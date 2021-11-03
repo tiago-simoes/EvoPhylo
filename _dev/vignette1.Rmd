@@ -1,0 +1,111 @@
+---
+title: "Notes"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+```{r}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+An R package to implement data pre-processing steps for analyses like those in https://www.nature.com/articles/s41559-021-01532-x. 
+
+#### CharPart
+(Documented)
+
+Workflow:
+```{r}
+#Load character data and produce Gower distance matrix
+Dmatrix <- get_gower_dist("Tetra_Characters.csv", numeric = FALSE)
+
+#Plot number of cluster against silhouette width
+get_sil_widths(Dmatrix, max.k = 10, plot = TRUE)
+#Decide on number of clusters based on plot; here, k = 3
+
+#Generate and visualize clusters
+clusters <- make_clusters(Dmatrix, k = 3, tsne = TRUE, plot = TRUE)
+
+#Write clusters to Nexus file
+cluster_to_nexus(clusters, file = "Clusters_Nexus.txt")
+```
+
+#### SelectionStrength
+(Documented)
+
+Workflow:
+```{r}
+RatesByClade <- read.csv("RateByClockrMelted_means.csv", header = TRUE)
+posterior <- read.table("3p_TipNodeMC_CombLog_8k.p", header = TRUE)
+tree <- treeio::read.mrbayes("3p_TK02_FT_SFBD4l_TipNode_MultiTopCons_AllCom.t")
+
+#Get matrix of t-tests for difference between the posterior mean and each rate
+f1(RatesByClade, posterior$clockrate.all.)
+
+#Plot tree using various thresholds
+f2(tree, posterior$clockrate.all., clock = 1,
+   threshold = c("1 SD", "2 SD", "95%"))
+
+```
+
+#### ST&P_Rates
+(Documented)
+
+Workflow:
+```{r}
+tree <- treeio::read.mrbayes("3p_TK02_FT_SFBD4l_TipNode_MultiTopCons_AllCom.t")
+
+#Get table of clock rates with given summary stat
+rate_table <- get_clockrate_table(tree, summary = "mean")
+
+#Get summary statistic table for each clade by clock 
+rate_table_clade <- read.csv("RateTable_Means_Clades.csv")
+clockrate_summary(rate_table_clade)
+
+#Plot distributions of rates by clock and clade
+clockrate_dens_plot(rate_table_clade, stack = TRUE, nrow = 1)
+
+#Plot regressions of rates from two clocks
+p12 <- clockrate_reg_plot(rate_table, clock_x = 1, clock_y = 2)
+p13 <- clockrate_reg_plot(rate_table, clock_x = 1, clock_y = 3)
+p23 <- clockrate_reg_plot(rate_table, clock_x = 2, clock_y = 3)
+
+gridExtra::grid.arrange(p12, p13, p23, nrow = 2)
+
+```
+
+#### ST&P_FBD
+(Documented)
+
+Workflow:
+```{r}
+AllRunsrMelted_MC <- read.csv("AllRuns_COMB_Melted.csv")
+
+#Summarize parameters by time bin and analysis
+FBD_summary(AllRunsrMelted_MC)
+
+#Plot density of parameter by time bin
+FBD_dens_plot(AllRunsrMelted_MC, parameter = "net_speciation", type = "density")
+FBD_dens_plot(AllRunsrMelted_MC, parameter = "net_speciation", type = "violin")
+
+#Plot density of clockrate estimates by analysis type
+f3(AllRunsrMelted_MC) #+ coord_cartesian(xlim = c(0, .08))
+
+#Reshape Allruns data from wide to long
+AllRuns <- read.table("1p_TipNode_MC_10k.p", header = TRUE)
+AllRunsrMelted <- FBD_reshape(AllRuns)
+
+#Tests for normality and homoscedasticity for each parameter across time bins
+#and analyses
+FBD_tests1(AllRunsrMelted_MC)
+
+#Visualize deviations from normality and similarity of variances
+FBD_normality_plot(AllRunsrMelted_MC)
+
+#Test differences in location for each parameter between time bins 
+#for each analysis type
+FBD_tests2(AllRunsrMelted_MC, contrast = "Time_bin")
+
+#Test differences in location for each parameter between analysis types
+#for each time bin
+FBD_tests2(AllRunsrMelted_MC, contrast = "analysis")
+```
