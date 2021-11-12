@@ -1,4 +1,4 @@
-\name{make_clusters}
+ \name{make_clusters}
 \alias{make_clusters}
 
 \title{
@@ -29,18 +29,26 @@ further argument to \code{\link{plot.cluster_df}} when \code{plot = TRUE}.
 }
 }
 \details{
-\code{make_clusters} calls \code{\link[cluster:pam]{cluster::pam}} on the supplied Gower distance matrix with the specified number of clusters to determine cluster membership for each character. When \code{tsne = TRUE}, Barnes-Hut t-distributed stochastic neighbor embedding is used to compute a two-dimensional embedding of the distance matrix, which can help in visualizing the resulting clusters. \code{\link[Rtsne:Rtsne]{Rtsne::Rtsne}} is used to do this, with \code{theta = 0} and \code{dims = 2}. The resulting dimensions will be included in the output; see Value below.
+\code{make_clusters} calls \code{\link[cluster:pam]{cluster::pam}} on the supplied Gower distance matrix with the specified number of clusters to determine cluster membership for each morphological character. 
+  
+When \code{tsne = TRUE}, Barnes-Hut t-distributed stochastic neighbor embedding is used to compute a two or three-dimensional embedding of the distance matrix. Group designation in the tSNE plots are based on the clusters identified by \code{\link[cluster:pam]{cluster::pam}} in order to test the congruence of cluster size and composition between both approaches. Overall agreement between both approaches indicate a strong character clustering scheme, besides helping visualizing the resulting clusters. \code{\link[Rtsne:Rtsne]{Rtsne::Rtsne}} is used to do this, with \code{theta = 0}, \code{dims = 2} or {dims = 3}, and \code{perplexity = 20}. 
+  
+The perplexity limits the minimal number of observations (number of rows) in the data matrix: it should not be bigger than 3 * perplexity < nrow(X) – 1. Therefore, the minimal number of characters to use here is 62 characters, which is common to most morphological data sets. If the user wants to test data matrix with fewer than 62 morphological characters, we suggest using the \code{\link[Rtsne]{Rtsne}} package directly and reduce the perplexity number accordingly.
+The resulting dimensions will be included in the output; see Value below.
+
 }
 \value{
-A data frame, inheriting from class \code{"cluster_df"}, with a row for each character with its number (\code{character_number}) and cluster membership (\code{cluster}). When \code{tsne = TRUE}, two additional columns, labeled \code{tSNE_Dim1} and \code{tSNE_Dim2}, will be included, containing the values on the two dimensions computed using \code{Rtsne}.
+A data frame, inheriting from class \code{"cluster_df"}, with a row for each character with its number (\code{character_number}) and cluster membership (\code{cluster}). When \code{tsne = TRUE}, additional columns, labeled \code{tSNE_Dim1}...\code{tSNE_Dim3}, will be included, containing the values on the number of dimensions computed using \code{Rtsne}.
 
 The \code{pam} fit resulting from \code{cluster::pam} is returned in the \code{"pam.fit"} attribute of the outut object.
 }
 \references{
-%% ~put references to the literature/web site here ~
+Budiaji, W. & Leisch, F. 2019. Simple K-Medoids Partitioning Algorithm for Mixed Variable Data. Algorithms, 12(9), 177.
+Van Der Maaten, L., Hinton, G. 2008. Visualizing data using t-SNE. JThe Journal of Machine Learning Research 9, 2579-2605.
+Van Der Maaten, L. 2014. Accelerating t-SNE using tree-based algorithms. The Journal of Machine Learning Research 15, 3221-3245.
 }
 \author{
-%%  ~~who you are~~
+Tiago R. Simões & Noah Greifer
 }
 \note{
 When \code{plot = TRUE}, a warning may appear from \code{ggrepel}, saying something along the lines of "unlabeled data points (too many overlaps). Consider increasing max.overlaps". See \code{\link[ggrepel:geom_text_repel]{ggrepel::geom_text_repel}} for details; the \code{max.overlaps} argument can be supplied to \code{\dots}.
@@ -52,5 +60,3 @@ When \code{plot = TRUE}, a warning may appear from \code{ggrepel}, saying someth
 \code{\link[cluster:pam]{cluster::pam}}, \code{\link[Rtsne:Rtsne]{Rtsne::Rtsne}}
 }
 \examples{
-
-}
