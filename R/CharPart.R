@@ -47,16 +47,17 @@ plot.sil_width_df <- function(x, ...) {
 }
 
 #Perform clustering,
-make_clusters <- function(Dmatrix, k, tsne = FALSE, plot = tsne, ...) {
+make_clusters <- function(Dmatrix, k, tsne = FALSE, plot = tsne, tsne_dim = 2, ...) {
   pam.fit <- cluster::pam(Dmatrix, diss = TRUE, k = k)
 
   df.Clusters <- data.frame(character_number = seq_along(pam.fit$clustering),
                             cluster = factor(pam.fit$clustering, levels = seq_len(k)))
 
   if (tsne) {
-    tsne <- Rtsne::Rtsne(Dmatrix, is_distance = TRUE, theta = 0, dims = 2)
-    df.Clusters$tSNE_Dim1 <- tsne$Y[,1]
-    df.Clusters$tSNE_Dim2 <- tsne$Y[,2]
+    tsne <- Rtsne::Rtsne(Dmatrix, is_distance = TRUE, theta = 0, dims = tsne_dim)
+    for (i in seq_len(tsne_dim)) {
+      df.Clusters[[paste0("tSNE_Dim", i)]] <- tsne$Y[,i]
+    }
   }
 
   class(df.Clusters) <- c("cluster_df", "data.frame")
@@ -72,13 +73,25 @@ make_clusters <- function(Dmatrix, k, tsne = FALSE, plot = tsne, ...) {
   return(df.Clusters)
 }
 
-plot.cluster_df <- function(x, seed = 100, ...) {
-  if (ncol(x) >= 4) {
-    p <- ggplot(x, aes(x = tSNE_Dim1, y = tSNE_Dim2)) +
-      geom_point(aes(color = cluster)) + suppressWarnings(
-        ggrepel::geom_text_repel(aes(label = character_number, color = cluster),
-                      show.legend = FALSE, ...)) +
-      theme_bw()
+plot.cluster_df <- function(x, seed = 100, nrow = 1, ...) {
+  names(x)[names(x) == "cluster"] <- "Cluster"
+
+  if (sum(startsWith(names(x), "tSNE_Dim")) > 1) {
+
+    names(x) <- gsub("tSNE_Dim", "tSNE Dimension ", names(x), fixed = TRUE)
+
+    dim_combs <- combn(names(x)[startsWith(names(x), "tSNE Dimension")], 2, simplify = FALSE)
+
+    plots <- lapply(seq_along(dim_combs), function(i) {
+      ggplot(x, aes(x = .data[[dim_combs[[i]][1]]],
+                    y = .data[[dim_combs[[i]][2]]])) +
+        geom_point(aes(color = Cluster)) +
+          ggrepel::geom_text_repel(aes(label = character_number, color = Cluster),
+                                   show.legend = FALSE, ...) +
+        theme_bw()
+    })
+
+    p <- Reduce("+", plots) + patchwork::plot_layout(nrow = nrow, guides = "collect")
   }
   else {
     pos <- position_jitter(seed = seed, width = .3)
@@ -87,9 +100,9 @@ plot.cluster_df <- function(x, seed = 100, ...) {
       geom_point(aes(color = cluster), position = pos) +
       ggrepel::geom_text_repel(aes(label = character_number, color = cluster),
                       show.legend = FALSE, position = pos, ...) +
-      theme_bw() + theme(axis.title.y=element_blank(),
-                         axis.text.y=element_blank(),
-                         axis.ticks.y=element_blank(),
+      theme_bw() + theme(axis.title.y = element_blank(),
+                         axis.text.y = element_blank(),
+                         axis.ticks.y = element_blank(),
                          panel.grid = element_blank())
   }
   p
