@@ -1,28 +1,21 @@
-#Get summary (n, mean, sd, 5 number) of parameters values by time bin and analysis
+#Get summary (n, mean, sd, 5 number) of parameters values by time bin
 FBD_summary <- function(AllRunsrMelted_MC, file = NULL, digits = 3) {
   time.bins <- sort(unique(AllRunsrMelted_MC$Time_bin))
   parameters <- c("net_speciation", "relative_extinction", "relative_fossilization")
-  analyses <- c("Tip", "TipNode", "Combined")
 
-  out <- expand.grid(parameter = parameters, Time_bin = time.bins, analysis = analyses,
+  out <- expand.grid(parameter = parameters, Time_bin = time.bins,
                      stringsAsFactors = FALSE)
 
   summary.list <- lapply(seq_len(nrow(out)), function(i) {
-    if (out[["analysis"]][i] == "Combined") {
-      in_t <- which(AllRunsrMelted_MC[["Time_bin"]] == out[["Time_bin"]][i])
-    }
-    else {
-      in_t <- which(AllRunsrMelted_MC[["Time_bin"]] == out[["Time_bin"]][i] &
-                      AllRunsrMelted_MC[["analysis"]] == out[["analysis"]][i])
-    }
+
+    in_t <- which(AllRunsrMelted_MC[["Time_bin"]] == out[["Time_bin"]][i])
+
     oneSummary(AllRunsrMelted_MC[[out[["parameter"]][i]]][in_t], digits = digits)
   })
 
   out <- cbind(out, do.call("rbind", summary.list))
 
   out$parameter <- factor(out$parameter, levels = parameters)
-  out$analysis <- factor(out$analysis, levels = analyses,
-                         labels = c("Tip", "Tip + Node", "Combined"))
 
   out <- out[with(out, order(parameter, Time_bin)),]
 
@@ -189,74 +182,58 @@ FBD_tests1 <- function(AllRunsrMelted_MC, downsample = TRUE) {
        fligner = fligner_df)
 }
 
-#Test differences in location  for each parameter between time bins for each analysis type
+#Test differences in location for each parameter between time bins
 #or between analysis types for each time bin
-FBD_tests2 <- function(AllRunsrMelted_MC, contrast = "Time_bin") {
-
-  contrast_var <- match.arg(contrast, c("Time_bin", "analysis"))
-  grouping_var <- setdiff(c("Time_bin", "analysis"), contrast_var)
+FBD_tests2 <- function(AllRunsrMelted_MC) {
 
   params <- c("net_speciation", "relative_extinction", "relative_fossilization")
 
   AllRunsrMelted_MC$Time_bin <- factor(AllRunsrMelted_MC$Time_bin)
-  AllRunsrMelted_MC$analysis <- factor(AllRunsrMelted_MC$analysis,
-                                       levels = c("Tip", "TipNode"),
-                                       labels = c("Tip", "Tip + Node"))
 
-  df_dimnames <- list(NULL, c(grouping_var, "parameter", paste0(contrast_var, 1:2), "n1", "n2", "p-value", "p-value adj"))
-  n_tests <- choose(nlevels(AllRunsrMelted_MC[[contrast_var]]), 2)
+  df_dimnames <- list(NULL, c("parameter", "Time_bin1", "Time_bin2", "n1", "n2", "p-value", "p-value adj"))
+  n_tests <- choose(nlevels(AllRunsrMelted_MC[["Time_bin"]]), 2)
 
-  #T-tests between pairs of Time_bins for each param within each analysis type
+  #T-tests between pairs of Time_bins for each param
   t_test_list <- setNames(lapply(params, function(p) {
-    df <- do.call("rbind", lapply(levels(AllRunsrMelted_MC[[grouping_var]]), function(g) {
-      in_group <- which(AllRunsrMelted_MC[[grouping_var]] == g)
-      t <- pairwise.t.test(AllRunsrMelted_MC[[p]][in_group],
-                           AllRunsrMelted_MC[[contrast_var]][in_group],
+      t <- pairwise.t.test(AllRunsrMelted_MC[[p]],
+                           AllRunsrMelted_MC[["Time_bin"]],
                            p.adjust.method = "none")
       d <- as.data.frame(matrix(nrow = n_tests, ncol = length(df_dimnames[[2]]),
                                 dimnames = df_dimnames))
-      d[[grouping_var]] <- g
       d$parameter <- p
 
-      d[paste0(contrast_var, 1:2)] <- as.data.frame(t(combn(levels(AllRunsrMelted_MC[[contrast_var]]), 2)))
+      d[paste0("Time_bin", 1:2)] <- as.data.frame(t(combn(levels(AllRunsrMelted_MC[["Time_bin"]]), 2)))
 
       for (i in seq_len(nrow(d))) {
-        d[["n1"]][i] <- sum(AllRunsrMelted_MC[[contrast_var]][in_group] == d[[paste0(contrast_var, 1)]][i])
-        d[["n2"]][i] <- sum(AllRunsrMelted_MC[[contrast_var]][in_group] == d[[paste0(contrast_var, 2)]][i])
-        d[["p-value"]][i] <- t$p.value[d[[paste0(contrast_var, 2)]][i],
-                                       d[[paste0(contrast_var, 1)]][i]]
+        d[["n1"]][i] <- sum(AllRunsrMelted_MC[["Time_bin"]] == d[["Time_bin1"]][i])
+        d[["n2"]][i] <- sum(AllRunsrMelted_MC[["Time_bin"]] == d[["Time_bin2"]][i])
+        d[["p-value"]][i] <- t$p.value[d[["Time_bin2"]][i], d[["Time_bin1"]][i]]
       }
-      return(d)
-    }))
 
-    df[["p-value adj"]] <- p.adjust(df[["p-value"]], "fdr")
-    return(df)
+    d[["p-value adj"]] <- p.adjust(d[["p-value"]], "fdr")
+    return(d)
   }), params)
 
-  #Mann-Whitney U tests between pairs of Time_bins for each param within each analysis type
+  #Mann-Whitney U tests between pairs of Time_bins for each param
   mwu_test_list <- setNames(lapply(params, function(p) {
-    df <- do.call("rbind", lapply(levels(AllRunsrMelted_MC[[grouping_var]]), function(g) {
-      in_group <- which(AllRunsrMelted_MC[[grouping_var]] == g)
-      t <- pairwise.wilcox.test(AllRunsrMelted_MC[[p]][in_group],
-                                AllRunsrMelted_MC[[contrast_var]][in_group],
+
+      t <- pairwise.wilcox.test(AllRunsrMelted_MC[[p]],
+                                AllRunsrMelted_MC[["Time_bin"]],
                                 p.adjust.method = "none")
       d <- as.data.frame(matrix(nrow = n_tests, ncol = length(df_dimnames[[2]]),
                                 dimnames = df_dimnames))
-      d[[grouping_var]] <- g
       d$parameter <- p
 
-      d[paste0(contrast_var, 1:2)] <- as.data.frame(t(combn(levels(AllRunsrMelted_MC[[contrast_var]]), 2)))
+      d[paste0("Time_bin", 1:2)] <- as.data.frame(t(combn(levels(AllRunsrMelted_MC[["Time_bin"]]), 2)))
 
       for (i in seq_len(nrow(d))) {
-        d[["n1"]][i] <- sum(AllRunsrMelted_MC[[contrast_var]][in_group] == d[[paste0(contrast_var, 1)]][i])
-        d[["n2"]][i] <- sum(AllRunsrMelted_MC[[contrast_var]][in_group] == d[[paste0(contrast_var, 2)]][i])
-        d[["p-value"]][i] <- t$p.value[d[[paste0(contrast_var, 2)]][i],
-                                       d[[paste0(contrast_var, 1)]][i]]
+        d[["n1"]][i] <- sum(AllRunsrMelted_MC[["Time_bin"]] == d[["Time_bin1"]][i])
+        d[["n2"]][i] <- sum(AllRunsrMelted_MC[["Time_bin"]] == d[["Time_bin2"]][i])
+        d[["p-value"]][i] <- t$p.value[d[["Time_bin2"]][i], d[["Time_bin1"]][i]]
       }
-      return(d)
-    }))
 
-    df[["p-value adj"]] <- p.adjust(df[["p-value"]], "fdr")
+
+    d[["p-value adj"]] <- p.adjust(d[["p-value"]], "fdr")
     return(df)
   }), params)
 

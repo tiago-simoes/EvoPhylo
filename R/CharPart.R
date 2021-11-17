@@ -2,13 +2,14 @@
 
 #Load data and compute Gower distance matrix
 get_gower_dist <- function(file, numeric = FALSE) {
-  if (is.matrix(file) || is.data.frame(file)) {
-    Data_M <- as.data.frame(t(as.matrix(file)))
+  if (length(file) == 1 && (is.matrix(file) || is.data.frame(file))) {
+    Data_M <- as.data.frame(as.matrix(file))
   }
-  else if (is.character(file)) {
-    Data_M <- as.data.frame(t(as.matrix(read.csv(file, colClasses = "character"))))
+  else if (length(file) == 1 && is.character(file) && endsWith(file, ".nex")) {
+    Data_M <- ape::read.nexus.data(file)
+    Data_M <- as.data.frame(Data_M)
   }
-  else stop("'file' must be a file path to a csv file or a data frame.", call. = FALSE)
+  else stop("'file' must be a file path to a .nex file or a data frame.", call. = FALSE)
 
   if (numeric) Data_M[] <- lapply(Data_M, as.numeric)
 

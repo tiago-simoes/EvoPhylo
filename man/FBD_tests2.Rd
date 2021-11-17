@@ -5,17 +5,14 @@
 Tests for differences in parameter values
 }
 \description{
-\code{FBD_tests2()} performs t-tests and Mann-Whitney U-tests to compare the average parameter value between time bins or analysis types (i.e., tip and tip + node).
+\code{FBD_tests2()} performs t-tests and Mann-Whitney U-tests to compare the average parameter value between time bins.
 }
 \usage{
-FBD_tests2(AllRunsrMelted_MC, contrast = "Time_bin")
+FBD_tests2(AllRunsrMelted_MC)
 }
 \arguments{
   \item{AllRunsrMelted_MC}{
 an AllRunsMelted_MC (long) dataset with a Time_bin column and columns for each parameter (net_speciation, relative_exinction, and relative_fossilization).
-}
-  \item{contrast}{
-the variable to define the groups being contrasted. If \code{"Time_bin"}, parameter means will be compared between time bins for each analysis type; if \code{"analysis"}, parameter means will be compared between analysis types for each time bin.
 }
 }
 \details{
