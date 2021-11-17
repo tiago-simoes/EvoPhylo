@@ -353,12 +353,3 @@ FBD_normality_plot <- function(AllRunsrMelted_MC) {
   p
 }
 
-#Plot clockrate density by analysis (tp vs tip+node)
-f3 <- function(AllRunsrMelted_MC) {
-  AllRunsrMelted_MC$analysis <- factor(AllRunsrMelted_MC$analysis, levels = c("Tip", "TipNode"),
-                                       labels = c("Tip", "Tip + Node"))
-  ggplot(AllRunsrMelted_MC, aes(clockrate, fill = analysis)) +
-    geom_density(alpha = 0.6) +
-    theme(legend.position="top") +
-    labs(x = "Clock Rate", y = "Density", fill = "Analysis:")
-}

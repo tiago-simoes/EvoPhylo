@@ -1,5 +1,5 @@
 #t-tests
-f1 <- function(RatesByClade, posterior.clockrate.all.) {
+get_pwt_rates <- function(RatesByClade, posterior.clockrate.all.) {
 
   post.df <- length(posterior.clockrate.all.) - 1
   post.mean <- mean(posterior.clockrate.all.)
@@ -22,7 +22,7 @@ f1 <- function(RatesByClade, posterior.clockrate.all.) {
 }
 
 #Plot tree with colored thresholds
-f2 <- function(tree, posterior.clockrate.all., clock = 1, summary = "mean", threshold = c("1 SD", "2 SD"),
+plot_treerates_sgn <- function(tree, posterior.clockrate.all., clock = 1, summary = "mean", threshold = c("1 SD", "2 SD"),
                low = "blue", mid = "gray90", high = "red", xlim = NULL,
                geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")) {
 
@@ -134,4 +134,17 @@ f2 <- function(tree, posterior.clockrate.all., clock = 1, summary = "mean", thre
 
   return(selection_plot)
 
+}
+
+
+
+clock_reshape <- function(RatesByClade) {
+  RatesByClade_long <- reshape(RatesByClade, direction = "long",
+                               varying = names(RatesByClade)[startsWith(names(RatesByClade), "rates")],
+                               v.names = c("rates"),
+                               timevar = "clock",
+                               idvar = "nodes",
+                               sep = "_")
+  RatesByClade_long[["clock"]] <- factor(RatesByClade_long[["clock"]])
+  RatesByClade_long
 }

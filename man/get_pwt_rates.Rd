@@ -8,7 +8,7 @@ Clockrate T-tests
 Produces a matrixes of 1-sample t-tests for the mean of posterior clockrates against each node's absolute clock rate.
 }
 \usage{
-f1(RatesByClade, posterior.clockrate.all.)
+get_pwt_rates(RatesByClade, posterior.clockrate.all.)
 }
 
 \arguments{

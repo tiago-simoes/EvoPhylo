@@ -8,7 +8,7 @@ Plots a tree with thresholds(?)
 Plots trees with user-specified thresholds
 }
 \usage{
-f2(tree, posterior.clockrate.all., clock = 1,
+plot_treerates_sgn(tree, posterior.clockrate.all., clock = 1,
    summary = "mean", threshold = c("1 SD", "2 SD"),
    low = "blue", mid = "gray90", high = "red",
    xlim = NULL, geo_skip = c("Quaternary", "Holocene",
