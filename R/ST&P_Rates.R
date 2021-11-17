@@ -7,7 +7,8 @@ get_clockrate_table <- function(tree, summary = "mean", drop.dummyextent = TRUE,
 
   nodes <- as.integer(tree@data$node)
 
-  p <- unglue::unglue_data(names(tree@data), "rate{model}rlens{clock}_{summary}")
+  p <- unglue::unglue_data(names(tree@data), "rate<model>rlens{<clock>}_<summary>",
+                           open = "<", close = ">")
   rownames(p) <- names(tree@data)
 
   p <- p[rowSums(is.na(p)) < ncol(p),,drop=FALSE]

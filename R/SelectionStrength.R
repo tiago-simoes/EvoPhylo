@@ -69,7 +69,8 @@ plot_treerates_sgn <- function(tree, posterior.clockrate.all., clock = 1, summar
     tree <- treeio::drop.tip(tree, "Dummyextant")
   }
 
-  p <- unglue::unglue_data(names(tree@data), "rate{model}rlens{clock}_{summary}")
+  p <- unglue::unglue_data(names(tree@data), "rate<model>rlens{<clock>}_<summary>",
+                           open = "<", close = ">")
   rownames(p) <- names(tree@data)
 
   p <- p[rowSums(is.na(p)) < ncol(p),,drop=FALSE]
