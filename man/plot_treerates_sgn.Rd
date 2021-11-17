@@ -10,6 +10,7 @@ Plots trees with user-specified thresholds
 \usage{
 plot_treerates_sgn(tree, posterior.clockrate.all., clock = 1,
    summary = "mean", threshold = c("1 SD", "2 SD"),
+   drop.dummyextent = TRUE,
    low = "blue", mid = "gray90", high = "red",
    xlim = NULL, geo_skip = c("Quaternary", "Holocene",
                              "Late Pleistocene"))
@@ -29,6 +30,9 @@ the rate summary to plot, (i.e., the value "rateTK02Brlens1_\{summary\}"). Only 
 }
   \item{threshold}{
 a vector of threshold values. Default is to display thresholds of ±1 relative standard deviation of the posterior clockrates. Should be specified as a number of standard deviations (e.g., \code{"1 SD"}) or the confidence level for a confidence interal around the mean posterior clockrate (e.g., \code{"95\%"}). Multiple values are allowed to produce a plot with multiple thresholds.
+}
+  \item{drop.dummyextent}{
+\code{logical}; whether to drop the "DummyExtent" tip of the tree prior to plotting the tree. Default is \code{TRUE}.
 }
   \item{low, mid, high}{
 colors passed to \code{\link{scale_color_steps2}} to control the colors of the branches based on which thresholds are exceeded.

@@ -23,8 +23,9 @@ get_pwt_rates <- function(RatesByClade, posterior.clockrate.all.) {
 
 #Plot tree with colored thresholds
 plot_treerates_sgn <- function(tree, posterior.clockrate.all., clock = 1, summary = "mean", threshold = c("1 SD", "2 SD"),
-               low = "blue", mid = "gray90", high = "red", xlim = NULL,
-               geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")) {
+                               drop.dummyextent = TRUE,
+                               low = "blue", mid = "gray90", high = "red", xlim = NULL,
+                               geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")) {
 
   #Process threshold
   if (!is.character(threshold)) stop("'threshold' must be a character vector.", call. = FALSE)
@@ -64,7 +65,9 @@ plot_treerates_sgn <- function(tree, posterior.clockrate.all., clock = 1, summar
   labels <- labels[break_order]
 
   #Drop extant "dummy" tip
-  tree <- treeio::drop.tip(tree, "Dummyextant")
+  if (drop.dummyextent) {
+    tree <- treeio::drop.tip(tree, "Dummyextant")
+  }
 
   p <- unglue::unglue_data(names(tree@data), "rate{model}rlens{clock}_{summary}")
   rownames(p) <- names(tree@data)

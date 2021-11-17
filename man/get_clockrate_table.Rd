@@ -8,7 +8,8 @@ Extract clock rates from a Tree
 Extracts the clock rates for each node from a tree and stores them in a table.
 }
 \usage{
-get_clockrate_table(tree, summary = "mean", file = NULL)
+get_clockrate_table(tree, summary = "mean",
+                    drop.dummyextent = TRUE, file = NULL)
 }
 \arguments{
   \item{tree}{
@@ -16,6 +17,9 @@ a \code{tidytree} object; the output of a call to \code{\link[treeio:read.mrbaye
 }
   \item{summary}{
 the name of the rate summary. Should be one of \code{"mean"} or \code{"median"}.
+}
+  \item{drop.dummyextent}{
+\code{logical}; whether to drop the "DummyExtent" tip of the tree prior to extracting the clock rates. Default is \code{TRUE}.
 }
   \item{file}{
 an optional file path where the resulting table will be stored using \code{\link{write.csv}}.

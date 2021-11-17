@@ -1,7 +1,9 @@
 #Rate Table
-get_clockrate_table <- function(tree, summary = "mean", file = NULL) {
+get_clockrate_table <- function(tree, summary = "mean", drop.dummyextent = TRUE, file = NULL) {
 
-  tree <- treeio::drop.tip(tree, "Dummyextant")
+  if (drop.dummyextent) {
+    tree <- treeio::drop.tip(tree, "Dummyextant")
+  }
 
   nodes <- as.integer(tree@data$node)
 
