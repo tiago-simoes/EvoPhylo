@@ -1,4 +1,4 @@
-Package: tiagospackage
+Package: EvoPhylo
 Version: 0.0.0.9000
 Title: Tiago's Package
 Description: A package to do some things
@@ -20,6 +20,7 @@ Imports:
     deeptime (>= 0.2.0),
     ggtree (>= 3.1.4.992),
     treeio (>= 1.16.2),
+    ape (>= 1.16.2),
     StatMatch (>= 1.4.0),
     unglue (>= 0.1.0),
     rlang,
