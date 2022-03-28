@@ -1,16 +1,109 @@
+#All functions documented with examples
+
+#Import log (.p) files, optionally downsampling; produces posterior1p-style object
+import_log <- function(path = ".", burnin = .25, downsample = 1e4) {
+  #Get FBD parameter estimates from collection of log files (.p)
+  if (!is.character(path)) files <- NULL
+  else if (all(utils::file_test(path, op = "-f"))) {
+    files <- path
+  }
+  else if (length(path) == 1 && utils::file_test(path, op = "-d")) {
+    files <- paste0(path, "/", list.files(path, pattern = '\\.p$'))
+  }
+  else files <- NULL
+
+  if (length(files) == 0) {
+    stop("The value supplied to 'path' must be a character vector containing the names of parameter log (.p) files or of a folder containg such files.", call. = FALSE)
+  }
+
+  if (length(burnin) != 1 || !is.numeric(burnin) || burnin < 0) {
+    stop("'burnin' must be a single number corresponding to the number or percentage of rows to drop from the beginning of each log file.",
+         call. = FALSE)
+  }
+
+  if (length(downsample) != 1 || !is.numeric(downsample) || downsample < 0) {
+    stop("'downsample' must be a single number corresponding to the number or percentage of rows to remain after downsampling from each log file.",
+         call. = FALSE)
+  }
+
+  L <- lapply(files, function(x) {
+    rtest <- read.table(x, skip = 1, header = TRUE, nrows = 3)
+    if (!all(c("Gen", "LnL", "LnPr") %in% names(rtest))) return(NULL)
+
+    r <- read.table(x, skip = 1, header = TRUE)
+    if (burnin > 0) {
+      if (burnin < 1) {
+        b <- seq_len(round(burnin * NROW(r)))
+      }
+      else {
+        b <- seq_len(round(min(burnin, NROW(r))))
+      }
+      r <- r[-b,,drop = FALSE]
+    }
+    r
+  })
+
+  if (all(lengths(L) == 0)) {
+    stop("No parameter log files were found in the supplied path.", call. = FALSE)
+  }
+
+  L[lengths(L) == 0] <- NULL
+
+  if (!all(vapply(L, function(i) identical(names(i), names(L[[1]])), logical(1L)))) {
+    stop("All parameter log files must have the same column names.", call. = FALSE)
+  }
+
+  if (!any(startsWith(names(L[[1]]), "net_speciation_")) ||
+      !any(startsWith(names(L[[1]]), "relative_extinction_")) ||
+      !any(startsWith(names(L[[1]]), "relative_fossilization_"))) {
+    stop("The log files must contain the parameters net_speciation, relative_extinction, and relative_fossilization.", call. = FALSE)
+  }
+
+  samples <- do.call("rbind", L)
+
+  if (downsample > 0) {
+    if (downsample < 1) {
+      d <- as.integer(round(seq(1, NROW(samples), length.out = NROW(samples)*downsample)))
+    }
+    else {
+      d <- as.integer(round(seq(1, NROW(samples), length.out = min(NROW(samples), downsample))))
+    }
+    samples <- samples[d,,drop = FALSE]
+  }
+
+  posterior <- reshape(samples, direction = "long",
+                     varying = list(names(samples)[startsWith(names(samples), "net_speciation_")],
+                                    names(samples)[startsWith(names(samples), "relative_extinction_")],
+                                    names(samples)[startsWith(names(samples), "relative_fossilization_")]),
+                     v.names = c("net_speciation", "relative_extinction", "relative_fossilization"),
+                     timevar = "Time_bin",
+                     sep = "_")
+  posterior[["id"]] <- NULL
+  posterior[["Time_bin"]] <- factor(posterior[["Time_bin"]])
+  attr(posterior, "reshapeLong") <- NULL
+
+  posterior
+}
+
 #Get summary (n, mean, sd, 5 number) of parameters values by time bin
-FBD_summary <- function(AllRunsrMelted_MC, file = NULL, digits = 3) {
-  time.bins <- sort(unique(AllRunsrMelted_MC$Time_bin))
+FBD_summary <- function(posterior, file = NULL, digits = 3) {
+
   parameters <- c("net_speciation", "relative_extinction", "relative_fossilization")
+
+  if (!is.data.frame(posterior) || !all(c("Time_bin", parameters) %in% names(posterior))) {
+    stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
+  }
+
+  time.bins <- sort(unique(posterior$Time_bin))
 
   out <- expand.grid(parameter = parameters, Time_bin = time.bins,
                      stringsAsFactors = FALSE)
 
   summary.list <- lapply(seq_len(nrow(out)), function(i) {
 
-    in_t <- which(AllRunsrMelted_MC[["Time_bin"]] == out[["Time_bin"]][i])
+    in_t <- which(posterior[["Time_bin"]] == out[["Time_bin"]][i])
 
-    oneSummary(AllRunsrMelted_MC[[out[["parameter"]][i]]][in_t], digits = digits)
+    oneSummary(posterior[[out[["parameter"]][i]]][in_t], digits = digits)
   })
 
   out <- cbind(out, do.call("rbind", summary.list))
@@ -31,36 +124,41 @@ FBD_summary <- function(AllRunsrMelted_MC, file = NULL, digits = 3) {
 }
 
 #Plot density of one parameter by time bin; density or violin plots
-FBD_dens_plot <- function(AllRunsrMelted_MC, parameter, type = "density", stack = FALSE, color = "red") {
+FBD_dens_plot <- function(posterior, parameter, type = "density", stack = FALSE, color = "red") {
+
+  parameters <- c("net_speciation", "relative_extinction", "relative_fossilization")
+
+  if (!is.data.frame(posterior) || !all(c("Time_bin", parameters) %in% names(posterior))) {
+    stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
+  }
 
   type <- match.arg(type, c("density", "violin"))
 
-  params <- c("net_speciation", "relative_extinction",
-              "relative_fossilization")
-  param.names <- setNames(gsub("_", " ", firstup(params), fixed = TRUE),
-                          params)
+  param.names <- setNames(gsub("_", " ", firstup(parameters), fixed = TRUE),
+                          parameters)
 
   if (missing(parameter)) {
     stop("'parameter' must be specified.", call. = FALSE)
   }
-  parameter <- match.arg(parameter, params, several.ok = FALSE)
+  parameter <- match.arg(parameter, parameters, several.ok = FALSE)
 
-  AllRunsrMelted_MC <- AllRunsrMelted_MC[c("Time_bin", parameter)]
+  posterior <- posterior[c("Time_bin", parameter)]
 
-  time.bins <- sort(unique(AllRunsrMelted_MC$Time_bin))
+  time.bins <- sort(unique(posterior$Time_bin))
 
-  AllRunsrMelted_MC$Time_bin <- factor(AllRunsrMelted_MC$Time_bin, levels = time.bins)
+  posterior$Time_bin <- factor(posterior$Time_bin, levels = time.bins)
 
-  AllRunsrMelted_MC_long <- reshape(AllRunsrMelted_MC, direction = "long",
-                                    v.names = "vals",
-                                    varying = parameter,
-                                    timevar = "parameter",
-                                    times = parameter)
-  AllRunsrMelted_MC_long$parameter <- factor(AllRunsrMelted_MC_long$parameter, levels = parameter,
-                                             labels = param.names[parameter])
+  posterior_long <- reshape(posterior, direction = "long",
+                            v.names = "vals",
+                            varying = parameter,
+                            timevar = "parameter",
+                            times = parameter)
+  posterior_long$parameter <- factor(posterior_long$parameter, levels = parameter,
+                                     labels = param.names[parameter])
 
   if (type == "density") {
-    p <- ggplot(AllRunsrMelted_MC_long, aes(x = vals , fill = Time_bin)) + theme_bw() +
+    p <- ggplot(data = posterior_long, aes(x = .data$vals , fill = .data$Time_bin)) +
+      theme_bw() +
       stat_density(position = if (stack) "stack" else "identity",
                    alpha = if (stack) 1 else .6,
                    outline.type = "both", color = "black") +
@@ -70,7 +168,8 @@ FBD_dens_plot <- function(AllRunsrMelted_MC, parameter, type = "density", stack 
             legend.position = "bottom")
   }
   else if (type == "violin") {
-    p <- ggplot(AllRunsrMelted_MC_long, aes(x = Time_bin, y = vals)) + theme_bw() +
+    p <- ggplot(data = posterior_long, aes(x = .data$Time_bin, y = .data$vals)) +
+      theme_bw() +
       geom_violin(color = color, fill = color,
                   alpha=0.5, draw_quantiles = 0.5, size=0.8, trim = FALSE) +
       stat_summary(fun=mean, geom="point", shape=16, size=2, color = "black")+
@@ -82,34 +181,26 @@ FBD_dens_plot <- function(AllRunsrMelted_MC, parameter, type = "density", stack 
   p
 }
 
-#Reshape AllRuns from wide to long with Time_bins as time and parameters as varying
-FBD_reshape <- function(AllRuns) {
-  AllRuns_long <- reshape(AllRuns, direction = "long",
-                          varying = list(names(AllRuns)[startsWith(names(AllRuns), "net_speciation_")],
-                                         names(AllRuns)[startsWith(names(AllRuns), "relative_extinction_")],
-                                         names(AllRuns)[startsWith(names(AllRuns), "relative_fossilization_")]),
-                          v.names = c("net_speciation", "relative_extinction", "relative_fossilization"),
-                          timevar = "Time_bin",
-                          sep = "_")
-  AllRuns_long[["Time_bin"]] <- factor(AllRuns_long[["Time_bin"]])
-  AllRuns_long
-}
-
 #Test assumptions of normality and homoscedasticity for each parameter
 #Normality tests within time bin, across time bin, and pooled within time bin
 #Homscedasticity tests across time bin
-FBD_tests1 <- function(AllRunsrMelted_MC, downsample = TRUE) {
-  params <- c("net_speciation", "relative_extinction", "relative_fossilization")
+FBD_tests1 <- function(posterior, downsample = TRUE) {
+  parameters <- c("net_speciation", "relative_extinction", "relative_fossilization")
 
-  AllRunsrMelted_MC$Time_bin <- factor(AllRunsrMelted_MC$Time_bin)
+  if (!is.data.frame(posterior) || !all(c("Time_bin", parameters) %in% names(posterior))) {
+    stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
+  }
+
+  posterior$Time_bin <- factor(posterior$Time_bin)
 
   #Bartlett test for homogeneity of variance across Time_bins
   #Run for each param
-  bartlett_df <- do.call("rbind", lapply(params, function(p) {
-    d <- as.data.frame(matrix(nrow = 1, ncol = 3,
-                              dimnames = list(NULL, c("parameter", "statistic", "p-value"))))
+  d <- as.data.frame(matrix(nrow = 1, ncol = 3,
+                            dimnames = list(NULL, c("parameter", "statistic", "p-value"))))
+
+  bartlett_df <- do.call("rbind", lapply(parameters, function(p) {
     d[["parameter"]] <- p
-    bt <- bartlett.test(AllRunsrMelted_MC[[p]], AllRunsrMelted_MC$Time_bin)
+    bt <- bartlett.test(posterior[[p]], posterior$Time_bin)
     d[["statistic"]] <- bt$statistic
     d[["p-value"]] <- bt$p.value
     return(d)
@@ -117,11 +208,9 @@ FBD_tests1 <- function(AllRunsrMelted_MC, downsample = TRUE) {
 
   #Fligner-Killeen test for homogeneity of variance across Time_bins
   #Run for each param
-  fligner_df <- do.call("rbind", lapply(params, function(p) {
-    d <- as.data.frame(matrix(nrow = 1, ncol = 3,
-                              dimnames = list(NULL, c("parameter", "statistic", "p-value"))))
+  fligner_df <- do.call("rbind", lapply(parameters, function(p) {
     d[["parameter"]] <- p
-    bt <- fligner.test(AllRunsrMelted_MC[[p]], AllRunsrMelted_MC$Time_bin)
+    bt <- fligner.test(posterior[[p]], posterior$Time_bin)
     d[["statistic"]] <- bt$statistic
     d[["p-value"]] <- bt$p.value
     return(d)
@@ -130,52 +219,52 @@ FBD_tests1 <- function(AllRunsrMelted_MC, downsample = TRUE) {
   #Shapiro-Wilk test for normality
   #Run within each Time_bin group, overall, and on residuals for each param
   #Need to downsample for SW test
-  max.n <- floor(5000/nlevels(AllRunsrMelted_MC$Time_bin))
+  max.n <- floor(5000/nlevels(posterior$Time_bin))
 
   if (downsample) {
-    keep <- unlist(lapply(levels(AllRunsrMelted_MC$Time_bin),
+    keep <- unlist(lapply(levels(posterior$Time_bin),
                           function(i) {
-                            if (sum(AllRunsrMelted_MC$Time_bin == i) > max.n) {
-                              which(AllRunsrMelted_MC$Time_bin == i)[round(seq(1, sum(AllRunsrMelted_MC$Time_bin == i), length.out = max.n))]
+                            if (sum(posterior$Time_bin == i) > max.n) {
+                              which(posterior$Time_bin == i)[round(seq(1, sum(posterior$Time_bin == i), length.out = max.n))]
                             }
-                            else which(AllRunsrMelted_MC$Time_bin == i)
+                            else which(posterior$Time_bin == i)
                           }))
-    AllRunsrMelted_MC <- AllRunsrMelted_MC[keep,,drop=FALSE]
-    run.sw.test <- rep(TRUE, nlevels(AllRunsrMelted_MC$Time_bin))
+    posterior <- posterior[keep,,drop=FALSE]
+    run.sw.test <- rep(TRUE, nlevels(posterior$Time_bin))
   }
   else {
-    t <- table(AllRunsrMelted_MC$Time_bin)
-    run.sw.test <- t[levels(AllRunsrMelted_MC$Time_bin)] <= max.n
-    if (!any(run.sw.test)) warning("Shapiro-Wilk normality tests requiring downsampling and will not be run. Set downsample = TRUE to run these tests.", call. = FALSE)
+    t <- table(posterior$Time_bin)
+    run.sw.test <- t[levels(posterior$Time_bin)] <= max.n
+    if (!any(run.sw.test)) warning("Shapiro-Wilk normality tests require downsampling and will not be run. Set downsample = TRUE to run these tests.", call. = FALSE)
   }
 
-  shapiro_df <- setNames(lapply(params, function(p) {
-    d <- as.data.frame(matrix(nrow = nlevels(AllRunsrMelted_MC$Time_bin) + 2, ncol = 3,
-                              dimnames = list(c(paste("Time bin", levels(AllRunsrMelted_MC$Time_bin)), "Overall", "Residuals"),
-                                              c("parameter", "statistic", "p-value"))))
+  d <- as.data.frame(matrix(nrow = nlevels(posterior$Time_bin) + 2, ncol = 3,
+                            dimnames = list(c(paste("Time bin", levels(posterior$Time_bin)), "Overall", "Residuals"),
+                                            c("parameter", "statistic", "p-value"))))
+  shapiro_df <- setNames(lapply(parameters, function(p) {
     d[["parameter"]] <- p
 
-    for (i in seq_len(nlevels(AllRunsrMelted_MC$Time_bin))[run.sw.test]) {
-      sw <- shapiro.test(AllRunsrMelted_MC[[p]][AllRunsrMelted_MC$Time_bin == levels(AllRunsrMelted_MC$Time_bin)[i]])
+    for (i in seq_len(nlevels(posterior$Time_bin))[run.sw.test]) {
+      sw <- shapiro.test(posterior[[p]][posterior$Time_bin == levels(posterior$Time_bin)[i]])
       d[["statistic"]][i] <- sw[["statistic"]]
       d[["p-value"]][i] <- sw[["p.value"]]
     }
 
     if (all(run.sw.test)) {
       #Overall
-      sw <- shapiro.test(AllRunsrMelted_MC[[p]])
-      d[["statistic"]][nlevels(AllRunsrMelted_MC$Time_bin) + 1] <- sw[["statistic"]]
-      d[["p-value"]][nlevels(AllRunsrMelted_MC$Time_bin) + 1] <- sw[["p.value"]]
+      sw <- shapiro.test(posterior[[p]])
+      d[["statistic"]][nlevels(posterior$Time_bin) + 1] <- sw[["statistic"]]
+      d[["p-value"]][nlevels(posterior$Time_bin) + 1] <- sw[["p.value"]]
 
       #Residuals
-      means <- ave(AllRunsrMelted_MC[[p]], AllRunsrMelted_MC$Time_bin)
-      sw <- shapiro.test(AllRunsrMelted_MC[[p]] - means)
-      d[["statistic"]][nlevels(AllRunsrMelted_MC$Time_bin) + 2] <- sw[["statistic"]]
-      d[["p-value"]][nlevels(AllRunsrMelted_MC$Time_bin) + 2] <- sw[["p.value"]]
+      means <- ave(posterior[[p]], posterior$Time_bin)
+      sw <- shapiro.test(posterior[[p]] - means)
+      d[["statistic"]][nlevels(posterior$Time_bin) + 2] <- sw[["statistic"]]
+      d[["p-value"]][nlevels(posterior$Time_bin) + 2] <- sw[["p.value"]]
     }
 
     return(d)
-  }), params)
+  }), parameters)
 
   list(shapiro = shapiro_df,
        bartlett = bartlett_df,
@@ -183,59 +272,63 @@ FBD_tests1 <- function(AllRunsrMelted_MC, downsample = TRUE) {
 }
 
 #Test differences in location for each parameter between time bins
-#or between analysis types for each time bin
-FBD_tests2 <- function(AllRunsrMelted_MC) {
+FBD_tests2 <- function(posterior, p.adjust.method = "fdr") {
 
-  params <- c("net_speciation", "relative_extinction", "relative_fossilization")
+  parameters <- c("net_speciation", "relative_extinction", "relative_fossilization")
 
-  AllRunsrMelted_MC$Time_bin <- factor(AllRunsrMelted_MC$Time_bin)
+  if (!is.data.frame(posterior) || !all(c("Time_bin", parameters) %in% names(posterior))) {
+    stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
+  }
+
+  posterior$Time_bin <- factor(posterior$Time_bin)
 
   df_dimnames <- list(NULL, c("parameter", "Time_bin1", "Time_bin2", "n1", "n2", "p-value", "p-value adj"))
-  n_tests <- choose(nlevels(AllRunsrMelted_MC[["Time_bin"]]), 2)
+  n_tests <- choose(nlevels(posterior[["Time_bin"]]), 2)
+
+  d <- as.data.frame(matrix(nrow = n_tests, ncol = length(df_dimnames[[2]]),
+                            dimnames = df_dimnames))
 
   #T-tests between pairs of Time_bins for each param
-  t_test_list <- setNames(lapply(params, function(p) {
-      t <- pairwise.t.test(AllRunsrMelted_MC[[p]],
-                           AllRunsrMelted_MC[["Time_bin"]],
-                           p.adjust.method = "none")
-      d <- as.data.frame(matrix(nrow = n_tests, ncol = length(df_dimnames[[2]]),
-                                dimnames = df_dimnames))
-      d$parameter <- p
+  t_test_list <- setNames(lapply(parameters, function(p) {
+    t <- pairwise.t.test(posterior[[p]],
+                         posterior[["Time_bin"]],
+                         p.adjust.method = "none")
 
-      d[paste0("Time_bin", 1:2)] <- as.data.frame(t(combn(levels(AllRunsrMelted_MC[["Time_bin"]]), 2)))
+    d$parameter <- p
 
-      for (i in seq_len(nrow(d))) {
-        d[["n1"]][i] <- sum(AllRunsrMelted_MC[["Time_bin"]] == d[["Time_bin1"]][i])
-        d[["n2"]][i] <- sum(AllRunsrMelted_MC[["Time_bin"]] == d[["Time_bin2"]][i])
-        d[["p-value"]][i] <- t$p.value[d[["Time_bin2"]][i], d[["Time_bin1"]][i]]
-      }
+    d[paste0("Time_bin", 1:2)] <- as.data.frame(t(combn(levels(posterior[["Time_bin"]]), 2)))
 
-    d[["p-value adj"]] <- p.adjust(d[["p-value"]], "fdr")
+    for (i in seq_len(nrow(d))) {
+      d[["n1"]][i] <- sum(posterior[["Time_bin"]] == d[["Time_bin1"]][i])
+      d[["n2"]][i] <- sum(posterior[["Time_bin"]] == d[["Time_bin2"]][i])
+      d[["p-value"]][i] <- t$p.value[d[["Time_bin2"]][i], d[["Time_bin1"]][i]]
+    }
+
+    d[["p-value adj"]] <- p.adjust(d[["p-value"]], p.adjust.method)
     return(d)
-  }), params)
+  }), parameters)
 
   #Mann-Whitney U tests between pairs of Time_bins for each param
-  mwu_test_list <- setNames(lapply(params, function(p) {
+  mwu_test_list <- setNames(lapply(parameters, function(p) {
 
-      t <- pairwise.wilcox.test(AllRunsrMelted_MC[[p]],
-                                AllRunsrMelted_MC[["Time_bin"]],
-                                p.adjust.method = "none")
-      d <- as.data.frame(matrix(nrow = n_tests, ncol = length(df_dimnames[[2]]),
-                                dimnames = df_dimnames))
-      d$parameter <- p
+    t <- pairwise.wilcox.test(posterior[[p]],
+                              posterior[["Time_bin"]],
+                              p.adjust.method = "none")
 
-      d[paste0("Time_bin", 1:2)] <- as.data.frame(t(combn(levels(AllRunsrMelted_MC[["Time_bin"]]), 2)))
+    d$parameter <- p
 
-      for (i in seq_len(nrow(d))) {
-        d[["n1"]][i] <- sum(AllRunsrMelted_MC[["Time_bin"]] == d[["Time_bin1"]][i])
-        d[["n2"]][i] <- sum(AllRunsrMelted_MC[["Time_bin"]] == d[["Time_bin2"]][i])
-        d[["p-value"]][i] <- t$p.value[d[["Time_bin2"]][i], d[["Time_bin1"]][i]]
-      }
+    d[paste0("Time_bin", 1:2)] <- as.data.frame(t(combn(levels(posterior[["Time_bin"]]), 2)))
+
+    for (i in seq_len(nrow(d))) {
+      d[["n1"]][i] <- sum(posterior[["Time_bin"]] == d[["Time_bin1"]][i])
+      d[["n2"]][i] <- sum(posterior[["Time_bin"]] == d[["Time_bin2"]][i])
+      d[["p-value"]][i] <- t$p.value[d[["Time_bin2"]][i], d[["Time_bin1"]][i]]
+    }
 
 
-    d[["p-value adj"]] <- p.adjust(d[["p-value"]], "fdr")
-    return(df)
-  }), params)
+    d[["p-value adj"]] <- p.adjust(d[["p-value"]], p.adjust.method)
+    return(d)
+  }), parameters)
 
   list(t_tests = t_test_list,
        mwu_tests = mwu_test_list)
@@ -243,37 +336,41 @@ FBD_tests2 <- function(AllRunsrMelted_MC) {
 
 #Visualize deviations from normality for each parameter by time bin using
 #density plots
-FBD_normality_plot <- function(AllRunsrMelted_MC) {
-  params <- c("net_speciation", "relative_extinction", "relative_fossilization")
+FBD_normality_plot <- function(posterior) {
+  parameters <- c("net_speciation", "relative_extinction", "relative_fossilization")
 
-  param.names <- setNames(gsub("_", " ", firstup(params), fixed = TRUE),
-                          params)
+  if (!is.data.frame(posterior) || !all(c("Time_bin", parameters) %in% names(posterior))) {
+    stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
+  }
 
-  AllRunsrMelted_MC <- AllRunsrMelted_MC[c("Time_bin", params)]
+  param.names <- setNames(gsub("_", " ", firstup(parameters), fixed = TRUE),
+                          parameters)
 
-  time.bins <- sort(unique(AllRunsrMelted_MC$Time_bin))
+  posterior <- posterior[c("Time_bin", parameters)]
 
-  AllRunsrMelted_MC$Time_bin <- factor(AllRunsrMelted_MC$Time_bin, levels = time.bins,
-                                       labels = paste("Time bin", time.bins))
+  time.bins <- sort(unique(posterior$Time_bin))
 
-  AllRunsrMelted_MC_long <- reshape(AllRunsrMelted_MC, direction = "long",
-                                    v.names = "vals",
-                                    varying = params,
-                                    timevar = "parameter",
-                                    times = params)
-  AllRunsrMelted_MC_long$parameter <- factor(AllRunsrMelted_MC_long$parameter, levels = params,
-                                             labels = param.names[params])
+  posterior$Time_bin <- factor(posterior$Time_bin, levels = time.bins,
+                             labels = paste("Time bin", time.bins))
+
+  posterior_long <- reshape(posterior, direction = "long",
+                            v.names = "vals",
+                            varying = parameters,
+                            timevar = "parameter",
+                            times = parameters)
+  posterior_long$parameter <- factor(posterior_long$parameter, levels = parameters,
+                                     labels = param.names[parameters])
 
   #Turn variables into residualized versions
-  AllRunsrMelted_MC_long[["resid_vals"]] <- with(AllRunsrMelted_MC_long, vals - ave(vals, parameter, Time_bin))
+  posterior_long[["resid_vals"]] <- with(posterior_long, vals - ave(vals, parameter, Time_bin))
 
-  p <- ggplot(AllRunsrMelted_MC_long, aes(x = resid_vals)) +
-    geom_density(aes(y=after_stat(scaled))) +
-    facet_grid(rows = vars(Time_bin), cols = vars(parameter), scales = "free")
+  p <- ggplot(data = posterior_long, aes(x = .data$resid_vals)) +
+    geom_density(aes(y = after_stat(.data$scaled))) +
+    facet_grid(rows = vars(.data$Time_bin), cols = vars(.data$parameter), scales = "free")
 
   # Add normal densities
   ## Compute SDs for each density (all means = 0)
-  aux_d <- aggregate(vals ~ parameter + Time_bin, data = AllRunsrMelted_MC_long,
+  aux_d <- aggregate(vals ~ parameter + Time_bin, data = posterior_long,
                      FUN = sd)
   names(aux_d)[names(aux_d) == "vals"] <- "sd"
 
@@ -288,7 +385,7 @@ FBD_normality_plot <- function(AllRunsrMelted_MC) {
                         times = c("high", "low"), v.names = "x",
                         varying = c("x_high", "x_low"))
 
-  p <- p + geom_blank(data = aux_d_long, aes(x = x))
+  p <- p + geom_blank(data = aux_d_long, aes(x = .data$x))
 
   ## Extract density data from geom_ensity to correctly scale normal densities
   ggpbd <- merge(layer_data(p, 1), aux_d)
@@ -302,31 +399,34 @@ FBD_normality_plot <- function(AllRunsrMelted_MC) {
   names(maxs)[names(maxs) == "density"] <- "dens_max"
   ggpbd <- merge(ggpbd, maxs)
 
-  p <- p + geom_line(data = ggpbd, aes(x = x, y = norm_density/dens_max), color = "red")
+  p <- p + geom_line(data = ggpbd, aes(x = .data$x, y = .data$norm_density/.data$dens_max), color = "red")
 
   ## Annotate with standard deviation
 
   ### Find which side is more empty, add annotation there
   aux_d$sd_loc_x <- NA_real_
+  rel_pos <- .85 #higher numbers mean more to the right
   for (i in levels(aux_d$PANEL)) {
 
-    ranges <- c(min(aux_d$x_low[aux_d$PANEL == i], ggpbd$x[ggpbd$PANEL == i]), max(aux_d$x_high[aux_d$PANEL == i], ggpbd$x[ggpbd$PANEL == i]))
+    ranges <- c(min(aux_d$x_low[aux_d$PANEL == i],
+                    ggpbd$x[ggpbd$PANEL == i]),
+                max(aux_d$x_high[aux_d$PANEL == i],
+                    ggpbd$x[ggpbd$PANEL == i]))
     ranges_mid <- mean(ranges)
 
-    if (max(ggpbd$scaled[ggpbd$PANEL == i & ggpbd$x < ranges_mid]) >= max(ggpbd$scaled[ggpbd$PANEL == i & ggpbd$x >= ranges_mid])) {
-      aux_d$sd_loc_x[aux_d$PANEL == i] <- sum(c(.25, .75) * ranges)
+    if (max(ggpbd$scaled[ggpbd$PANEL == i & ggpbd$x < ranges_mid]) >=
+        max(ggpbd$scaled[ggpbd$PANEL == i & ggpbd$x >= ranges_mid])) {
+      aux_d$sd_loc_x[aux_d$PANEL == i] <- sum(c(1-rel_pos, rel_pos) * ranges)
     }
     else {
-      aux_d$sd_loc_x[aux_d$PANEL == i] <- sum(c(.75, .25) * ranges)
+      aux_d$sd_loc_x[aux_d$PANEL == i] <- sum(c(rel_pos, 1-rel_pos) * ranges)
     }
 
   }
 
-  p <- p + geom_label(data = aux_d, aes(x = sd_loc_x, y = .8, label = paste0("italic(SD) == ", format(sd, digits = 2))), parse = TRUE)
+  p <- p + geom_label(data = aux_d, aes(x = .data$sd_loc_x, y = .85, label = paste0("italic(SD) == ", format(sd, digits = 2))),
+                      size = 3.5, label.padding	= unit(.15, "lines"), parse = TRUE)
 
-
-  p <- p + theme_bw() +
-    labs(x = "Residual", y = "Scaled density")
-  p
+  p + theme_bw() + labs(x = "Residual", y = "Scaled density")
 }
 

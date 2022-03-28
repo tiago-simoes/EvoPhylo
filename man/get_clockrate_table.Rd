@@ -2,50 +2,38 @@
 \alias{get_clockrate_table}
 
 \title{
-Extract clock rates from a Tree
+Extract clock rate summaries from a Tree
 }
 \description{
-Extracts the clock rates for each node from a tree and stores them in a table.
+Extracts the clock rate summaries for each node from a tree and stores them in a data frame.
 }
 \usage{
 get_clockrate_table(tree, summary = "mean",
-                    drop.dummyextent = TRUE, file = NULL)
+                    drop_dummyextent = TRUE)
 }
 \arguments{
   \item{tree}{
-a \code{tidytree} object; the output of a call to \code{\link[treeio:read.mrbayes]{treeio::read.mrbayes}}.
+a \code{treedata} object; the output of a call to \code{\link[treeio:read.mrbayes]{treeio::read.mrbayes}}.
 }
   \item{summary}{
 the name of the rate summary. Should be one of \code{"mean"} or \code{"median"}.
 }
-  \item{drop.dummyextent}{
+  \item{drop_dummyextent}{
 \code{logical}; whether to drop the "DummyExtent" tip of the tree prior to extracting the clock rates. Default is \code{TRUE}.
 }
-  \item{file}{
-an optional file path where the resulting table will be stored using \code{\link{write.csv}}.
 }
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
+
 \value{
 A data frame containing a column containing the node identifer (\code{node}) and one column for each clock in the tree object containing the rates.
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{clockrate_summary}}, \code{\link{clockrate_summary}}, and \code{\link{clockrate_summary}} for summarizing and examining properties of the resulting rate table. Note that clade must be manually added before these functions can be used.
 }
 \examples{
+data("tree1p")
 
+rate_table <- get_clockrate_table(tree1p)
+
+head(rate_table)
 }

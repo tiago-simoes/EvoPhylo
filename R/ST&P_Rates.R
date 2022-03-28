@@ -1,40 +1,44 @@
-#Rate Table
-get_clockrate_table <- function(tree, summary = "mean", drop.dummyextent = TRUE, file = NULL) {
+#All functions documented with examples
 
-  if (drop.dummyextent) {
+#Rate Table
+get_clockrate_table <- function(tree, summary = "mean", drop_dummyextent = TRUE) {
+
+  if (drop_dummyextent) {
     tree <- treeio::drop.tip(tree, "Dummyextant")
   }
 
   nodes <- as.integer(tree@data$node)
 
-  p <- unglue::unglue_data(names(tree@data), "rate<model>rlens{<clock>}_<summary>",
+  p <- unglue::unglue_data(names(tree@data), "rate<model>rlens<clock>_<summary>",
                            open = "<", close = ">")
   rownames(p) <- names(tree@data)
 
   p <- p[rowSums(is.na(p)) < ncol(p),,drop=FALSE]
 
+  p$clock <- gsub("\\{|\\}", "", p$clock)
+
   summary <- match.arg(summary, c("mean", "median"))
 
   rates <- rownames(p)[p$summary == summary]
 
-  RateTable <- setNames(data.frame(nodes, tree@data[rates]),
+  rate_table <- setNames(data.frame(nodes, tree@data[rates]),
                         c("nodes", paste0("rates", p[rates, "clock"])))
 
-  for (i in names(RateTable)[-1]) RateTable[[i]] <- as.numeric(RateTable[[i]])
+  for (i in seq_len(ncol(rate_table))[-1]) rate_table[[i]] <- as.numeric(rate_table[[i]])
 
-  if (length(file) > 0) {
-    write.csv(RateTable, file = file)
-    invisible(RateTable)
-  }
-  else {
-    return(RateTable)
-  }
+  return(rate_table)
 }
 
 #Summary stats for clades
 clockrate_summary <- function(rate_table, file = NULL, digits = 3) {
 
-  if (!"clade" %in% names(rate_table)) {
+  if (!is.data.frame(rate_table)) {
+    stop("'rate_table' must be a data frame.", call. = FALSE)
+  }
+  if (!any(startsWith(names(rate_table), "rates"))) {
+    stop("'rate_table' must contain \"rates\" columns containing clockrate summaries.", call. = FALSE)
+  }
+  if (!hasName(rate_table, "clade")) {
     stop("A 'clade' column must be present in the data.", call. = FALSE)
   }
 
@@ -54,9 +58,10 @@ clockrate_summary <- function(rate_table, file = NULL, digits = 3) {
   }))
 
   out$clade <- factor(out$clade, levels = clades)
-  rownames(out) <- NULL
 
   out <- out[with(out, order(clock, clade)),]
+
+  rownames(out) <- NULL
 
   if (length(file) > 0) {
     write.csv(out, file = file)
@@ -69,6 +74,16 @@ clockrate_summary <- function(rate_table, file = NULL, digits = 3) {
 
 #Density plot of rates by clade
 clockrate_dens_plot <- function(rate_table, clock = NULL, stack = FALSE, nrow = 1, scales = "fixed") {
+
+  if (!is.data.frame(rate_table)) {
+    stop("'rate_table' must be a data frame.", call. = FALSE)
+  }
+  if (!any(startsWith(names(rate_table), "rates"))) {
+    stop("'rate_table' must contain \"rates\" columns containing clockrate summaries.", call. = FALSE)
+  }
+  if (!hasName(rate_table, "clade")) {
+    stop("A 'clade' column must be present in the data.", call. = FALSE)
+  }
 
   clock_cols <- which(startsWith(names(rate_table), "rates"))
 
@@ -91,16 +106,11 @@ clockrate_dens_plot <- function(rate_table, clock = NULL, stack = FALSE, nrow = 
   if ("Other" %in% clades) clades <- c(setdiff(clades, "Other"), "Other")
   rate_table$clade <- factor(rate_table$clade, levels = clades)
 
-  rate_table_long <- reshape(rate_table, direction = "long",
-                             idvar = c("clade", "nodes"),
-                             v.names = "rates",
-                             varying = startsWith(names(rate_table), "rates"),
-                             timevar = "clock")
-  rate_table_long$clock <- factor(rate_table_long$clock)
-  levels(rate_table_long$clock) <- paste("Clock", levels(rate_table_long$clock))
+  rt <- clock_reshape(rate_table)
+  levels(rt$clock) <- paste("Clock", levels(rt$clock))
 
-
-  rateplot <- ggplot(rate_table_long, aes(x = rates, fill = clade, color = clade)) +
+  rateplot <- ggplot(data = rt, mapping = aes(x = .data$rate, fill = .data$clade, color = .data$clade)) +
+    geom_hline(yintercept = 0) +
     geom_density(position = if (stack) "stack" else "identity",
                  alpha = if (stack) 1 else .3) +
     scale_x_continuous() +
@@ -108,14 +118,21 @@ clockrate_dens_plot <- function(rate_table, clock = NULL, stack = FALSE, nrow = 
     theme_bw() +
     theme(legend.position = "top")
 
-  if (nlevels(rate_table_long$clock) > 1) {
-    rateplot <- rateplot  + facet_wrap(vars(clock), nrow = nrow, scales = scales)
-  }
+  # if (nlevels(rt$clock) > 1) {
+    rateplot <- rateplot  + facet_wrap(~.data$clock, nrow = nrow, scales = scales)
+  # }
   rateplot
 }
 
 #Regression plot of one rate against another
-clockrate_reg_plot <- function(rate_table, clock_x, clock_y, method = "lm", corr = TRUE) {
+clockrate_reg_plot <- function(rate_table, clock_x, clock_y, method = "lm", corr = TRUE, ...) {
+
+  if (!is.data.frame(rate_table)) {
+    stop("'rate_table' must be a data frame.", call. = FALSE)
+  }
+  if (!any(startsWith(names(rate_table), "rates"))) {
+    stop("'rate_table' must contain \"rates\" columns containing clockrate summaries.", call. = FALSE)
+  }
 
   clock_cols <- which(startsWith(names(rate_table), "rates"))
 
@@ -153,7 +170,7 @@ clockrate_reg_plot <- function(rate_table, clock_x, clock_y, method = "lm", corr
 
   regplot <- ggplot(rate_table, aes(x = clock_x, y = clock_y)) +
     geom_point() +
-    geom_smooth(method = method, se = TRUE, formula = y ~ x) +
+    geom_smooth(method = method, formula = y ~ x, ...) +
     scale_x_continuous() +
     scale_y_continuous() +
     labs(x = paste("Clock", clock_x), y = paste("Clock", clock_y)) +
@@ -162,14 +179,19 @@ clockrate_reg_plot <- function(rate_table, clock_x, clock_y, method = "lm", corr
   if (corr) {
     r <- cor(rate_table$clock_x, rate_table$clock_y)
 
-    ggbd1 <- ggplot_build(regplot)$data[[1]]
-    ggbd2 <- ggplot_build(regplot)$data[[2]]
+    #Extract underlying ggplot data to place correlation in correct place in plot
+    ggbd <- ggplot_build(regplot)$data
+
+    ggbd1 <- ggbd[[1]] #geom_point data
+    ggbd2 <- ggbd[[2]] #geom_smooth data
 
     min_x <- min(min(ggbd1$x), min(ggbd2$x))
     max_x <- max(max(ggbd1$x), max(ggbd2$x))
 
-    min_y <- min(min(ggbd1$y), min(ggbd2$y), min(ggbd2$ymin))
-    max_y <- max(max(ggbd1$y), max(ggbd2$y), max(ggbd2$ymax))
+    min_y <- min(min(ggbd1$y), min(ggbd2$y),
+                 if (hasName(ggbd2, "ymin")) min(ggbd2$ymin)) #FALSE when se = FALSE
+    max_y <- max(max(ggbd1$y), max(ggbd2$y),
+                 if (hasName(ggbd2, "ymax")) max(ggbd2$ymax)) #FALSE when se = FALSE
 
     regplot <- regplot +
       annotate("label", label = paste0("italic(r) == ", round(r, 2)), parse = TRUE,

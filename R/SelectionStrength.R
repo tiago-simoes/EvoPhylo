@@ -1,79 +1,120 @@
 #t-tests
-get_pwt_rates <- function(RatesByClade, posterior.clockrate.all.) {
+#rate_table = rate_table_means
+#posterior.clockrate = samples$clockrate?
+get_pwt_rates <- function(rate_table, posterior) {
 
-  post.df <- length(posterior.clockrate.all.) - 1
-  post.mean <- mean(posterior.clockrate.all.)
+  if (missing(rate_table) || !is.data.frame(rate_table)) {
+    stop("'rate_table' must be a data frame.", call. = FALSE)
+  }
+  if (!any(startsWith(names(rate_table), "rates"))) {
+    stop("'rate_table' must contain \"rates\" columns containing clockrate summaries.", call. = FALSE)
+  }
+  if (!hasName(rate_table, "clade")) {
+    stop("A 'clade' column must be present in 'rate_table'.", call. = FALSE)
+  }
+  if (missing(posterior) || !is.data.frame(posterior)) {
+    stop("'posterior' must be a data frame.", call. = FALSE)
+  }
+  if (!hasName(posterior, "clockrate")) {
+    stop("A 'clockrate' column must be present in 'posterior'.", call. = FALSE)
+  }
 
-  RatesByClade$abs_rate <- RatesByClade$rate * post.mean
+  posterior.clockrate <- posterior$clockrate
+  post.df <- length(posterior.clockrate) - 1
+  post.mean <- mean(posterior.clockrate)
 
-  post.se <- sd(posterior.clockrate.all.)/sqrt(length(posterior.clockrate.all.))
-  post.ts <- abs(post.mean - RatesByClade$abs_rate)/post.se
+  rate_table_long <- clock_reshape(rate_table)
+  rate_table_long$abs_rate <- rate_table_long$rate * post.mean
+
+  post.se <- sd(posterior.clockrate)/sqrt(length(posterior.clockrate))
+  post.ts <- abs(post.mean - rate_table_long$abs_rate)/post.se
   pvals <- 2*pt(post.ts, df = post.df, lower.tail = FALSE)
 
-  out <- data.frame(RatesByClade$clade,
-                    RatesByClade$nodes,
-                    RatesByClade$clock,
-                    RatesByClade$rate,
-                    RatesByClade$abs_rate,
-                    RatesByClade$abs_rate,
+  out <- data.frame(rate_table_long$clade,
+                    rate_table_long$nodes,
+                    rate_table_long$clock,
+                    rate_table_long$rate,
+                    rate_table_long$abs_rate,
+                    rate_table_long$abs_rate,
                     pvals)
-  names(out) <- c("clade", "nodes", "clock", "Relative rate", "Absolute rate (mean)", "null", "p.value")
+  names(out) <- c("clade", "nodes", "clock", "relative rate", "absolute rate (mean)", "null", "p.value")
   out
 }
 
 #Plot tree with colored thresholds
-plot_treerates_sgn <- function(tree, posterior.clockrate.all., clock = 1, summary = "mean", threshold = c("1 SD", "2 SD"),
+plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", threshold = c("1 SD", "2 SD"),
                                drop.dummyextent = TRUE,
-                               low = "blue", mid = "gray90", high = "red", xlim = NULL,
+                               low = "blue", mid = "gray90", high = "red", size = 2, xlim = NULL,
                                geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")) {
 
   #Process threshold
-  if (!is.character(threshold)) stop("'threshold' must be a character vector.", call. = FALSE)
-  thresh_conf <- endsWith(threshold, "%")
-  thresh_sd <- endsWith(tolower(threshold), "sd")
+  if (length(threshold) > 0) {
+    if (missing(posterior) || !is.data.frame(posterior)) {
+      stop("'posterior' must be a data frame.", call. = FALSE)
+    }
+    if (!hasName(posterior, "clockrate")) {
+      stop("A 'clockrate' column must be present in 'posterior'.", call. = FALSE)
+    }
 
-  if (any(!thresh_conf & !thresh_sd)) stop("All entries in 'threshold' must end in '%' for confidence intervals or 'SD' for standard deviations.", call. = FALSE)
+    if (!is.character(threshold)) stop("'threshold' must be a character vector.", call. = FALSE)
+    thresh_conf <- endsWith(threshold, "%")
+    thresh_sd <- endsWith(tolower(threshold), "sd")
 
-  thresh_vals <- character(length(threshold))
+    if (any(!thresh_conf & !thresh_sd)) {
+      stop("All entries in 'threshold' must end in '%' for confidence intervals or 'SD' for standard deviations.", call. = FALSE)
+    }
 
-  if (any(thresh_conf)) thresh_vals[thresh_conf] <- substring(threshold[thresh_conf], 1, nchar(threshold[thresh_conf]) - 1)
-  if (any(thresh_sd)) thresh_vals[thresh_sd] <- substring(threshold[thresh_sd], 1, nchar(threshold[thresh_sd]) - 2)
+    thresh_vals <- character(length(threshold))
 
-  if (anyNA(suppressWarnings(as.numeric(thresh_vals)))) {
-    stop("All entries in 'threshold' must be confidence levels or the number of standard deviations to use as the thresholds.", call. = FALSE)
+    if (any(thresh_conf)) thresh_vals[thresh_conf] <- substring(threshold[thresh_conf], 1, nchar(threshold[thresh_conf]) - 1)
+    if (any(thresh_sd)) thresh_vals[thresh_sd] <- substring(threshold[thresh_sd], 1, nchar(threshold[thresh_sd]) - 2)
+
+    if (anyNA(suppressWarnings(as.numeric(thresh_vals)))) {
+      stop("All entries in 'threshold' must be confidence levels or the number of standard deviations to use as the thresholds.", call. = FALSE)
+    }
+    thresh_vals <- as.numeric(thresh_vals)
+
+    #Use relative clockrate
+    posterior.rel.clockrate <- posterior$clockrate/mean(posterior$clockrate)
+    mean.posterior.rel.clockrate <- 1
+
+    breaks <- numeric(2*length(threshold))
+    labels <- character(2*length(threshold))
+
+    if (any(thresh_sd)) {
+      breaks[c(thresh_sd, thresh_sd)] <- mean.posterior.rel.clockrate + c(-thresh_vals[thresh_sd], thresh_vals[thresh_sd]) * sd(posterior.rel.clockrate)
+      labels[c(thresh_sd, thresh_sd)] <- c(sprintf("-%s SD", round(thresh_vals[thresh_sd], 2)),
+                                           sprintf("+%s SD", round(thresh_vals[thresh_sd], 2)))
+    }
+    if (any(thresh_conf)) {
+      n <- length(posterior.rel.clockrate)
+      tcrits <- qt(.5*(1 + thresh_vals[thresh_conf]/100), n - 1)
+      breaks[c(thresh_conf, thresh_conf)] <- mean.posterior.rel.clockrate + c(-tcrits, tcrits) * sd(posterior.rel.clockrate)/sqrt(n)
+      labels[c(thresh_conf, thresh_conf)] <- c(sprintf("Lower %s%%CI", round(thresh_vals[thresh_conf],2)),
+                                               sprintf("Lower %s%%CI", round(thresh_vals[thresh_conf],2)))
+    }
+
+    break_order <- order(breaks)
+    breaks <- breaks[break_order]
+    labels <- labels[break_order]
   }
-  thresh_vals <- as.numeric(thresh_vals)
-
-  if (any(thresh_conf)) {
-    n <- length(posterior.clockrate.all.)
-    tcrits <- qt(.5*(1 + thresh_vals[thresh_conf]/100), n - 1)
+  else {
+    breaks <- numeric(0)
+    labels <- character(0)
   }
-
-  breaks <- numeric(2*length(threshold))
-  if (any(thresh_sd)) breaks[c(thresh_sd, thresh_sd)] <- mean(posterior.clockrate.all.) + c(-thresh_vals[thresh_sd], thresh_vals[thresh_sd]) * sd(posterior.clockrate.all.)
-  if (any(thresh_conf)) breaks[c(thresh_conf, thresh_conf)] <- mean(posterior.clockrate.all.) + c(-tcrits, tcrits)*sd(posterior.clockrate.all.)/sqrt(n)
-  breaks <- breaks/mean(posterior.clockrate.all.)
-
-  labels <- character(2*length(threshold))
-  if (any(thresh_sd)) labels[c(thresh_sd, thresh_sd)] <- c(paste0("-", round(thresh_vals[thresh_sd],2), " SD"),
-                                                           paste0("+", round(thresh_vals[thresh_sd],2), " SD"))
-  if (any(thresh_conf)) labels[c(c(thresh_conf, thresh_conf))] <- c(paste0("Lower ", round(thresh_vals[thresh_conf],2), "%CI"),
-                                                                    paste0("Upper", round(thresh_vals[thresh_conf],2), "%CI"))
-
-  break_order <- order(breaks)
-  breaks <- breaks[break_order]
-  labels <- labels[break_order]
 
   #Drop extant "dummy" tip
   if (drop.dummyextent) {
     tree <- treeio::drop.tip(tree, "Dummyextant")
   }
 
-  p <- unglue::unglue_data(names(tree@data), "rate<model>rlens{<clock>}_<summary>",
+  p <- unglue::unglue_data(names(tree@data), "rate<model>rlens<clock>_<summary>",
                            open = "<", close = ">")
   rownames(p) <- names(tree@data)
 
   p <- p[rowSums(is.na(p)) < ncol(p),,drop=FALSE]
+
+  p$clock <- gsub("\\{|\\}", "", p$clock)
 
   summary <- match.arg(summary, c("mean", "median"))
 
@@ -107,17 +148,18 @@ plot_treerates_sgn <- function(tree, posterior.clockrate.all., clock = 1, summar
     x2 <- round(xlim[2], -1)
   }
 
-
   #Create integer version of variable split up by breaks
   tree@data$clockfac <- as.numeric(cut(tree@data[[rate_var]], breaks = c(-Inf, breaks, Inf)))
 
   selection_plot <- ggtree::ggtree(tree, layout = "rectangular", ladderize = TRUE, right = TRUE,
-                                                position = position_nudge(x = -offset),
-                                                size = 2,
-                                                aes(color = clockfac)) +
-    ggtree::geom_tiplab(size = 3, linesize = 0.01, fontface = "italic", color="black", offset = -offset + .5) +
+                                   position = position_nudge(x = -offset),
+                                   size = size,
+                                   mapping = aes(color = .data$clockfac)) +
+    ggtree::geom_tiplab(size = 3, linesize = 0.01, fontface = "italic",
+                        color = "black", offset = -offset + .5) +
     scale_color_steps2("Background Rate\nThreshold",
-                       low = low, high = high, mid = mid,
+                       low = low, high = high,
+                       mid = mid,
                        midpoint = mean(c(1, length(breaks) + 1)),
                        breaks = seq_along(breaks) + .5,
                        labels = labels,
@@ -137,18 +179,4 @@ plot_treerates_sgn <- function(tree, posterior.clockrate.all., clock = 1, summar
   selection_plot <- ggtree::revts(selection_plot)
 
   return(selection_plot)
-
-}
-
-
-
-clock_reshape <- function(RatesByClade) {
-  RatesByClade_long <- reshape(RatesByClade, direction = "long",
-                               varying = names(RatesByClade)[startsWith(names(RatesByClade), "rates")],
-                               v.names = c("rates"),
-                               timevar = "clock",
-                               idvar = "nodes",
-                               sep = "_")
-  RatesByClade_long[["clock"]] <- factor(RatesByClade_long[["clock"]])
-  RatesByClade_long
 }

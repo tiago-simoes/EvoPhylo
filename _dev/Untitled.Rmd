@@ -1,0 +1,14 @@
+---
+title: "Untitled"
+output: 
+  html_document:
+    always_allow_html: true
+---
+
+```{r, results = 'asis'}
+library(kableExtra)
+d <- data.frame(a = 1:5, b = 6:10)
+d$a[2] <- cell_spec(d$a[2], color = "red")
+kbl(d, format = "html", escape = FALSE) |> kable_styling()
+```
+

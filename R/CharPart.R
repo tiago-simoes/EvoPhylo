@@ -1,61 +1,62 @@
-#Implementing the procedure in CharPartitioning_Tetrapods.R
+#All functions documented with examples
 
 #Load data and compute Gower distance matrix
-get_gower_dist <- function(file, numeric = FALSE) {
-  if (length(file) == 1 && (is.matrix(file) || is.data.frame(file))) {
-    Data_M <- as.data.frame(as.matrix(file))
+get_gower_dist <- function(x, numeric = FALSE) {
+  if (is.matrix(x) || is.data.frame(x) ||
+      (is.list(x) && all(lengths(x) == length(x[[1]])))) {
+    data <- as.data.frame(as.matrix(x))
   }
-  else if (length(file) == 1 && is.character(file) && endsWith(file, ".nex")) {
-    Data_M <- ape::read.nexus.data(file)
-    Data_M <- as.data.frame(Data_M)
+  else if (length(x) == 1 && is.character(x) && endsWith(x, ".nex")) {
+    data <- as.data.frame(ape::read.nexus.data(x))
   }
-  else stop("'file' must be a file path to a .nex file or a data frame.", call. = FALSE)
+  else stop("'x' must be a data frame, matrix, or file path to a .nex file.", call. = FALSE)
 
-  if (numeric) Data_M[] <- lapply(Data_M, as.numeric)
+  if (numeric) data[] <- safe_as.numeric(data)
 
-  Dmatrix <- StatMatch::gower.dist(Data_M, KR.corr = TRUE)
-
-  return(Dmatrix)
+  return(gowerdist(data))
 }
 
 #Compute silhouette widths for different numbers of clusters; optionally plot
-get_sil_widths <- function(Dmatrix, max.k = 10, plot = TRUE) {
+get_sil_widths <- function(dist_mat, max.k = 10) {
 
   sil_width <- vapply(2:max.k, function(i) {
-    cluster::pam(Dmatrix, diss = TRUE, k = i)$silinfo$avg.width
+    cluster::pam(dist_mat, diss = TRUE, k = i)$silinfo$avg.width
   }, numeric(1L))
 
   sil_width_df <- data.frame(k = 2:max.k, sil_width = sil_width)
   class(sil_width_df) <- c("sil_width_df", "data.frame")
 
-  if (plot) {
-    print(
-      plot.sil_width_df(sil_width_df)
-    )
-    invisible(sil_width_df)
-  }
-  else {
-    return(sil_width_df)
-  }
+  return(sil_width_df)
 }
 
 #Plot silhouette widths
 plot.sil_width_df <- function(x, ...) {
-  ggplot(x, aes(x = k, y = sil_width)) +
-    geom_line() +
+  ggplot(data = x) +
+    geom_line(aes(x = .data$k, y = .data$sil_width), ...) +
     labs(x = "Number of clusters", y = "Silhouette Width") +
     theme_bw()
 }
 
 #Perform clustering,
-make_clusters <- function(Dmatrix, k, tsne = FALSE, plot = tsne, tsne_dim = 2, ...) {
-  pam.fit <- cluster::pam(Dmatrix, diss = TRUE, k = k)
+make_clusters <- function(dist_mat, k, tsne = FALSE, tsne_dim = 2,
+                          tsne_theta = 0, ...) {
+  pam.fit <- cluster::pam(dist_mat, diss = TRUE, k = k)
 
   df.Clusters <- data.frame(character_number = seq_along(pam.fit$clustering),
                             cluster = factor(pam.fit$clustering, levels = seq_len(k)))
 
   if (tsne) {
-    tsne <- Rtsne::Rtsne(Dmatrix, is_distance = TRUE, theta = 0, dims = tsne_dim)
+    if (!requireNamespace("Rtsne", quietly = TRUE)) {
+      stop("The {Rtsne} package must be installed to use tSNE.\nInstall it using install.packages(\"Rtsne\").", call. = FALSE)
+    }
+    args <- list(...)
+    args[["X"]] <- dist_mat
+    args[["dims"]] <- tsne_dim
+    args[["theta"]] <- tsne_theta
+    args[["is_distance"]] <- TRUE
+
+    tsne <- do.call(Rtsne::Rtsne, args)
+
     for (i in seq_len(tsne_dim)) {
       df.Clusters[[paste0("tSNE_Dim", i)]] <- tsne$Y[,i]
     }
@@ -63,19 +64,12 @@ make_clusters <- function(Dmatrix, k, tsne = FALSE, plot = tsne, tsne_dim = 2, .
 
   class(df.Clusters) <- c("cluster_df", "data.frame")
 
-  if (plot) {
-    print(
-        plot.cluster_df(df.Clusters, ...)
-    )
-  }
-
   attr(df.Clusters, "pam.fit") <- pam.fit
 
   return(df.Clusters)
 }
 
-plot.cluster_df <- function(x, seed = 100, nrow = 1, ...) {
-  names(x)[names(x) == "cluster"] <- "Cluster"
+plot.cluster_df <- function(x, seed = NA, nrow = 1, ...) {
 
   if (sum(startsWith(names(x), "tSNE_Dim")) > 1) {
 
@@ -86,42 +80,47 @@ plot.cluster_df <- function(x, seed = 100, nrow = 1, ...) {
     plots <- lapply(seq_along(dim_combs), function(i) {
       ggplot(x, aes(x = .data[[dim_combs[[i]][1]]],
                     y = .data[[dim_combs[[i]][2]]])) +
-        geom_point(aes(color = Cluster)) +
-          ggrepel::geom_text_repel(aes(label = character_number, color = Cluster),
-                                   show.legend = FALSE, ...) +
-        theme_bw()
+        geom_point(aes(color = .data$cluster)) +
+          ggrepel::geom_text_repel(aes(label = .data$character_number, color = .data$cluster),
+                                   show.legend = FALSE, seed = seed, ...) +
+        theme_bw() + labs(color = "Cluster")
     })
 
     p <- Reduce("+", plots) + patchwork::plot_layout(nrow = nrow, guides = "collect")
   }
   else {
     pos <- position_jitter(seed = seed, width = .3)
-    x$ypos <- 1
-    p <- ggplot(x, aes(x = cluster, y = ypos)) +
-      geom_point(aes(color = cluster), position = pos) +
-      ggrepel::geom_text_repel(aes(label = character_number, color = cluster),
-                      show.legend = FALSE, position = pos, ...) +
+
+    p <- ggplot(x, aes(x = .data$cluster, y = 1)) +
+      geom_point(aes(color = .data$cluster), position = pos) +
+      ggrepel::geom_text_repel(aes(label = .data$character_number, color = .data$cluster),
+                      show.legend = FALSE, position = pos, seed = seed, ...) +
       theme_bw() + theme(axis.title.y = element_blank(),
                          axis.text.y = element_blank(),
                          axis.ticks.y = element_blank(),
-                         panel.grid = element_blank())
+                         panel.grid = element_blank()) +
+      labs(color = "Cluster")
   }
   p
 }
 
-#Write cluster output to a Nexus file and returning the cluster
-cluster_to_nexus <- function(clusters, file = "") {
+#Write cluster output to a Nexus file
+cluster_to_nexus <- function(cluster_df, file = NULL) {
 
-  s <- data.frame(cluster = levels(clusters$cluster),
-                  vector = vapply(levels(clusters$cluster), function(i) {
-                    paste(clusters$character_number[clusters$cluster==i], collapse = " ")
-                  }, character(1L)))
+  cluster <- levels(cluster_df$cluster)
+  vector <- vapply(levels(cluster_df$cluster), function(i) {
+    paste(cluster_df$character_number[cluster_df$cluster==i], collapse = " ")
+  }, character(1L))
 
   out <- paste0("#NEXUS\n\n",
-                paste(paste0("charset morph_p", s$cluster," = ", s$vector, ";"), collapse = "\n"),
+                paste(paste0("charset morph_p", cluster," = ", vector, ";"), collapse = "\n"),
                 "\nset partition=all;\n")
 
-  cat(out, file = file)
-
-  return(invisible(out))
+  if (is.null(file)) {
+    return(out)
+  }
+  else {
+    cat(out, file = file)
+    return(invisible(out))
+  }
 }

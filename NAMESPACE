@@ -1,14 +1,20 @@
 import(ggplot2)
-import(stats)
-import(utils)
-import(rlang)
-importFrom(grid, "unit", "textGrob")
+import(patchwork)
+
+importFrom("stats",
+           "aggregate", "ave", "bartlett.test", "cor",
+           "dnorm", "fligner.test", "p.adjust", "pairwise.t.test",
+           "pairwise.wilcox.test", "pt", "qt", "quantile", "reshape",
+           "sd", "setNames", "shapiro.test")
+importFrom("utils",
+           "combn", "hasName", "read.table", "write.csv")
+importFrom("grid",
+           "unit", "textGrob")
 
 export("get_gower_dist", "get_sil_widths", "make_clusters", "cluster_to_nexus",
        "get_pwt_rates", "plot_treerates_sgn",
-       "FBD_summary", "FBD_dens_plot", "FBD_reshape", "FBD_tests1", "FBD_tests2", "FBD_normality_plot",
-       "get_clockrate_table", "clockrate_summary", "clockrate_dens_plot", "clockrate_reg_plot",
-       "clock_reshape")
+       "import_log", "FBD_summary", "FBD_dens_plot", "FBD_tests1", "FBD_tests2", "FBD_normality_plot",
+       "get_clockrate_table", "clockrate_summary", "clockrate_dens_plot", "clockrate_reg_plot")
 
 S3method("plot", "sil_width_df")
 S3method("plot", "cluster_df")

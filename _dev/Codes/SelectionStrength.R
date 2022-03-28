@@ -47,7 +47,7 @@ remotes::install_github("YuLab-SMU/ggtree")
 
 
 # Import melted from RWTY script
-AllRunsrMelted_MC <- read.csv("AllRuns_COMB_Melted.csv")
+AllRunsrMelted_MC <- read.csv("_dev/Examples/SelectionStrength/AllRuns_COMB_Melted.csv")
 names(AllRunsrMelted_MC)
 
 #Downsample posterior sample to 1k (necessary for some stats tests)
@@ -82,7 +82,7 @@ RatesByClade <- read.csv("RateByClockrMelted_means.csv", header = TRUE)
 names(RatesByClade)
 
 #Import all clockrate values from full posterior output
-posterior <- read.table("3p_TipNodeMC_CombLog_8k.p", header = TRUE)
+posterior <- read.table("_dev/Examples/SelectionStrength/3p_TipNodeMC_CombLog_8k.p", header = TRUE)
 names(posterior)
 
 #Summary stats of clockrate parameter from the posterior (absolute rate)
@@ -162,7 +162,7 @@ write.csv(out, file="RateSign_T.test(Tip+Node MCT).csv")
 # For plotting trees without dummy extant, use the following only (not remove.MrB.extant) - SINGLE & MULTI CLOCK
 
 
-MCT_TRE2<- read.mrbayes("3p_TK02_FT_SFBD4l_TipNode_MultiTopCons_AllCom.t")
+MCT_TRE2<- read.mrbayes("_dev/Examples/SelectionStrength/3p_TK02_FT_SFBD4l_TipNode_MultiTopCons_AllCom.t")
 names(MCT_TRE2@data)
 
 #Drop extant "dummy" tip

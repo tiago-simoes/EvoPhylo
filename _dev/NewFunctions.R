@@ -12,7 +12,7 @@ transform.woffset.root.metadata <- function(treesfile, logfile, outfile) {
   trees <- treeio::read.beast(treesfile)
   log <- read.table(logfile, header = TRUE)
   log <- log$offset
-  print(median(log))
+  # print(median(log))
 
   for(i in seq_along(trees)) trees[[i]]@phylo$offset <- log[i]
 
@@ -29,23 +29,23 @@ transform.woffset.root.metadata <- function(treesfile, logfile, outfile) {
     t$edge[t$edge > ntips] <- t$edge[t$edge > ntips] + 1
     t$edge[t$edge >= root] <- t$edge[t$edge >= root] + 1
 
-    t$edge <- rbind(c(root, root+1), c(root, ntips+1),t$edge)
-    t$edge.length <- c(0.1 , root_time, t$edge.length)
+    t$edge <- rbind(c(root, root+1), c(root, ntips+1), t$edge)
+    t$edge.length <- c(0.1, root_time, t$edge.length)
     t$tip.label <- c(t$tip.label, "dummy")
     t$Nnode <- t$Nnode + 1
 
     tmp@data$node <- as.numeric(tmp@data$node)
-    tmp@data$node[tmp@data$node > ntips] <- tmp@data$node[tmp@data$node > ntips]+1
-    tmp@data$node[tmp@data$node >= root] <- tmp@data$node[tmp@data$node >= root]+1
+    tmp@data$node[tmp@data$node > ntips] <- tmp@data$node[tmp@data$node > ntips] + 1
+    tmp@data$node[tmp@data$node >= root] <- tmp@data$node[tmp@data$node >= root] + 1
     tmp@data$node <- as.character(tmp@data$node)
-    tmp@data <- rbind(tmp@data, list(rate = 0, node = as.character(ntips+1)))
+    tmp@data <- rbind(tmp@data, list(rate = 0, node = as.character(ntips + 1)))
 
-    tmp@phylo = t # save the modified S3 class tree file (t) as the phylo component of the S4 class tmp t
+    tmp@phylo <- t # save the modified S3 class tree file (t) as the phylo component of the S4 class tmp t
     return(tmp) # save that as presenttrees
   })
 
   write.beast.treedatas(presenttrees, file = outfile) # save the final tree with metadata using function described below
-  presenttrees
+  invisible(presenttrees)
 }
 
 ##NEW Function- Write presenttrees from above as trees with metadata
@@ -71,7 +71,7 @@ write.beast.treedatas <- function(treedatas, file = "", translate = TRUE, tree.n
   #allow or not translate taxon names data block
   if (translate) {
     cat("\tTRANSLATE\n", file = file, append = TRUE)
-    obj <- ape:::.compressTipLabel(obj)
+    obj <- compressTipLabel(obj)
     X <- paste("\t\t", seq_len(N), "\t", attr(obj, "TipLabel"),
                ",", sep = "")
     X[length(X)] <- gsub(",", "", X[length(X)])
@@ -115,6 +115,35 @@ uncompressTipLabel <- function(x) {
   x
 }
 
+compressTipLabel <- function (x, ref = NULL) {
+  #Taken from ape:::.compressTipLabel
+  if (!is.null(attr(x, "TipLabel")))
+    return(x)
+  if (is.null(ref))
+    ref <- x[[1]]$tip.label
+  n <- length(ref)
+  if (length(unique(ref)) != n)
+    stop("Some tip labels are duplicated in tree no. 1.", call. = FALSE)
+  relabel <- function(y) {
+    label <- y$tip.label
+    if (!identical(label, ref)) {
+      if (length(label) != length(ref))
+        stop("One tree has a different number of tips.", call. = FALSE)
+      ilab <- match(label, ref)
+      if (anyNA(ilab))
+        stop("One tree has different tip labels.", call. = FALSE)
+      ie <- match(seq_len(n), y$edge[, 2])
+      y$edge[ie, 2] <- ilab
+    }
+    y$tip.label <- NULL
+    y
+  }
+  x <- unclass(x)
+  x <- lapply(x, relabel)
+  attr(x, "TipLabel") <- ref
+  class(x) <- "multiPhylo"
+  x
+}
 
 
 #### FUNCTION 2: REMOVE "DUMMY" extant FROM BEAST MCC TREE ######
@@ -128,18 +157,18 @@ convert.MCC.tree = function(treefile, outfile) {
   node <- tmp@phylo$edge[tmp@phylo$edge[,2] == tip,1]
   noden <- which(tmp@data$node == as.character(node))
 
-  offset <- min(tmp@data$height_median[as.numeric(tmp@data$node) <= length(tmp@phylo$tip.label) &
-                                              as.numeric(tmp@data$node) != tip])
-  print(offset)
+  # offset <- min(tmp@data$height_median[as.numeric(tmp@data$node) <= length(tmp@phylo$tip.label) &
+  #                                             as.numeric(tmp@data$node) != tip])
+  # print(offset)
 
-  tmp@phylo <- ape::drop.tip(tmp@phylo, tip)
+  tmp@phylo <- treeio::drop.tip(tmp@phylo, tip)
   tmp@data <- tmp@data[-c(tipn, noden),]
   tmp@data$node <- as.numeric(tmp@data$node)
   tmp@data$node[tmp@data$node > tip] <- tmp@data$node[tmp@data$node > tip] - 1
   tmp@data$node[tmp@data$node > node] <- tmp@data$node[tmp@data$node > node] - 1
   tmp@data$node <- as.character(tmp@data$node)
 
-  tmp@data$height_0.95_HPD <- lapply(tmp@data$height_0.95_HPD, function(x) x-offset)
+  tmp@data$height_0.95_HPD[] <- lapply(tmp@data$height_0.95_HPD, function(x) x-offset)
   treeio::write.beast(tmp,outfile)
   system(paste0("gsed -i 's%* UNTITLED%TREE1%' ", outfile))
 }
@@ -152,31 +181,20 @@ convert.MrB.trees = function(treefile, outfile) {
 
   tmp <- treeio::read.mrbayes(treefile)
 
-  tmp@data$age_mean <- as.numeric(tmp@data$age_mean)
-  tmp@data$age_median <- as.numeric(tmp@data$age_median)
-  tmp@data$effectivebrlenIgrBrlens_mean <- as.numeric(tmp@data$effectivebrlenIgrBrlens_mean)
-  tmp@data$effectivebrlenIgrBrlens_median <- as.numeric(tmp@data$effectivebrlenIgrBrlens_median)
-  tmp@data$height_mean <- as.numeric(tmp@data$height_mean)
-  tmp@data$height_median <- as.numeric(tmp@data$height_median)
-  tmp@data$length_mean <- as.numeric(tmp@data$length_mean)
-  tmp@data$length_median <- as.numeric(tmp@data$length_median)
-  tmp@data$prob <- as.numeric(tmp@data$prob)
-  tmp@data$prob_percent <- as.numeric(tmp@data$prob_percent)
-  tmp@data$prob_stddev <- as.numeric(tmp@data$prob_stddev)
-  tmp@data$node <- as.numeric(tmp@data$node)
-  tmp@data$rateIgrBrlens_mean <- as.numeric(tmp@data$rateIgrBrlens_mean)
-  tmp@data$rateIgrBrlens_median <- as.numeric(tmp@data$rateIgrBrlens_median)
+  tmp@data$`prob+-sd` <- as.factor(tmp@data$`prob+-sd`)
+
+  char_col <- vapply(tmp@data, is.character, logical(1L))
+  tmp@data[char_col] <- lapply(tmp@data[char_col], as.numeric)
 
   tip <- which(tmp@phylo$tip.label == "Dummyextant")
   tipn <- which(tmp@data$node == as.character(tip))
   node <- tmp@phylo$edge[tmp@phylo$edge[,2] == tip,1]
   noden <- which(tmp@data$node == as.character(node))
 
-  offset <- min(tmp@data$age_median[as.numeric(tmp@data$node) <= length(tmp@phylo$tip.label) &
-                                           as.numeric(tmp@data$node) != tip])
-  print(offset)
+  # offset <- min(tmp@data$age_median[which(as.numeric(tmp@data$node) <= length(tmp@phylo$tip.label) &
+  #                                             as.numeric(tmp@data$node) != tip)])
 
-  tmp@phylo <- ape::drop.tip(tmp@phylo, tip)
+  tmp@phylo <- treeio::drop.tip(tmp@phylo, tip)
   tmp@data <- tmp@data[-c(tipn,noden),]
   tmp@data$node <- as.numeric(tmp@data$node)
   tmp@data$node[tmp@data$node > tip] <- tmp@data$node[tmp@data$node > tip] - 1
@@ -184,7 +202,7 @@ convert.MrB.trees = function(treefile, outfile) {
   tmp@data$node <- as.character(tmp@data$node)
 
   treeio::write.beast(tmp,outfile)
-  system(paste0("gsed -i 's%* UNTITLED%TREE1%' ", outfile))
+  # system(paste0("gsed -i 's%* UNTITLED%TREE1%' ", outfile))
 }
 
 
