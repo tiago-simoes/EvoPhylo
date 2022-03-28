@@ -4,7 +4,7 @@
 Compute Silhouette Widths for Various Numbers of Clusters
 }
 \description{
-Computes silhouette widths for several possible numbers of clusters to help determine the best number, usually as that with the highest silhouette width.
+Computes silhouette widths for several possible numbers of clusters to help determine the best number, usually that with the highest silhouette width. 
 }
 \usage{
 get_sil_widths(Dmatrix, max.k = 10, plot = TRUE)
@@ -17,7 +17,7 @@ a Gower distance matrix, the output of a call to \code{\link{get_gower_dist}}.
 the maximum number of clusters to search across.
 }
   \item{plot}{
-whether to plot the silhouette widths against the the number of clusters. If \code{TRUE}, \code{\link{plot.sil_width_df}} is called on the resulting output.
+whether to plot the silhouette widths against the number of clusters. If \code{TRUE}, \code{\link{plot.sil_width_df}} is called on the resulting output. Clusters inferred with PAM (k-medoids).
 }
 }
 \details{
