@@ -25,7 +25,7 @@ whether to display stacked density plots (\code{TRUE}) or overlapping density pl
 when plotting rates for more than one clock, how many rows should be filled by the plots. This is passed to \code{\link{facet_wrap}}.
 }
   \item{scales}{
-when plotting rates for more than one clock, whether the axis scales should be fixed across clocks or allowed to vary. This is passed to \code{\link{facet_wrap}}.
+when plotting rates for more than one clock, whether the axis scales should be "fixed" (default) across clocks or allowed to vary ("free", "free_x", or "free_y"). This is passed to \code{\link{facet_wrap}}.
 }
 }
 \details{

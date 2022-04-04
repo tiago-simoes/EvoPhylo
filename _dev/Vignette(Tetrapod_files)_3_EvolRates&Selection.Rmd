@@ -45,11 +45,26 @@ clockrate_summary(RateTable_Medians, "Sum_RateTable_Medians.csv", digits=2)
 clockrate_summary(RateTable_Medians, digits=2) 
 ```
 
+Plot distributions of rates by clock partition and clade
+```{r}
+#Overlapping plots
+clockrate_dens_plot(RateTable_Medians, stack = FALSE, nrow = 1, scales = "fixed")
+```
+```{r}
+#Stacked plots
+clockrate_dens_plot(RateTable_Medians, stack = TRUE, nrow = 1, scales = "fixed")
+```
 
 ```{r}
-#Plot distributions of rates by clock and clade
-clockrate_dens_plot(RateTable_Medians, stack = TRUE, nrow = 1)
+#Stacked plots with viridis color scale
+clockrate_dens_plot(RateTable_Medians, stack = TRUE, nrow = 1, scales = "fixed")+
+    ggplot2::scale_color_viridis_d() +
+    ggplot2::scale_fill_viridis_d()
+```
 
+Plot linear regressions of rates from two or more clocks
+
+```{r}
 #Plot regressions of rates from two clocks
 p12 <- clockrate_reg_plot(RateTable_Medians, clock_x = 1, clock_y = 2)
 p13 <- clockrate_reg_plot(RateTable_Medians, clock_x = 1, clock_y = 3)
@@ -61,13 +76,16 @@ gridExtra::grid.arrange(p12, p13, p23, nrow = 2)
 
 # SelectionStrength
 
+1. Import rate table with customized clade membership added as an extra column
 
 Workflow:
 ```{r}
-data("rate_table_means")
-data("tree1p")
+#Import rate table with clade membership 
+RateTable_Medians<- read.csv("RateTable_Medians_Clades.csv", header = TRUE)
+
 RatesByClade <- clock_reshape(RateTable_Medians)
-posterior <- read.table("_dev/Examples/SelectionStrength/3p_TipNodeMC_CombLog_8k.p", header = TRUE)
+
+posterior <- read.table("3p_CombLog(4runs)_8k.p", header = TRUE)
 
 #Get matrix of t-tests for difference between the posterior mean and each rate
 get_pwt_rates(RatesByClade, posterior$clockrate.all.)

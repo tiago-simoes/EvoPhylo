@@ -1,3 +1,19 @@
+#Reshape rate_table with a column for each rate to long
+clock_reshape <- function(rate_table) {
+  rate_table_long <- reshape(rate_table, direction = "long",
+                             varying = which(startsWith(names(rate_table), "rates")),
+                             v.names = "rate",
+                             timevar = "clock",
+                             idvar = "nodes",
+                             sep = "_")
+  rate_table_long[["clock"]] <- factor(rate_table_long[["clock"]])
+  rownames(rate_table_long) <- NULL
+  attr(rate_table_long, "reshapeLong") <- NULL
+
+  rate_table_long
+}
+
+
 #t-tests
 #rate_table = rate_table_means
 #posterior.clockrate = samples$clockrate?
