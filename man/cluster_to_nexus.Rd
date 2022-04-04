@@ -13,10 +13,10 @@ cluster_to_nexus(cluster_df, file = NULL)
 
 \arguments{
   \item{cluster_df}{
-a \code{cluster_df} object; the output of a call to \code{\link{make_clusters}}.
+A \code{cluster_df} object; the output of a call to \code{\link{make_clusters}}.
 }
   \item{file}{
-the path of the text file to be created that is to contain the cluster information in a NEXUS-readable format. If \code{NULL} (the default), no file will be written and the output will be returned as a string. If \code{""}, the text will be printed to the console. Passed directly to the \code{file} argument of \code{\link{cat}}.
+The path of the text file to be created containing the cluster information in Nexus format (can be copied and pasted into a Mr. Bayes command block). If \code{NULL} (the default), no file will be written and the output will be returned as a string. If \code{""}, the text will be printed to the console. Passed directly to the \code{file} argument of \code{\link{cat}}.
 }
 }
 \value{
@@ -29,10 +29,11 @@ The text as a string, returned invisibly if \code{file} is not \code{NULL}. Use 
 \examples{
 data("characters")
 
-dist_matrix <- get_gower_dist(characters)
+#Reading example file as categorical data
+Dmatrix <- get_gower_dist(characters)
 
-#Create 3 clusters
-cluster_df <- make_clusters(dist_matrix, k = 3)
+#Create clusters with PAM under k=3 partitions
+cluster_df <- make_clusters(Dmatrix, k = 3)
 
 #Name of the desired .nex file, e.g., "clusters.nex"
 file <- tempfile(fileext = ".nex")

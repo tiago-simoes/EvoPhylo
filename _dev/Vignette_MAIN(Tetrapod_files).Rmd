@@ -1,33 +1,47 @@
 ---
-title: "Notes"
+title: "Vignette_MAIN(Tetrapod_files)"
 output: html_document
-editor_options: 
-  chunk_output_type: console
 ---
-```{r}
-knitr::opts_chunk$set(eval = FALSE)
+
+```{r setup, eval = TRUE}
+knitr::opts_chunk$set(warning = FALSE)
 ```
 
-An R package to implement data pre-processing steps for analyses like those in https://www.nature.com/articles/s41559-021-01532-x. 
+An R package to implement data pre-processing steps for analyses like those in [Simões & Pierce 2021](https://www.nature.com/articles/s41559-021-01532-x). 
 
-#### CharPart
+### Install package EvoPhylo
+
+```{r}
+#devtools::install_github("tiago-simoes/EvoPhylo")
+#install.packages("EvoPhylo")
+library(EvoPhylo)
+```
+
+#### Character Partitioning
 (Documented)
 
-Workflow:
+Simple Workflow: Generate distance matrix, analyze clusters with PAM under chosen k value (from Si) and simple vizualization:
 ```{r}
-data("characters")
+setwd("Examples/CharPartitioning/")
 
-#Load character data and produce Gower distance matrix
-Dmatrix <- get_gower_dist(characters, numeric = FALSE)
+#Load character data matrix and produce Gower distance matrix
+Dmatrix <- get_gower_dist("DataMatrix.nex", numeric = FALSE)
 
 #Plot number of cluster against silhouette width
 sw <- get_sil_widths(Dmatrix, max.k = 10)
-plot(sw)
-#Decide on number of clusters based on plot; here, k = 3
+plot(sw, color = "red", size=1)
+#Decide on number of clusters based on plot; here, k = 3 partitions
 
-#Generate and visualize clusters
-clusters <- make_clusters(Dmatrix, k = 3, tsne = TRUE)
+#Generate and vizualize clusters with PAM under chosen k value. 
+clusters <- make_clusters(Dmatrix, k = 3, tsne = FALSE)
 plot(clusters)
+```
+
+Complete Workflow: Generate distance matrix, analyze clusters with PAM under chosen k value (from Si). Also, produce a graphic clustering (tSNEs), coloring data points according to PAM clusters, to independently verify PAM clustering
+```{r}
+#User may also generate clusters with PAM and produce a graphic clustering (tSNEs)
+clusters <- make_clusters(Dmatrix, k = 3, tsne = TRUE, tsne_dim = 3)
+plot(clusters, nrow = 2)
 
 #Write clusters to Nexus file
 cluster_to_nexus(clusters, file = "Clusters_Nexus.txt")

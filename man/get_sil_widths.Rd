@@ -6,7 +6,7 @@
 Compute Silhouette Widths for Various Numbers of Clusters
 }
 \description{
-Computes silhouette widths for several possible numbers of clusters to help determine the best number, usually as that with the highest silhouette width.
+Computes silhouette widths for several possible numbers of clusters \code{k}, which determines how well an object falls within their cluster compared to other clusters. The best number of clusters \code{k} is the one with the highest silhouette width.
 }
 \usage{
 get_sil_widths(dist_mat, max.k = 10)
@@ -42,11 +42,13 @@ For \code{plot.sil_widths_df()}, a \code{ggplot} object that can be manipulated 
 \examples{
 data("characters")
 
-dist_matrix <- get_gower_dist(characters)
+#Reading example file as categorical data
+Dmatrix <- get_gower_dist(characters)
 
-sil_widths <- get_sil_widths(dist_matrix, max.k = 7)
+#Get silhouette widths for k=7
+sw <- get_sil_widths(Dmatrix, max.k = 7)
 
-sil_widths
+sw
 
-plot(sil_widths, color = "red")
+plot(sw, color = "red", size =2)
 }
