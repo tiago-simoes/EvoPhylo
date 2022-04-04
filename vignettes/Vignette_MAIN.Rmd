@@ -42,24 +42,6 @@ plot(clusters)
 cluster_to_nexus(clusters, file = "Clusters_Nexus.txt")
 ```
 
-#### SelectionStrength
-(Documented)
-
-Workflow:
-```{r}
-data("rate_table_means")
-data("tree1p")
-RatesByClade <- clock_reshape(RateTable_Means)
-posterior <- read.table("_dev/Examples/SelectionStrength/3p_TipNodeMC_CombLog_8k.p", header = TRUE)
-
-#Get matrix of t-tests for difference between the posterior mean and each rate
-get_pwt_rates(RatesByClade, posterior$clockrate.all.)
-
-#Plot tree using various thresholds
-plot_treerates_sgn(tree, posterior$clockrate.all., clock = 1,
-   threshold = c("1 SD", "2 SD", "95%"))
-
-```
 
 #### ST&P_Rates
 (Documented)
@@ -86,6 +68,27 @@ p23 <- clockrate_reg_plot(RateTable_Means, clock_x = 2, clock_y = 3)
 gridExtra::grid.arrange(p12, p13, p23, nrow = 2)
 
 ```
+
+
+#### SelectionStrength
+(Documented)
+
+Workflow:
+```{r}
+data("rate_table_means")
+data("tree1p")
+RatesByClade <- clock_reshape(RateTable_Means)
+posterior <- read.table("_dev/Examples/SelectionStrength/3p_TipNodeMC_CombLog_8k.p", header = TRUE)
+
+#Get matrix of t-tests for difference between the posterior mean and each rate
+get_pwt_rates(RatesByClade, posterior$clockrate.all.)
+
+#Plot tree using various thresholds
+plot_treerates_sgn(tree, posterior$clockrate.all., clock = 1,
+   threshold = c("1 SD", "2 SD", "95%"))
+
+```
+
 
 #### ST&P_FBD
 (Documented)

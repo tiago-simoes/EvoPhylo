@@ -1,0 +1,108 @@
+---
+title: "Evolutionary Rates & Selection Strength"
+output: html_document
+---
+
+An R package to implement data pre-processing steps for analyses like those in [Simões & Pierce 2021](https://www.nature.com/articles/s41559-021-01532-x). 
+
+```{r, setup}
+knitr::opts_chunk$set(warning = TRUE)
+knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/")
+```
+
+# Extracting Evolutionary Rates Statistics and Plots
+
+Extract evolutionary rate summary statistics from each node from a Bayesian clock (time) summary tree produced by Mr. Bayes and stores them in a data frame.
+
+1. First, get rates from tree file and create rate table. 
+2. Export the rate table
+
+Workflow:
+```{r}
+#Import summary tree
+tree<-treeio::read.mrbayes("Tree_3p(raw).t")
+
+#Get table of clock rates with summary stats for each node in the tree for each relaxed clock partition 
+RateTable_Medians_no_clades <- get_clockrate_table(tree, summary = "median")
+
+#Export the rate table
+write.csv(RateTable_Medians_no_clades, file="RateTable_Medians.csv")
+```
+
+3. Import rate table with customized clade membership added as an extra column
+4. Get summary statistics table and plots for each clade by clock 
+
+Workflow:
+```{r}
+#Import rate table with clade membership 
+RateTable_Medians<- read.csv("RateTable_Medians_Clades.csv", header = TRUE)
+
+#Get summary statistics table for each clade by clock 
+clockrate_summary(RateTable_Medians, "Sum_RateTable_Medians.csv", digits=2)
+```
+
+```{r, echo = FALSE}
+clockrate_summary(RateTable_Medians, digits=2) 
+```
+
+
+```{r}
+#Plot distributions of rates by clock and clade
+clockrate_dens_plot(RateTable_Medians, stack = TRUE, nrow = 1)
+
+#Plot regressions of rates from two clocks
+p12 <- clockrate_reg_plot(RateTable_Medians, clock_x = 1, clock_y = 2)
+p13 <- clockrate_reg_plot(RateTable_Medians, clock_x = 1, clock_y = 3)
+p23 <- clockrate_reg_plot(RateTable_Medians, clock_x = 2, clock_y = 3)
+
+gridExtra::grid.arrange(p12, p13, p23, nrow = 2)
+
+```
+
+# SelectionStrength
+
+
+Workflow:
+```{r}
+data("rate_table_means")
+data("tree1p")
+RatesByClade <- clock_reshape(RateTable_Medians)
+posterior <- read.table("_dev/Examples/SelectionStrength/3p_TipNodeMC_CombLog_8k.p", header = TRUE)
+
+#Get matrix of t-tests for difference between the posterior mean and each rate
+get_pwt_rates(RatesByClade, posterior$clockrate.all.)
+
+#Plot tree using various thresholds
+plot_treerates_sgn(tree, posterior$clockrate.all., clock = 1,
+   threshold = c("1 SD", "2 SD", "95%"))
+
+```
+
+
+#### ST&P_FBD
+(Documented)
+
+Workflow:
+```{r}
+#Reshape Allruns data from wide to long
+#import_log()
+data("posterior1p")
+
+#Summarize parameters by time bin and analysis
+FBD_summary(posterior1p)
+
+#Plot density of parameter by time bin
+FBD_dens_plot(posterior1p, parameter = "net_speciation", type = "density")
+FBD_dens_plot(posterior1p, parameter = "net_speciation", type = "violin")
+
+#Tests for normality and homoscedasticity for each parameter across time bins
+#and analyses
+FBD_tests1(posterior1p)
+
+#Visualize deviations from normality and similarity of variances
+FBD_normality_plot(posterior1p)
+
+#Test differences in location for each parameter between time bins 
+FBD_tests2(posterior1p)
+
+```

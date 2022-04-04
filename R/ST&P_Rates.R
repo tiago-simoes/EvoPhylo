@@ -1,9 +1,9 @@
 #All functions documented with examples
 
 #Rate Table
-get_clockrate_table <- function(tree, summary = "mean", drop_dummyextent = TRUE) {
+get_clockrate_table <- function(tree, summary = "median", drop_dummyextant = TRUE) {
 
-  if (drop_dummyextent) {
+  if (drop_dummyextant) {
     tree <- treeio::drop.tip(tree, "Dummyextant")
   }
 
