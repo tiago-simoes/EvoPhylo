@@ -3,23 +3,29 @@ title: "Evolutionary Rates & Selection Strength"
 output: html_document
 ---
 
-An R package to implement data pre-processing steps for analyses like those in [Simões & Pierce 2021](https://www.nature.com/articles/s41559-021-01532-x). 
+This vignette explains how to extract evolutionary rate parameters estimated from relaxed clock Bayesian inference analyses produced by the program Mr. Bayes. It also shows how to use evolutionary rate based inference of selection strength (or mode) adapted to clock-based rates, as introduced by [Simões & Pierce 2021](https://www.nature.com/articles/s41559-021-01532-x). 
 
-```{r, setup}
-knitr::opts_chunk$set(warning = TRUE)
+```{r, setup, echo=FALSE}
+knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/")
 ```
 
 # Extracting Evolutionary Rates Statistics and Plots
 
-Extract evolutionary rate summary statistics from each node from a Bayesian clock (time) summary tree produced by Mr. Bayes and stores them in a data frame.
+Open the *EvoPhylo* package
+
+```{r}
+library(EvoPhylo)
+```
+
+Extract evolutionary rate summary statistics from each node from a Bayesian clock (time-calibrate) summary tree produced by Mr. Bayes, store them in a data frame, produce summary tables, and plots:
 
 1. First, get rates from tree file and create rate table. 
 2. Export the rate table
 
 Workflow:
 ```{r}
-#Import summary tree
+#Import summary tree produced by Mr. Bayes
 tree<-treeio::read.mrbayes("Tree_3p(raw).t")
 
 #Get table of clock rates with summary stats for each node in the tree for each relaxed clock partition 

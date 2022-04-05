@@ -3,7 +3,7 @@
 
 \title{
 Extract evolutionary rates from a Bayesian clock tree
-
+}
 \description{
 Extract evolutionary rate summary statistics for each node from a Bayesian clock (time) summary tree produced by Mr. Bayes and stores them in a data frame.
 }

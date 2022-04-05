@@ -1,24 +1,29 @@
 ---
-title: "Character Partitioning"
-output:
-  html_document: default
+title: "Part 1. Character Partitioning"
+output: html_document
 ---
-An R package to implement data pre-processing steps for analyses like those in [Simões & Pierce 2021](https://www.nature.com/articles/s41559-021-01532-x). 
+This vignette explains how to conduct automated morphological character partitioning as a pre-processing step for phylogenetic analysis of morphological data, as introduced by [Simões & Pierce 2021](https://www.nature.com/articles/s41559-021-01532-x). 
 
-```{r, setup}
+```{r, setup, echo=FALSE}
 knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/")
 ```
 
-# Install package *EvoPhylo*
+# Installing package *EvoPhylo*
 
-```{r}
-#devtools::install_github("tiago-simoes/EvoPhylo")
-#install.packages("EvoPhylo")
-library(EvoPhylo)
+```{r, eval = FALSE}
+install.packages("EvoPhylo")
+# or
+devtools::install_github("tiago-simoes/EvoPhylo")
 ```
 
 # Character Partitioning
+
+Open the *EvoPhylo* package
+
+```{r}
+library(EvoPhylo)
+```
 
 Generate distance matrix, analyze clusters with PAM under chosen k value (from Si)
 ```{r}

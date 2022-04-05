@@ -24,7 +24,6 @@ firstup <- function(x) {
 }
 
 #Reshape AllRuns from wide to long with Time_bins as time and parameters as varying
-#Not exported
 FBD_reshape <- function(samples) {
   if (!is.data.frame(samples) ||
       !any(startsWith(names(samples), "net_speciation_")) ||

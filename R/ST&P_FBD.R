@@ -85,6 +85,30 @@ import_log <- function(path = ".", burnin = .25, downsample = 1e4) {
   posterior
 }
 
+
+#Reshape AllRuns from wide to long with Time_bins as time and parameters as varying
+FBD_reshape <- function(samples) {
+  if (!is.data.frame(samples) ||
+      !any(startsWith(names(samples), "net_speciation_")) ||
+      !any(startsWith(names(samples), "relative_extinction_")) ||
+      !any(startsWith(names(samples), "relative_fossilization_"))) {
+    stop("'samples' must be a data frame with columns for net_speciation, relative_extinction, and relative_fossilization.", call. = FALSE)
+  }
+
+  samples_long <- reshape(samples, direction = "long",
+                          varying = list(names(samples)[startsWith(names(samples), "net_speciation_")],
+                                         names(samples)[startsWith(names(samples), "relative_extinction_")],
+                                         names(samples)[startsWith(names(samples), "relative_fossilization_")]),
+                          v.names = c("net_speciation", "relative_extinction", "relative_fossilization"),
+                          timevar = "Time_bin",
+                          sep = "_",
+                          idvar = "Gen", ids = samples[["Gen"]])
+  samples_long[["Time_bin"]] <- factor(samples_long[["Time_bin"]])
+  attr(samples_long, "reshapeLong") <- NULL
+  samples_long
+}
+
+
 #Get summary (n, mean, sd, 5 number) of parameters values by time bin
 FBD_summary <- function(posterior, file = NULL, digits = 3) {
 
