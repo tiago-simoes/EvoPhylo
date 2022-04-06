@@ -1,5 +1,14 @@
+import(ape)
+import(cluster)
+import(deeptime)
 import(ggplot2)
+import(ggrepel)
+import(ggtree)
+import(kableExtra)
 import(patchwork)
+import(treeio)
+import(Rtsne)
+import(unglue)
 
 importFrom("stats",
            "aggregate", "ave", "bartlett.test", "cor",

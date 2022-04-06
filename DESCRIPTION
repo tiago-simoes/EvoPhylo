@@ -13,20 +13,23 @@ Authors@R: c(
 Depends:
     R (>= 4.0.0)
 Imports:
+    ape (>= 1.16.2),
     cluster (>= 2.1.2),
+	deeptime (>= 0.2.0),
     ggplot2 (>= 3.3.5),
     ggrepel (>= 0.9.1),
-    deeptime (>= 0.2.0),
+	grid,
     ggtree (>= 3.1.4.992),
+	kableExtra,
+	patchwork,
     treeio (>= 1.16.2),
-    ape (>= 1.16.2),
+	Rtsne (>= 0.15),
+	stats,
     unglue (>= 0.1.0),
-    patchwork,
-    knitr,
-    rmarkdown,
-    kableExtra
+	utils
 Suggests:
-    Rtsne (>= 0.15)
+    knitr,
+	rmarkdown
 Encoding: UTF-8
 LazyData: true
 License: GPL (>=2)

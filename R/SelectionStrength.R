@@ -31,11 +31,11 @@ get_pwt_rates <- function(rate_table, posterior) {
   if (missing(posterior) || !is.data.frame(posterior)) {
     stop("'posterior' must be a data frame.", call. = FALSE)
   }
-  if (!hasName(posterior, "clockrate")) {
-    stop("A 'clockrate' column must be present in 'posterior'.", call. = FALSE)
+  if (!hasName(posterior, "clockrate.all.")) {
+    stop("A 'clockrate.all.' column must be present in 'posterior'.", call. = FALSE)
   }
 
-  posterior.clockrate <- posterior$clockrate
+  posterior.clockrate <- posterior$clockrate.all.
   post.df <- length(posterior.clockrate) - 1
   post.mean <- mean(posterior.clockrate)
 
@@ -59,7 +59,7 @@ get_pwt_rates <- function(rate_table, posterior) {
 
 #Plot tree with colored thresholds
 plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", threshold = c("1 SD", "2 SD"),
-                               drop.dummyextent = TRUE,
+                               drop.dummyextant = TRUE,
                                low = "blue", mid = "gray90", high = "red", size = 2, xlim = NULL,
                                geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")) {
 
@@ -68,8 +68,8 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
     if (missing(posterior) || !is.data.frame(posterior)) {
       stop("'posterior' must be a data frame.", call. = FALSE)
     }
-    if (!hasName(posterior, "clockrate")) {
-      stop("A 'clockrate' column must be present in 'posterior'.", call. = FALSE)
+    if (!hasName(posterior, "clockrate.all.")) {
+      stop("A 'clockrate.all.' column must be present in 'posterior'.", call. = FALSE)
     }
 
     if (!is.character(threshold)) stop("'threshold' must be a character vector.", call. = FALSE)
@@ -91,7 +91,7 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
     thresh_vals <- as.numeric(thresh_vals)
 
     #Use relative clockrate
-    posterior.rel.clockrate <- posterior$clockrate/mean(posterior$clockrate)
+    posterior.rel.clockrate <- posterior$clockrate.all./mean(posterior$clockrate.all.)
     mean.posterior.rel.clockrate <- 1
 
     breaks <- numeric(2*length(threshold))
@@ -120,7 +120,7 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
   }
 
   #Drop extant "dummy" tip
-  if (drop.dummyextent) {
+  if (drop.dummyextant) {
     tree <- treeio::drop.tip(tree, "Dummyextant")
   }
 

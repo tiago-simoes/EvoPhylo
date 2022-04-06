@@ -83,22 +83,43 @@ gridExtra::grid.arrange(p12, p13, p23, nrow = 2)
 # SelectionStrength
 
 1. Import rate table with customized clade membership added as an extra column
+2. Import combined log file from all runs. This is produced by using `import_log`, or using LogCombiner from the [BEAST2](https://www.beast2.org/beagle-beast-2-in-cluster/index.html) software package.
 
-Workflow:
 ```{r}
 #Import rate table with clade membership 
-RateTable_Medians<- read.csv("RateTable_Medians_Clades.csv", header = TRUE)
+RateTable_Means<- read.csv("RateTable_Means_Clades.csv", header = TRUE)
 
-RatesByClade <- clock_reshape(RateTable_Medians)
+#Transform table from wide to long format
+RatesByClade <- clock_reshape(RateTable_Means)
 
-posterior <- read.table("3p_CombLog(4runs)_8k.p", header = TRUE)
+#Import combined log file from all runs (if available)
+Comb_posterior3p <- read.table("3p_CombLog(4runs)_8k.p", header = TRUE)
 
-#Get matrix of t-tests for difference between the posterior mean and each rate
-get_pwt_rates(RatesByClade, posterior$clockrate.all.)
+#OR
 
+#Import all log (.p) files from all runs and combine them, with burn-in = 25% and downsampling to 10k trees in file
+Comb_posterior3p <- import_log("E:/Git/EvoPhylo/_dev/Examples/LogFiles3p", burnin = 0.25, downsample = 10000)
+```
+
+3. Produce a table of pairwise t-tests for difference between the mean clockrate value in the posterior and the absolute rate for each tree node
+```{r}
+#Get table of pairwise t-tests for difference between the posterior mean and the rate for each tree node
+RateSign_tests<- get_pwt_rates2(RateTable_Medians, Comb_posterior3p)
+
+#Show first 10 lines of table
+head(RateSign_tests, 10)
+
+#Export the table
+write.csv(RateSign_tests, file="RateSign_tests.csv")
+```
+
+4. Plot selection gradient on the summary tree
+```{r}
 #Plot tree using various thresholds
-plot_treerates_sgn(tree, posterior$clockrate.all., clock = 1,
-   threshold = c("1 SD", "2 SD", "95%"))
+plot_treerates_sgn(tree, Comb_posterior3p, 
+                   clock = 1,               #Show rates for clock partition 1
+                   summary = "mean",   
+                   threshold = c("1 SD", "2 SD", "95%"))
 
 ```
 
