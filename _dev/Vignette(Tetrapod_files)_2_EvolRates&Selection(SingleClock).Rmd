@@ -1,5 +1,5 @@
 ---
-title: "Evolutionary Rates & Selection Strength"
+title: "Evolutionary Rates & Selection Strength (Single clock tree)"
 output: html_document
 ---
 
@@ -7,7 +7,7 @@ This vignette explains how to extract evolutionary rate parameters estimated fro
 
 ```{r, setup, echo=FALSE}
 knitr::opts_chunk$set(warning = FALSE)
-knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/")
+knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/SingleClockTree/")
 ```
 
 # Evolutionary Rates Statistics and Plots
@@ -25,7 +25,7 @@ Extract evolutionary rate summary statistics from each node from a Bayesian cloc
 
 ```{r}
 #Import summary tree produced by Mr. Bayes
-tree<-treeio::read.mrbayes("Tree_3p(raw).t")
+tree<-treeio::read.mrbayes("Tree_1p.t")
 
 #Get table of clock rates with summary stats for each node in the tree for each relaxed clock partition 
 RateTable_Medians_no_clades <- get_clockrate_table(tree, summary = "median")
@@ -101,15 +101,17 @@ RatesByClade <- clock_reshape(RateTable_Means)
 
 ```{r}
 #Import all log (.p) files from all runs and combine them, with burn-in = 25% and downsampling to 2.5k trees in each log file
-Comb_posterior3p <- import_log("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/LogFiles3p", burnin = 0.25, downsample = 2500)
+#Comb_posterior3p <- import_log("E:/Git/EvoPhylo/_dev/Examples/SingleClockTree/LogFiles3p", burnin = 0.25, downsample = 2500)
 
 #OR
 
 #Import combined log file from all runs (if available)
-Comb_posterior3p <- read.table("3p_CombLog(4runs).p", header = TRUE)
+Comb_posterior1p <- read.table("1p_CombLog(4runs).p", header = TRUE)
+
+Comb_posterior1p<- FBD_reshape(Comb_posterior1p)
 
 #Show first 10 lines of combined log file
-head(Comb_posterior3p, 10)
+head(Comb_posterior1p, 10)
 ```
 
 3. Produce a table of pairwise t-tests for difference between the mean clockrate value in the posterior and the absolute rate for each tree node
