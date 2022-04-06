@@ -60,7 +60,9 @@ get_pwt_rates <- function(rate_table, posterior) {
 #Plot tree with colored thresholds
 plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", threshold = c("1 SD", "2 SD"),
                                drop.dummyextant = TRUE,
-                               low = "blue", mid = "gray90", high = "red", size = 2, xlim = NULL,
+                               low = "blue", mid = "gray90", high = "red",
+                               branch_size = 2, tip_size = 2,
+                               xlim = NULL, nbreaks = 10, geo_size=list(2, 3),
                                geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")) {
 
   #Process threshold
@@ -169,9 +171,9 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
 
   selection_plot <- ggtree::ggtree(tree, layout = "rectangular", ladderize = TRUE, right = TRUE,
                                    position = position_nudge(x = -offset),
-                                   size = size,
+                                   size = branch_size,
                                    mapping = aes(color = .data$clockfac)) +
-    ggtree::geom_tiplab(size = 3, linesize = 0.01, fontface = "italic",
+    ggtree::geom_tiplab(size = tip_size, linesize = 0.01, fontface = "italic",
                         color = "black", offset = -offset + .5) +
     scale_color_steps2("Background Rate\nThreshold",
                        low = low, high = high,
@@ -180,17 +182,19 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
                        breaks = seq_along(breaks) + .5,
                        labels = labels,
                        limits = c(1.5 - 1e-8, length(breaks) + .5 + 1e-8)) +
-    deeptime::coord_geo(xlim = c(x1, x2), ylim = c(0, treeio::Ntip(tree) + 2), expand = FALSE,
+    deeptime::coord_geo(xlim = c(x1, x2), ylim = c(-1, treeio::Ntip(tree) + 2), expand = FALSE,
                         dat = list("epochs", "periods"), abbrv = list(TRUE, FALSE),
                         skip = geo_skip,
                         pos = list("bottom", "bottom"), alpha = 1, height = unit(1, "line"),
-                        rot = 0, size = list(2.5, 3), neg = TRUE) +
-    scale_x_continuous(n.breaks = 7, labels = abs) +
+                        rot = 0, size = geo_size, neg = TRUE) +
+    scale_x_continuous(n.breaks = nbreaks, labels = abs) +
     ggtree::theme_tree2() +
     labs(title = "Selection Strength") +
     theme(plot.title = element_text(size = 12, face = "bold", hjust = 0.5),
-          legend.position = c(.9, .2),
-          legend.title = element_text(size = 10, face = "bold"))
+          legend.position = c(.05, .25),
+          legend.title = element_text(size = 8, face = "bold"),
+          legend.key.size = unit(0.5,'cm'),
+          legend.text = element_text(size=7))
 
   selection_plot <- ggtree::revts(selection_plot)
 

@@ -1,0 +1,46 @@
+---
+title: "FBD parameters"
+output: html_document
+---
+
+This vignette explains how to extract FBD (fossilized birth-death) parameters estimated from relaxed clock Bayesian inference analyses produced by the program Mr. Bayes. 
+
+```{r, setup, echo=FALSE}
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/")
+```
+
+# Extracting Evolutionary Rates Statistics and Plots
+
+Open the *EvoPhylo* package
+
+```{r}
+library(EvoPhylo)
+```
+
+Extract evolutionary rate summary statistics from each node from a Bayesian clock (time-calibrate) summary tree produced by Mr. Bayes, store them in a data frame, produce summary tables, and plots:
+
+#### FBD Parameters Statistics and Plots
+```{r}
+#Reshape Allruns data from wide to long
+#import_log()
+data("posterior1p")
+
+#Summarize parameters by time bin and analysis
+FBD_summary(posterior1p)
+
+#Plot density of parameter by time bin
+FBD_dens_plot(posterior1p, parameter = "net_speciation", type = "density")
+FBD_dens_plot(posterior1p, parameter = "net_speciation", type = "violin")
+
+#Tests for normality and homoscedasticity for each parameter across time bins
+#and analyses
+FBD_tests1(posterior1p)
+
+#Visualize deviations from normality and similarity of variances
+FBD_normality_plot(posterior1p)
+
+#Test differences in location for each parameter between time bins 
+FBD_tests2(posterior1p)
+
+```

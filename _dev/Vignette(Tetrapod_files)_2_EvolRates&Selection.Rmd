@@ -10,12 +10,14 @@ knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/")
 ```
 
-# Extracting Evolutionary Rates Statistics and Plots
+# Evolutionary Rates Statistics and Plots
 
 Open the *EvoPhylo* package
 
 ```{r}
 library(EvoPhylo)
+library(ggtree)
+library(ggplot2)
 ```
 
 Extract evolutionary rate summary statistics from each node from a Bayesian clock (time-calibrate) summary tree produced by Mr. Bayes, store them in a data frame, produce summary tables, and plots:
@@ -23,7 +25,6 @@ Extract evolutionary rate summary statistics from each node from a Bayesian cloc
 1. First, get rates from tree file and create rate table. 
 2. Export the rate table
 
-Workflow:
 ```{r}
 #Import summary tree produced by Mr. Bayes
 tree<-treeio::read.mrbayes("Tree_3p(raw).t")
@@ -32,13 +33,12 @@ tree<-treeio::read.mrbayes("Tree_3p(raw).t")
 RateTable_Medians_no_clades <- get_clockrate_table(tree, summary = "median")
 
 #Export the rate table
-write.csv(RateTable_Medians_no_clades, file="RateTable_Medians.csv")
+#write.csv(RateTable_Medians_no_clades, file="RateTable_Medians.csv")
 ```
 
 3. Import rate table with customized clade membership added as an extra column
 4. Get summary statistics table and plots for each clade by clock 
 
-Workflow:
 ```{r}
 #Import rate table with clade membership 
 RateTable_Medians<- read.csv("RateTable_Medians_Clades.csv", header = TRUE)
@@ -80,6 +80,7 @@ gridExtra::grid.arrange(p12, p13, p23, nrow = 2)
 
 ```
 
+
 # SelectionStrength
 
 1. Import rate table with customized clade membership added as an extra column
@@ -98,19 +99,19 @@ Comb_posterior3p <- read.table("3p_CombLog(4runs)_8k.p", header = TRUE)
 #OR
 
 #Import all log (.p) files from all runs and combine them, with burn-in = 25% and downsampling to 10k trees in file
-Comb_posterior3p <- import_log("E:/Git/EvoPhylo/_dev/Examples/LogFiles3p", burnin = 0.25, downsample = 10000)
+#Comb_posterior3p <- import_log("E:/Git/EvoPhylo/_dev/Examples/LogFiles3p", burnin = 0.25, downsample = 10000)
 ```
 
 3. Produce a table of pairwise t-tests for difference between the mean clockrate value in the posterior and the absolute rate for each tree node
 ```{r}
 #Get table of pairwise t-tests for difference between the posterior mean and the rate for each tree node
-RateSign_tests<- get_pwt_rates2(RateTable_Medians, Comb_posterior3p)
+RateSign_tests<- get_pwt_rates(RateTable_Medians, Comb_posterior3p)
 
 #Show first 10 lines of table
 head(RateSign_tests, 10)
 
 #Export the table
-write.csv(RateSign_tests, file="RateSign_tests.csv")
+#write.csv(RateSign_tests, file="RateSign_tests.csv")
 ```
 
 4. Plot selection gradient on the summary tree
@@ -118,36 +119,9 @@ write.csv(RateSign_tests, file="RateSign_tests.csv")
 #Plot tree using various thresholds
 plot_treerates_sgn(tree, Comb_posterior3p, 
                    clock = 1,               #Show rates for clock partition 1
-                   summary = "mean",   
-                   threshold = c("1 SD", "2 SD", "95%"))
-
-```
-
-
-#### ST&P_FBD
-(Documented)
-
-Workflow:
-```{r}
-#Reshape Allruns data from wide to long
-#import_log()
-data("posterior1p")
-
-#Summarize parameters by time bin and analysis
-FBD_summary(posterior1p)
-
-#Plot density of parameter by time bin
-FBD_dens_plot(posterior1p, parameter = "net_speciation", type = "density")
-FBD_dens_plot(posterior1p, parameter = "net_speciation", type = "violin")
-
-#Tests for normality and homoscedasticity for each parameter across time bins
-#and analyses
-FBD_tests1(posterior1p)
-
-#Visualize deviations from normality and similarity of variances
-FBD_normality_plot(posterior1p)
-
-#Test differences in location for each parameter between time bins 
-FBD_tests2(posterior1p)
+                   summary = "mean",        #sets summary stats to get from summary tree nodes
+                   branch_size = 1.5, tip_size = 2,                      #sets size for tree elements
+                   xlim=c(-450,-250), nbreaks = 8, geo_size=list(3, 3),  #sets limits and breaks for geoscale
+                   threshold = c("1 SD", "2 SD", "95%"))                 #sets threshold for selection mode
 
 ```
