@@ -1,6 +1,8 @@
 ---
 title: "Evolutionary Rates & Selection Strength"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 This vignette explains how to extract evolutionary rate parameters estimated from relaxed clock Bayesian inference analyses produced by the program Mr. Bayes. It also shows how to use evolutionary rate based inference of selection strength (or mode) adapted to clock-based rates, as introduced by [Simões & Pierce 2021](https://www.nature.com/articles/s41559-021-01532-x). 
@@ -16,8 +18,8 @@ Open the *EvoPhylo* package
 
 ```{r}
 library(EvoPhylo)
-library(ggplot2)
-library(ggtree)
+#library(ggplot2)
+#library(ggtree)
 ```
 
 Extract evolutionary rate summary statistics from each node from a Bayesian clock (time-calibrate) summary tree produced by Mr. Bayes, store them in a data frame, produce summary tables, and plots:
@@ -34,8 +36,8 @@ RateTable_Medians_no_clades <- get_clockrate_table(tree, summary = "median")
 RateTable_Means_no_clades <- get_clockrate_table(tree, summary = "mean")
 
 #Export the rate table
-write.csv(RateTable_Medians_no_clades, file="RateTable_Medians.csv")
-write.csv(RateTable_Means_no_clades, file="RateTable_Means.csv")
+#write.csv(RateTable_Medians_no_clades, file="RateTable_Medians.csv")
+#write.csv(RateTable_Means_no_clades, file="RateTable_Means.csv")
 ```
 
 3. Import rate table with customized clade membership added as an extra column
