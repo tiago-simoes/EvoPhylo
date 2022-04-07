@@ -16,6 +16,8 @@ Open the *EvoPhylo* package
 
 ```{r}
 library(EvoPhylo)
+library(ggplot2)
+library(ggtree)
 ```
 
 Extract evolutionary rate summary statistics from each node from a Bayesian clock (time-calibrate) summary tree produced by Mr. Bayes, store them in a data frame, produce summary tables, and plots:
@@ -25,7 +27,7 @@ Extract evolutionary rate summary statistics from each node from a Bayesian cloc
 
 ```{r}
 #Import summary tree produced by Mr. Bayes
-tree<-treeio::read.mrbayes("Tree_3p(raw).t")
+tree<-treeio::read.mrbayes("Tree_3p.t")
 
 #Get table of clock rates with summary stats for each node in the tree for each relaxed clock partition 
 RateTable_Medians_no_clades <- get_clockrate_table(tree, summary = "median")
@@ -84,6 +86,8 @@ gridExtra::grid.arrange(p12, p13, p23, nrow = 2)
 ---
 
 
+
+
 # SelectionStrength
 
 1. Import rate table with customized clade membership added as an extra column
@@ -106,7 +110,7 @@ Comb_posterior3p <- import_log("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/Log
 #OR
 
 #Import combined log file from all runs (if available)
-Comb_posterior3p <- read.table("3p_CombLog(4runs).p", header = TRUE)
+#Comb_posterior3p <- read.table("3p_CombLog(4runs).p", header = TRUE)
 
 #Show first 10 lines of combined log file
 head(Comb_posterior3p, 10)
@@ -115,7 +119,7 @@ head(Comb_posterior3p, 10)
 3. Produce a table of pairwise t-tests for difference between the mean clockrate value in the posterior and the absolute rate for each tree node
 ```{r}
 #Get table of pairwise t-tests for difference between the posterior mean and the rate for each tree node
-RateSign_tests<- get_pwt_rates(RateTable_Medians, Comb_posterior3p)
+RateSign_tests<- get_pwt_rates(RateTable_Means, Comb_posterior3p)
 
 #Show first 10 lines of table
 head(RateSign_tests, 10)
@@ -131,7 +135,7 @@ plot_treerates_sgn(tree, Comb_posterior3p,
                    clock = 1,               #Show rates for clock partition 1
                    summary = "mean",        #sets summary stats to get from summary tree nodes
                    branch_size = 1.5, tip_size = 2,                      #sets size for tree elements
-                   xlim=c(-450,-250), nbreaks = 8, geo_size=list(3, 3),  #sets limits and breaks for geoscale
+                   xlim=c(-450,-260), nbreaks = 8, geo_size=list(3, 3),  #sets limits and breaks for geoscale
                    threshold = c("1 SD", "2 SD", "95%"))                 #sets threshold for selection mode
 
 ```

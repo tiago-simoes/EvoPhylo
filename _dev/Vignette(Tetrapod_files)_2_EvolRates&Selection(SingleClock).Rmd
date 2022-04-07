@@ -16,6 +16,8 @@ Open the *EvoPhylo* package
 
 ```{r}
 library(EvoPhylo)
+library(ggplot2)
+library(ggtree)
 ```
 
 Extract evolutionary rate summary statistics from each node from a Bayesian clock (time-calibrate) summary tree produced by Mr. Bayes, store them in a data frame, produce summary tables, and plots:
@@ -101,7 +103,7 @@ RatesByClade <- clock_reshape(RateTable_Means)
 
 ```{r}
 #Import all log (.p) files from all runs and combine them, with burn-in = 25% and downsampling to 2.5k trees in each log file
-#Comb_posterior3p <- import_log("E:/Git/EvoPhylo/_dev/Examples/SingleClockTree/LogFiles3p", burnin = 0.25, downsample = 2500)
+#Comb_posterior1p <- import_log("E:/Git/EvoPhylo/_dev/Examples/SingleClockTree/LogFiles3p", burnin = 0.25, downsample = 2500)
 
 #OR
 
@@ -117,7 +119,7 @@ head(Comb_posterior1p, 10)
 3. Produce a table of pairwise t-tests for difference between the mean clockrate value in the posterior and the absolute rate for each tree node
 ```{r}
 #Get table of pairwise t-tests for difference between the posterior mean and the rate for each tree node
-RateSign_tests<- get_pwt_rates(RateTable_Medians, Comb_posterior3p)
+RateSign_tests<- get_pwt_rates(RateTable_Means, Comb_posterior1p)
 
 #Show first 10 lines of table
 head(RateSign_tests, 10)
@@ -129,7 +131,7 @@ head(RateSign_tests, 10)
 4. Plot selection gradient on the summary tree
 ```{r}
 #Plot tree using various thresholds
-plot_treerates_sgn(tree, Comb_posterior3p, 
+plot_treerates_sgn(tree, Comb_posterior1p, 
                    clock = 1,               #Show rates for clock partition 1
                    summary = "mean",        #sets summary stats to get from summary tree nodes
                    branch_size = 1.5, tip_size = 2,                      #sets size for tree elements

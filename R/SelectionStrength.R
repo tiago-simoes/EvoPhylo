@@ -14,11 +14,11 @@ clock_reshape <- function(rate_table) {
 }
 
 
+
 #t-tests
 #rate_table = rate_table_means
 #posterior.clockrate = samples$clockrate?
 get_pwt_rates <- function(rate_table, posterior) {
-
   if (missing(rate_table) || !is.data.frame(rate_table)) {
     stop("'rate_table' must be a data frame.", call. = FALSE)
   }
@@ -31,11 +31,11 @@ get_pwt_rates <- function(rate_table, posterior) {
   if (missing(posterior) || !is.data.frame(posterior)) {
     stop("'posterior' must be a data frame.", call. = FALSE)
   }
-  if (!hasName(posterior, "clockrate.all.")) {
-    stop("A 'clockrate.all.' column must be present in 'posterior'.", call. = FALSE)
+  if (hasName(posterior, "clockrate.all.")) {
+    colnames(posterior)[which(names(posterior) == "clockrate.all.")] <- "clockrate"
   }
 
-  posterior.clockrate <- posterior$clockrate.all.
+  posterior.clockrate <- posterior$clockrate
   post.df <- length(posterior.clockrate) - 1
   post.mean <- mean(posterior.clockrate)
 
@@ -57,6 +57,7 @@ get_pwt_rates <- function(rate_table, posterior) {
   out
 }
 
+
 #Plot tree with colored thresholds
 plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", threshold = c("1 SD", "2 SD"),
                                drop.dummyextant = TRUE,
@@ -70,8 +71,8 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
     if (missing(posterior) || !is.data.frame(posterior)) {
       stop("'posterior' must be a data frame.", call. = FALSE)
     }
-    if (!hasName(posterior, "clockrate.all.")) {
-      stop("A 'clockrate.all.' column must be present in 'posterior'.", call. = FALSE)
+  if (hasName(posterior, "clockrate.all.")) {
+    colnames(posterior)[which(names(posterior) == "clockrate.all.")] <- "clockrate"
     }
 
     if (!is.character(threshold)) stop("'threshold' must be a character vector.", call. = FALSE)
@@ -93,7 +94,7 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
     thresh_vals <- as.numeric(thresh_vals)
 
     #Use relative clockrate
-    posterior.rel.clockrate <- posterior$clockrate.all./mean(posterior$clockrate.all.)
+    posterior.rel.clockrate <- posterior$clockrate/mean(posterior$clockrate)
     mean.posterior.rel.clockrate <- 1
 
     breaks <- numeric(2*length(threshold))
@@ -189,7 +190,7 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
                         rot = 0, size = geo_size, neg = TRUE) +
     scale_x_continuous(n.breaks = nbreaks, labels = abs) +
     ggtree::theme_tree2() +
-    labs(title = "Selection Strength") +
+    labs(title = paste0("Selection for partition: ", paste(clock), collapse = ", "), call. = FALSE) +
     theme(plot.title = element_text(size = 12, face = "bold", hjust = 0.5),
           legend.position = c(.05, .25),
           legend.title = element_text(size = 8, face = "bold"),
