@@ -12,9 +12,9 @@ knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/")
 # Installing package *EvoPhylo*
 
 ```{r, eval = FALSE}
-install.packages("EvoPhylo")
+#install.packages("EvoPhylo")
 # or
-devtools::install_github("tiago-simoes/EvoPhylo", lib="C:/Program Files/R/R-4.1.0/library")
+#devtools::install_github("tiago-simoes/EvoPhylo", lib="C:/Program Files/R/R-4.1.0/library")
 ```
 
 # Character Partitioning
