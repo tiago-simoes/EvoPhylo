@@ -1,15 +1,24 @@
 ---
-title: "Part 1. Character Partitioning"
-output: html_document
+title: "Character Partitioning"
+date: '2022-04-08'
+output:
+  html_vignette:
+    toc: yes
+vignette: |
+  %\VignetteIndexEntry{Character Partitioning} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+link-citations: true
 ---
-This vignette explains how to conduct automated morphological character partitioning as a pre-processing step for phylogenetic analysis of morphological data, as introduced by [Simões & Pierce 2021](https://www.nature.com/articles/s41559-021-01532-x). 
+This vignette explains how to conduct automated morphological character partitioning as a pre-processing step for phylogenetic analysis of morphological data, as introduced by [@simões2021].
 
 ```{r, setup, echo=FALSE}
 knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/")
 ```
 
-# Installing package *EvoPhylo*
+## Installing package *EvoPhylo*
 
 ```{r, eval = FALSE}
 #install.packages("EvoPhylo")
@@ -17,7 +26,7 @@ knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/")
 #devtools::install_github("tiago-simoes/EvoPhylo", lib="C:/Program Files/R/R-4.1.0/library")
 ```
 
-# Character Partitioning
+## Character Partitioning
 
 Open the *EvoPhylo* package
 
@@ -25,22 +34,31 @@ Open the *EvoPhylo* package
 library(EvoPhylo)
 ```
 
-Generate distance matrix, analyze clusters with PAM under chosen k value (from Si)
+
+### 1.Generate distance matrix
 ```{r}
 #Load character data matrix and produce Gower distance matrix
 Dmatrix <- get_gower_dist("DataMatrix.nex", numeric = FALSE)
+```
 
+
+### 2. Estimate optimal number of partitions (clusters)
+```{r}
 #Plot number of cluster against silhouette width
 sw <- get_sil_widths(Dmatrix, max.k = 10)
 plot(sw, color = "red", size=1)
 #Decide on number of clusters based on plot; here, k = 3 partitions
 ```
 
-### Simple Workflow: 
-1. Generate distance matrix
-2. Analyze clusters with PAM under chosen k value (from Si). 
-3. Produce simple cluster graph
-4. Exports clusters/partitions to Nexus file
+
+### 3. Simple Workflow: 
+
+
+3.1. Generate distance matrix
+3.2. Analyze clusters with PAM under chosen k value (from Si). 
+3.3. Produce simple cluster graph
+3.4. Exports clusters/partitions to Nexus file
+
 
 ```{r}
 #Generate and vizualize clusters with PAM under chosen k value. 
@@ -51,11 +69,14 @@ plot(clusters)
 cluster_to_nexus(clusters, file = "Clusters_Nexus.txt")
 ```
 
-### Complete Workflow: 
-1. Generate distance matrix
-2. Analyze clusters with PAM under chosen k value (from Si). 
-3. Produce a graphic clustering (tSNEs), coloring data points according to PAM clusters, to independently verify PAM clustering.
-4. Exports clusters/partitions to Nexus file
+
+### 4. Complete Workflow: 
+
+
+4.1. Generate distance matrix
+4.2. Analyze clusters with PAM under chosen k value (from Si). 
+4.3. Produce a graphic clustering (tSNEs), coloring data points according to PAM clusters, to independently verify PAM clustering.
+4.4. Exports clusters/partitions to Nexus file
 
 ```{r}
 #User may also generate clusters with PAM and produce a graphic clustering (tSNEs)
