@@ -1383,83 +1383,1960 @@ relative_fossilization
 <div id="test-for-significant-fbd-shifts-between-time-bins" class="section level3">
 <h3>5. Test for significant FBD shifts between time bins</h3>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Test for significant differences between each time bin for each FBD parameter</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#T-tests (output = tables 1-3)</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Mann-Whitney U tests (output = tables 4-6) #Use if Tests in step #4 fail assumptions</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">FBD_tests2</span>(Comb_posterior3p)</span></code></pre></div>
-<pre><code>## $t_tests
-## $t_tests$net_speciation
-##        parameter Time_bin1 Time_bin2   n1   n2       p-value   p-value adj
-## 1 net_speciation         1         2 2500 2500 2.063041e-183 3.094562e-183
-## 2 net_speciation         1         3 2500 2500  0.000000e+00  0.000000e+00
-## 3 net_speciation         1         4 2500 2500  3.238622e-06  3.238622e-06
-## 4 net_speciation         2         3 2500 2500  4.433227e-52  5.319872e-52
-## 5 net_speciation         2         4 2500 2500 6.765461e-242 1.353092e-241
-## 6 net_speciation         3         4 2500 2500  0.000000e+00  0.000000e+00
-## 
-## $t_tests$relative_extinction
-##             parameter Time_bin1 Time_bin2   n1   n2      p-value  p-value adj
-## 1 relative_extinction         1         2 2500 2500 0.000000e+00 0.000000e+00
-## 2 relative_extinction         1         3 2500 2500 0.000000e+00 0.000000e+00
-## 3 relative_extinction         1         4 2500 2500 0.000000e+00 0.000000e+00
-## 4 relative_extinction         2         3 2500 2500 1.148716e-16 1.148716e-16
-## 5 relative_extinction         2         4 2500 2500 0.000000e+00 0.000000e+00
-## 6 relative_extinction         3         4 2500 2500 0.000000e+00 0.000000e+00
-## 
-## $t_tests$relative_fossilization
-##                parameter Time_bin1 Time_bin2   n1   n2       p-value
-## 1 relative_fossilization         1         2 2500 2500  6.162251e-55
-## 2 relative_fossilization         1         3 2500 2500  6.359863e-43
-## 3 relative_fossilization         1         4 2500 2500  2.985681e-01
-## 4 relative_fossilization         2         3 2500 2500 1.529670e-183
-## 5 relative_fossilization         2         4 2500 2500  3.313348e-48
-## 6 relative_fossilization         3         4 2500 2500  2.742880e-49
-##     p-value adj
-## 1  1.848675e-54
-## 2  7.631836e-43
-## 3  2.985681e-01
-## 4 9.178021e-183
-## 5  4.970023e-48
-## 6  5.485760e-49
-## 
-## 
-## $mwu_tests
-## $mwu_tests$net_speciation
-##        parameter Time_bin1 Time_bin2   n1   n2       p-value   p-value adj
-## 1 net_speciation         1         2 2500 2500 1.475742e-189 2.951485e-189
-## 2 net_speciation         1         3 2500 2500  0.000000e+00  0.000000e+00
-## 3 net_speciation         1         4 2500 2500  2.953651e-05  2.953651e-05
-## 4 net_speciation         2         3 2500 2500  6.441666e-73  7.729999e-73
-## 5 net_speciation         2         4 2500 2500 1.687325e-168 2.530987e-168
-## 6 net_speciation         3         4 2500 2500  0.000000e+00  0.000000e+00
-## 
-## $mwu_tests$relative_extinction
-##             parameter Time_bin1 Time_bin2   n1   n2      p-value  p-value adj
-## 1 relative_extinction         1         2 2500 2500 0.000000e+00 0.000000e+00
-## 2 relative_extinction         1         3 2500 2500 0.000000e+00 0.000000e+00
-## 3 relative_extinction         1         4 2500 2500 0.000000e+00 0.000000e+00
-## 4 relative_extinction         2         3 2500 2500 4.715112e-89 4.715112e-89
-## 5 relative_extinction         2         4 2500 2500 0.000000e+00 0.000000e+00
-## 6 relative_extinction         3         4 2500 2500 0.000000e+00 0.000000e+00
-## 
-## $mwu_tests$relative_fossilization
-##                parameter Time_bin1 Time_bin2   n1   n2       p-value
-## 1 relative_fossilization         1         2 2500 2500 1.024760e-215
-## 2 relative_fossilization         1         3 2500 2500 5.811361e-221
-## 3 relative_fossilization         1         4 2500 2500 1.394820e-217
-## 4 relative_fossilization         2         3 2500 2500  0.000000e+00
-## 5 relative_fossilization         2         4 2500 2500  0.000000e+00
-## 6 relative_fossilization         3         4 2500 2500  1.896188e-80
-##     p-value adj
-## 1 1.229712e-215
-## 2 1.162272e-220
-## 3 2.092230e-217
-## 4  0.000000e+00
-## 5  0.000000e+00
-## 6  1.896188e-80</code></pre>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#OR</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Export the table</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#openxlsx::write.xlsx(t3.3, file=&quot;FBD_Tests2_Sign.xlsx&quot;)</span></span></code></pre></div>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="do">##Pairwise t-tests </span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Output as separate tables </span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>t3<span class="fl">.3</span><span class="ot">&lt;-</span> <span class="fu">FBD_tests2</span>(Comb_posterior3p)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>kableExtra<span class="sc">::</span><span class="fu">kbl</span>(t3<span class="fl">.3</span><span class="sc">$</span>t_tests, <span class="at">digits=</span><span class="dv">4</span>, <span class="at">align=</span><span class="fu">c</span>(<span class="st">&#39;c&#39;</span>,<span class="st">&#39;c&#39;</span>,<span class="st">&#39;c&#39;</span>,<span class="st">&#39;c&#39;</span>),  <span class="at">caption =</span> <span class="st">&quot;Significant tests &quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">10</span>, <span class="at">full_width =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>                            <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="st">&quot;condensed&quot;</span>)</span></code></pre></div>
+<table class="kable_wrapper table table-striped" style="font-size: 10px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Significant tests
+</caption>
+<tbody>
+<tr>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">
+parameter
+</th>
+<th style="text-align:center;">
+Time_bin1
+</th>
+<th style="text-align:center;">
+Time_bin2
+</th>
+<th style="text-align:center;">
+n1
+</th>
+<th style="text-align:center;">
+n2
+</th>
+<th style="text-align:center;">
+p-value
+</th>
+<th style="text-align:center;">
+p-value adj
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">
+parameter
+</th>
+<th style="text-align:center;">
+Time_bin1
+</th>
+<th style="text-align:center;">
+Time_bin2
+</th>
+<th style="text-align:center;">
+n1
+</th>
+<th style="text-align:center;">
+n2
+</th>
+<th style="text-align:center;">
+p-value
+</th>
+<th style="text-align:center;">
+p-value adj
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">
+parameter
+</th>
+<th style="text-align:center;">
+Time_bin1
+</th>
+<th style="text-align:center;">
+Time_bin2
+</th>
+<th style="text-align:center;">
+n1
+</th>
+<th style="text-align:center;">
+n2
+</th>
+<th style="text-align:center;">
+p-value
+</th>
+<th style="text-align:center;">
+p-value adj
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.2986
+</td>
+<td style="text-align:center;">
+0.2986
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#OR as single merged table</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>k3<span class="fl">.3</span>a <span class="ot">&lt;-</span> <span class="fu">rbind</span> (t3<span class="fl">.3</span><span class="sc">$</span>t_tests<span class="sc">$</span>net_speciation, t3<span class="fl">.3</span><span class="sc">$</span>t_tests<span class="sc">$</span>relative_extinction, t3<span class="fl">.3</span><span class="sc">$</span>t_tests<span class="sc">$</span>relative_fossilization,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">make.row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>kableExtra<span class="sc">::</span><span class="fu">kbl</span>(k3<span class="fl">.3</span>a, <span class="at">digits=</span><span class="dv">4</span>, <span class="at">align=</span><span class="fu">c</span>(<span class="st">&#39;c&#39;</span>,<span class="st">&#39;c&#39;</span>,<span class="st">&#39;c&#39;</span>,<span class="st">&#39;c&#39;</span>), <span class="at">caption =</span> <span class="st">&quot;Pairwise t-tests&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">12</span>, <span class="at">full_width =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                            <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="st">&quot;condensed&quot;</span>)</span></code></pre></div>
+<table class="table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Pairwise t-tests
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+parameter
+</th>
+<th style="text-align:center;">
+Time_bin1
+</th>
+<th style="text-align:center;">
+Time_bin2
+</th>
+<th style="text-align:center;">
+n1
+</th>
+<th style="text-align:center;">
+n2
+</th>
+<th style="text-align:center;">
+p-value
+</th>
+<th style="text-align:center;">
+p-value adj
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.2986
+</td>
+<td style="text-align:center;">
+0.2986
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+<td style="text-align:center;">
+0.0000
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Mann-Whitney tests #Use if Tests in step #4 fail assumptions</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Output as separate tables </span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>kableExtra<span class="sc">::</span><span class="fu">kbl</span>(t3<span class="fl">.3</span><span class="sc">$</span>mwu_tests, <span class="at">digits=</span><span class="dv">4</span>, <span class="at">align=</span><span class="fu">c</span>(<span class="st">&#39;c&#39;</span>,<span class="st">&#39;c&#39;</span>,<span class="st">&#39;c&#39;</span>,<span class="st">&#39;c&#39;</span>), <span class="at">caption =</span> <span class="st">&quot;Mann-Whitney tests&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">10</span>, <span class="at">full_width =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="st">&quot;condensed&quot;</span>)</span></code></pre></div>
+<table class="kable_wrapper table table-striped" style="font-size: 10px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Mann-Whitney tests
+</caption>
+<tbody>
+<tr>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">
+parameter
+</th>
+<th style="text-align:center;">
+Time_bin1
+</th>
+<th style="text-align:center;">
+Time_bin2
+</th>
+<th style="text-align:center;">
+n1
+</th>
+<th style="text-align:center;">
+n2
+</th>
+<th style="text-align:center;">
+p-value
+</th>
+<th style="text-align:center;">
+p-value adj
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">
+parameter
+</th>
+<th style="text-align:center;">
+Time_bin1
+</th>
+<th style="text-align:center;">
+Time_bin2
+</th>
+<th style="text-align:center;">
+n1
+</th>
+<th style="text-align:center;">
+n2
+</th>
+<th style="text-align:center;">
+p-value
+</th>
+<th style="text-align:center;">
+p-value adj
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">
+parameter
+</th>
+<th style="text-align:center;">
+Time_bin1
+</th>
+<th style="text-align:center;">
+Time_bin2
+</th>
+<th style="text-align:center;">
+n1
+</th>
+<th style="text-align:center;">
+n2
+</th>
+<th style="text-align:center;">
+p-value
+</th>
+<th style="text-align:center;">
+p-value adj
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#OR as single merged table</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>k3<span class="fl">.3</span>b <span class="ot">&lt;-</span> <span class="fu">rbind</span> (t3<span class="fl">.3</span><span class="sc">$</span>mwu_tests<span class="sc">$</span>net_speciation, t3<span class="fl">.3</span><span class="sc">$</span>mwu_tests<span class="sc">$</span>relative_extinction, t3<span class="fl">.3</span><span class="sc">$</span>mwu_tests<span class="sc">$</span>relative_fossilization,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">make.row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>kableExtra<span class="sc">::</span><span class="fu">kbl</span>(k3<span class="fl">.3</span>b, <span class="at">digits=</span><span class="dv">4</span>, <span class="at">align=</span><span class="fu">c</span>(<span class="st">&#39;c&#39;</span>,<span class="st">&#39;c&#39;</span>,<span class="st">&#39;c&#39;</span>,<span class="st">&#39;c&#39;</span>), <span class="at">caption =</span> <span class="st">&quot;Mann-Whitney tests&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">12</span>, <span class="at">full_width =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                            <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="st">&quot;condensed&quot;</span>)</span></code></pre></div>
+<table class="table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Mann-Whitney tests
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+parameter
+</th>
+<th style="text-align:center;">
+Time_bin1
+</th>
+<th style="text-align:center;">
+Time_bin2
+</th>
+<th style="text-align:center;">
+n1
+</th>
+<th style="text-align:center;">
+n2
+</th>
+<th style="text-align:center;">
+p-value
+</th>
+<th style="text-align:center;">
+p-value adj
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+net_speciation
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_extinction
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+relative_fossilization
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Export the table</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">#openxlsx::write.xlsx(t3.3, file=&quot;FBD_Tests2_Sign.xlsx&quot;)</span></span></code></pre></div>
 </div>
 </div>
 

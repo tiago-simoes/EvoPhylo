@@ -143,11 +143,38 @@ FBD_normality_plot(Comb_posterior3p)
 ### 5. Test for significant FBD shifts between time bins
 ```{r}
 ### Test for significant differences between each time bin for each FBD parameter
-#T-tests (output = tables 1-3)
-#Mann-Whitney U tests (output = tables 4-6) #Use if Tests in step #4 fail assumptions
-FBD_tests2(Comb_posterior3p)
+##Pairwise t-tests 
 
-#OR
+# Output as separate tables 
+t3.3<- FBD_tests2(Comb_posterior3p)
+
+kableExtra::kbl(t3.3$t_tests, digits=4, align=c('c','c','c','c'),  caption = "Significant tests ") |> 
+  kableExtra::kable_styling(font_size = 10, full_width = FALSE, 
+                            bootstrap_options = "striped", "condensed")
+
+#OR as single merged table
+
+k3.3a <- rbind (t3.3$t_tests$net_speciation, t3.3$t_tests$relative_extinction, t3.3$t_tests$relative_fossilization,
+                make.row.names = FALSE)
+
+kableExtra::kbl(k3.3a, digits=4, align=c('c','c','c','c'), caption = "Pairwise t-tests") |> 
+  kableExtra::kable_styling(font_size = 12, full_width = FALSE, 
+                            bootstrap_options = "striped", "condensed")
+
+
+##Mann-Whitney tests #Use if Tests in step #4 fail assumptions
+# Output as separate tables 
+kableExtra::kbl(t3.3$mwu_tests, digits=4, align=c('c','c','c','c'), caption = "Mann-Whitney tests") |> 
+  kableExtra::kable_styling(font_size = 10, full_width = FALSE, 
+                            bootstrap_options = "striped", "condensed")
+
+#OR as single merged table
+k3.3b <- rbind (t3.3$mwu_tests$net_speciation, t3.3$mwu_tests$relative_extinction, t3.3$mwu_tests$relative_fossilization,
+                make.row.names = FALSE)
+
+kableExtra::kbl(k3.3b, digits=4, align=c('c','c','c','c'), caption = "Mann-Whitney tests") |> 
+  kableExtra::kable_styling(font_size = 12, full_width = FALSE, 
+                            bootstrap_options = "striped", "condensed")
 
 #Export the table
 #openxlsx::write.xlsx(t3.3, file="FBD_Tests2_Sign.xlsx")
