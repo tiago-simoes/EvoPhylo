@@ -1,6 +1,15 @@
 ---
 title: "FBD parameters"
-output: html_document
+date: '2022-04-08'
+output:
+  html_vignette:
+    toc: yes
+vignette: |
+  %\VignetteIndexEntry{Character Partitioning} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+link-citations: true
 ---
 
 This vignette explains how to extract FBD (fossilized birth-death) parameters estimated from relaxed clock Bayesian inference analyses produced by the program Mr. Bayes. 
@@ -9,38 +18,137 @@ This vignette explains how to extract FBD (fossilized birth-death) parameters es
 knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/")
 ```
+## FBD Parameters Statistics and Plots
 
-# Extracting Evolutionary Rates Statistics and Plots
+Extract evolutionary rate summary statistics from each node from a Bayesian clock (time-calibrate) summary tree produced by Mr. Bayes, store them in a data frame, produce summary tables, and plots:
 
 Open the *EvoPhylo* package
 
 ```{r}
 library(EvoPhylo)
+library(openxlsx)
 ```
 
-Extract evolutionary rate summary statistics from each node from a Bayesian clock (time-calibrate) summary tree produced by Mr. Bayes, store them in a data frame, produce summary tables, and plots:
+### 1. Import combined log file from all runs. 
 
-#### FBD Parameters Statistics and Plots
+This is produced by using `import_log`. Alternatively, users can also use **LogCombiner** from the [BEAST2](https://www.beast2.org/beagle-beast-2-in-cluster/index.html) software package. Table is automatically reshaped from wide to long.
+
 ```{r}
+#Import all log (.p) files from all runs and combine them, with burn-in = 25% and downsampling to 2.5k trees in each log file
+Comb_posterior3p <- import_log("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/LogFiles3p", burnin = 0.25, downsample = 2500)
+
+#OR
+
+#Import combined log file from all runs (if available)
+#Comb_posterior3p <- read.table("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/3p_CombLog(4runs).p", header = TRUE)
+
 #Reshape Allruns data from wide to long
-#import_log()
-data("posterior1p")
+#FBD_reshape(Comb_posterior3p)
+```
 
+
+### 2. Summarize FBD parameters by time bin
+```{r}
 #Summarize parameters by time bin and analysis
-FBD_summary(posterior1p)
+t3.1<- FBD_summary(Comb_posterior3p, digits = 2)
 
-#Plot density of parameter by time bin
-FBD_dens_plot(posterior1p, parameter = "net_speciation", type = "density")
-FBD_dens_plot(posterior1p, parameter = "net_speciation", type = "violin")
+kableExtra::kbl(t3.1, caption = "FBD parameters by time bin") |> 
+  kableExtra::kable_styling(font_size = 15, full_width = FALSE, bootstrap_options = "striped", "condensed")
+#Export the table
+#write.csv(t3.1, file="FBD_summary.csv")
+```
 
-#Tests for normality and homoscedasticity for each parameter across time bins
-#and analyses
-FBD_tests1(posterior1p)
 
+### 3. Plot density of each FBD parameter by time bin
+
+```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "70%"}
+#Plot distribution of the desired FBD parameter by time bin with kernel density plot
+FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "density", stack = FALSE)
+```
+
+```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "70%"}
+#Plot distribution of the desired FBD parameter by time bin with stacked kernel density plot
+FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "density", stack = TRUE)
+```
+
+```{r, fig.width=4, fig.height=4, fig.align = "center", out.width = "50%"}
+#Plot distribution of the desired FBD parameter by time bin with a violin plot
+FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "violin", stack = FALSE, color = "red")
+```
+```{r, fig.width=12, fig.height=4, fig.align = "center", out.width = "100%"}
+#Plot distribution of all FBD parameter by time bin with a violin plot
+p1<-FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "violin", stack = FALSE, color = "red")
+p2<-FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "violin", stack = FALSE, color = "cyan3")
+p3<-FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "violin", stack = FALSE, color = "green3")
+
+p1|p2|p3
+
+#Save your plot to your working directory as a PDF
+#ggplot2::ggsave	("Plot_regs.pdf", width=12, height=4)
+```
+
+
+### 4. Test for assumptions 
+```{r}
+### Tests for normality and homoscedasticity for each FBD parameter for all time bins
+
+## Shapiro-Wilk normality test for each parameter 
+# Output as separate tables 
+t3.2<- FBD_tests1(Comb_posterior3p)
+
+kableExtra::kbl(t3.2$shapiro, digits=4, align=c('c','c','c','c'),  caption = "Shapiro-Wilk normality test ") |> 
+  kableExtra::kable_styling(font_size = 12, full_width = FALSE, 
+                            bootstrap_options = "striped", "condensed")
+
+#OR as single merged table
+
+t3.2$shapiro$net_speciation$bin <- row.names(t3.2$shapiro$net_speciation)  
+t3.2$shapiro$relative_extinction$bin <- row.names(t3.2$shapiro$relative_extinction)  
+t3.2$shapiro$relative_fossilization$bin <- row.names(t3.2$shapiro$relative_fossilization)  
+
+k1all <- rbind (t3.2$shapiro$net_speciation, t3.2$shapiro$relative_extinction, t3.2$shapiro$relative_fossilization,
+                make.row.names = FALSE)
+
+k1<-kableExtra::kbl(k1all, digits=4, caption = "Shapiro-Wilk normality test ") |> 
+  kableExtra::kable_styling(font_size = 12, full_width = FALSE, bootstrap_options = "striped", "condensed")
+k1
+
+#Bartlett's test for homogeneity of variance 
+k2<-kableExtra::kbl(t3.2$bartlett, caption = "Bartlett's test") |> 
+  kableExtra::kable_styling(font_size = 12, full_width = FALSE, bootstrap_options = "striped", "condensed")
+k2 
+
+#Fligner-Killeen test for homogeneity of variance 
+k3<-kableExtra::kbl(t3.2$fligner, caption = "Fligner-Killeen test") |> 
+  kableExtra::kable_styling(font_size = 12, full_width = FALSE, bootstrap_options = "striped", "condensed")
+k3
+
+######
+
+#Export the table
+#openxlsx::write.xlsx(t3.2, file="FBD_Tests1_Assum.xlsx")
+
+```
+
+
+```{r, fig.width=8, fig.height=6, fig.align = "center", out.width = "100%"}
 #Visualize deviations from normality and similarity of variances
-FBD_normality_plot(posterior1p)
+FBD_normality_plot(Comb_posterior3p)
 
-#Test differences in location for each parameter between time bins 
-FBD_tests2(posterior1p)
+#Save your plot to your working directory as a PDF
+#ggplot2::ggsave	("Plot_normTests.pdf", width=8, height=6)
+```
 
+
+### 5. Test for significant FBD shifts between time bins
+```{r}
+### Test for significant differences between each time bin for each FBD parameter
+#T-tests (output = tables 1-3)
+#Mann-Whitney U tests (output = tables 4-6) #Use if Tests in step #4 fail assumptions
+FBD_tests2(Comb_posterior3p)
+
+#OR
+
+#Export the table
+#openxlsx::write.xlsx(t3.3, file="FBD_Tests2_Sign.xlsx")
 ```

@@ -92,7 +92,7 @@ FBD_reshape <- function(samples) {
       !any(startsWith(names(samples), "net_speciation_")) ||
       !any(startsWith(names(samples), "relative_extinction_")) ||
       !any(startsWith(names(samples), "relative_fossilization_"))) {
-    stop("'samples' must be a data frame with columns for net_speciation, relative_extinction, and relative_fossilization.", call. = FALSE)
+    stop("'samples' must be a data frame with two or more columns for net_speciation, relative_extinction, and relative_fossilization.", call. = FALSE)
   }
 
   samples_long <- reshape(samples, direction = "long",
@@ -145,6 +145,24 @@ FBD_summary <- function(posterior, file = NULL, digits = 3) {
   else {
     return(out)
   }
+}
+
+#New summary function
+oneSummary <- function(x, digits = 3) {
+  qq <- unname(quantile(x, c(0, .25, .5, .75, 1)))
+  d <- data.frame(
+    n = length(x),
+    mean = round(mean(x), digits),
+    sd = round(sd(x), digits),
+    min = round(qq[1], digits),
+    Q1 = round(qq[2], digits),
+    median = round(qq[3], digits),
+    Q3 = round(qq[4], digits),
+    max = round(qq[5], digits)
+  )
+  rownames(d) <- NULL
+
+  d
 }
 
 #Plot density of one parameter by time bin; density or violin plots
