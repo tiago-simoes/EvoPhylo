@@ -11,8 +11,6 @@ vignette: |
 bibliography: references.bib
 link-citations: true
 ---
-
-
 This vignette explains how to conduct automated morphological character partitioning as a pre-processing step for clock (time-calibrated) Bayesian phylogenetic analysis of morphological data, as introduced by @simões2021.
 
 ```{r, setup, echo=FALSE}
@@ -24,35 +22,33 @@ knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/")
 
 ```{r, eval = FALSE}
 #install.packages("EvoPhylo")
-
 ### OR
-
 #devtools::install_github("tiago-simoes/EvoPhylo", lib="C:/Program Files/R/R-4.1.0/library")
 ```
 
 ## Character Partitioning
 
-Open the *EvoPhylo* package
+Load the **EvoPhylo** package
 
 ```{r}
 library(EvoPhylo)
 ```
 
 
-### 1.Generate a Gower distance matrix with `get_gower_dist`:
+### 1.Generate distance matrix
 
+Generate a Gower distance matrix with `get_gower_dist`:
 ```{r}
-## Load a character data matrix and produce a Gower distance matrix
+#Load character a data matrix and produce a Gower distance matrix
 Dmatrix <- get_gower_dist("DataMatrix.nex", numeric = FALSE)
 ```
 
 
-### 2. Estimate optimal number of partitions 
+### 2. Estimate the optimal number of partitions
 
 The optimal number of partitions (clusters) will be first determined using partitioning around medoids (PAM) with Silhouette widths index (Si) using `get_sil_widths`. The latter will estimate the quality of each PAM cluster proposal relative to other potential clusters.
 
 ```{r, fig.width=6, fig.height=4, fig.align = "center", out.width = "70%"}
-
 ## Estimate and plot number of cluster against silhouette width
 sw <- get_sil_widths(Dmatrix, max.k = 10)
 plot(sw, color = "red", size=1)
@@ -63,16 +59,19 @@ plot(sw, color = "red", size=1)
 
 ### 3. Simple Workflow: 
 
-3.1. Generate distance matrix
-3.2. Analyze clusters with PAM under chosen k value (from Si). 
-3.3. Produce simple cluster graph
-3.4. Exports clusters/partitions to Nexus file
+
+3.1. Analyze clusters with PAM under chosen k value (from Si) with `make_clusters`.
+
+3.2. Produce simple cluster graph
+
+3.3. Exports clusters/partitions to Nexus file with `cluster_to_nexus`.
 
 
 ```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "70%"}
 ## Generate and vizualize clusters with PAM under chosen k value. 
 clusters <- make_clusters(Dmatrix, k = 3, tsne = FALSE)
 plot(clusters)
+
 
 ## Write clusters to Nexus file
 cluster_to_nexus(clusters, file = "Clusters_Nexus.txt")
@@ -82,16 +81,18 @@ cluster_to_nexus(clusters, file = "Clusters_Nexus.txt")
 ### 4. Complete Workflow: 
 
 
-4.1. Generate distance matrix
-4.2. Analyze clusters with PAM under chosen k value (from Si) with `make_clusters`.
-4.3. Produce a graphic clustering (tSNEs), coloring data points according to PAM clusters, to independently verify PAM clustering. This is set with the `tsne = TRUE` argument within `make_clusters`.
-4.4. Exports clusters/partitions to Nexus file with `cluster_to_nexus`.
+4.1. Analyze clusters with PAM under chosen k value (from Si) with `make_clusters`.
 
-```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "100%"}
-## User may also generate clusters with PAM and produce a graphic clustering (tSNEs)
-clusters2 <- make_clusters(Dmatrix, k = 3, tsne = TRUE, tsne_dim = 3)
+4.2. Produce a graphic clustering (tSNEs), coloring data points according to PAM clusters, to independently verify PAM clustering. This is set with the `tsne` argument within `make_clusters`.
+
+4.3. Exports clusters/partitions to Nexus file with `cluster_to_nexus`. This can be copied and pasted into the [Mr. Bayes](https://nbisweden.github.io/MrBayes/) command block.
+
+```{r, fig.width=10, fig.height=7, fig.align = "center", out.width = "100%"}
+#User may also generate clusters with PAM and produce a graphic clustering (tSNEs)
+clusters <- make_clusters(Dmatrix, k = 3, tsne = TRUE, tsne_dim = 3)
+plot(clusters, nrow = 2, max.overlaps=12)
 
 
+#Write clusters/partitions in Nexus file format 
+cluster_to_nexus(clusters, file = "Clusters_Nexus.txt")
 ````
-
-## References

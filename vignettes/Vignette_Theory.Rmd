@@ -1,11 +1,11 @@
 ---
-title: "Importing Data"
+title: "Theoretical background"
 date: '2022-03-24'
 output:
   html_vignette:
     toc: yes
 vignette: |
-  %\VignetteIndexEntry{Importing Data} 
+  %\VignetteIndexEntry{Theoretical background} 
   %\VignetteEngine{knitr::rmarkdown} 
   %\VignetteEncoding{UTF-8}
 bibliography: references.bib
@@ -16,11 +16,13 @@ link-citations: true
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Type of morphological data
+## Creating Inter-character Distance Matrices
+
+### Types of morphological data
 
 Categorical morphological data (discrete characters) should be treated as factors when imported to calculate character distances, as the symbols used to represent different states are arbitrary (e.g., could be equally represented by letters, such as for DNA data). If continuous variables are used as phylogenetic characters, those should be read in from a separate file and treated as numeric data, since input values for each state (e.g., 0.234; 2.456; 3.567; etc) represent true distance between data points.
 
-## Treatment of inapplicable and missing data
+### Treatment of inapplicable and missing data
 
 Categorical data including symbols for inapplicable and missing data (typically `"-"` and `"?"`, respectively) will be read in and treated as separate categories of data relative to numerical symbols for different character states (`"0"`, `"1"`, `"2"`, etc.). Two options are available: option 1---converting inapplicables/missing to `NA` (as done by default in the package [Claddis](https://cran.r-project.org/web/packages/Claddis/index.html)) or option 2---keeping the original symbols.
 
@@ -66,9 +68,9 @@ knitr::kables(list(k1))
 knitr::kables(list(k2))
 ```
 
-## Cluster identification
+### Cluster identification
 
-### Using PAM and silhouettes width index (Si)
+#### Using PAM and silhouettes width index (Si)
 
 Euclidean distances are extremely sensitive to missing data, and alternative choices such as Gower distances provide more suitable alternatives for the handling of missing data [@lloyd2016; @lehmann2019]. This issue creates a subsequent problem for estimating clusters using K-means, perhaps the most popular clustering approach, as it depends on an Euclidean-based distance matrix. Further, K-means are based on measuring the distance between samples and cluster centroids (i.e., the center of mass or mean vector of the cluster). The mean vector is particularly sensitive to outliers (as any other mean estimate) [@rencher2012], which can be particularly problematic for small-sized clusters or clusters of drastically different sizes, which are to be expected from most standard sized morphological datasets. Those limitation from Euclidean distances and K-means thus limit the quality of the clustering analysis based on such approaches.
 
@@ -96,7 +98,7 @@ clusters <- make_clusters(gd, k = 3, tsne = TRUE)
 plot(clusters)
 ```
 
-## Strength of selection (using morphological clock rates)
+## Selection strength (mode) using morphological clock rates
 
 The strength of natural selection operating upon particular regions of the phenotype (e.g., phenotypic partitions) across distinct clades in a phylogeny can be indirectly measured by comparing the variation of evolutionary rates relative to the background evolutionary rates. When rates are significantly accelerated, it provides support for positive phenotypic selection in analogy with the $d_N/d_S$ ratio in molecular evolution, whereas strongly decelerating rates represent an instance of stabilizing selection, stasis or constraint [@yang2014; @baker2016]. This concept first applied to phenotypic traits using continuous data in phylogenetic comparative methods by @baker2016 was extended to discrete data and evolutionary rates estimated with Bayesian molecular or morphological clocks [@simões2021].
 
@@ -106,7 +108,7 @@ In its original implementation, when evolutionary rates are at least twice as fa
 
 Here we expand on that by enabling users to compute multiple threshold levels across the tree: using the 95% confidence interval (CI), or 1, 2, or more standard deviations. Users can plot only one of those thresholds or all of those thresholds combined onto the evolutionary tree to assess the degree upon which particular clades are evolving faster or slower compared to background rates, with direct implications to the strength of selection operating upon the morphological traits used to calculate the respective rate values.
 
-## Statistical analysis available
+### Statistical analysis available
 
 Users can assess the normality of the distribution for each time bin using the Shapiro-Wilk normality test and visual assessment of data distribution. Additionally, users can use the Bartlett test of homogeneity of variances to assess homoscedasticity in the data. For statistical hypothesis testing, we provide fast outputs of parametric (pairwise t-tests) and nonparametric (pairwise Wilcoxon rank sum (Mann-Whitney) tests) between phenotypic partitions, time bins, or specific kind of analyses.
 
