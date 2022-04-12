@@ -12,7 +12,7 @@ bibliography: references.bib
 link-citations: true
 ---
 
-This vignette explains how to extract evolutionary rate parameters estimated from relaxed clock Bayesian inference analyses produced by the program [Mr. Bayes](https://nbisweden.github.io/MrBayes/). It also shows how to use evolutionary rate based inference of selection strength (or mode) adapted to clock-based rates, as introduced by [@simões2021].
+This vignette explains how to extract evolutionary rate parameters estimated from relaxed clock Bayesian inference analyses produced by the program [Mr. Bayes](https://nbisweden.github.io/MrBayes/). It also shows how to use evolutionary rate based inference of selection strength (or mode) adapted to clock-based rates, as introduced by @simões2021.
 
 ```{r, setup, echo=FALSE}
 knitr::opts_chunk$set(warning = FALSE)
@@ -22,7 +22,7 @@ knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/")
 ## Evolutionary Rates Statistics and Plots
 
 
-In this section, we will extract evolutionary rate parameters from each node from a Bayesian clock (time-calibrate) summary tree produced by Mr. Bayes. The functions below will store them in a data frame, produce summary statistics tables, and create different plots showing how rates are distributed across morphological partitions and clades.
+In this section, we will extract evolutionary rate parameters from each node from a Bayesian clock (time-calibrate) summary tree produced by [Mr. Bayes](https://nbisweden.github.io/MrBayes/). The functions below will store them in a data frame, produce summary statistics tables, and create different plots showing how rates are distributed across morphological partitions and clades.
 
 
 Load the **EvoPhylo** package
@@ -38,17 +38,16 @@ library(ggtree)
 
 ### 1. Get rates from the clock tree and create a rate table 
 
-This will extract mean or median rate values for each node in the summary tree (with `get_clockrate_table`) that were annotated by Mr. Bayes when creating the summary tree with the "sumt" command. These mean or median rate values are calculated by Mr. Bayes taking into account all trees from the posterior sample. This works for any summary tree produced by Mr. Bayes: a majority rule consensus or the fully resolved maximum compatible tree (the latter is used in the examples here).
+This will extract mean or median rate values for each node in the summary tree (with `get_clockrate_table`) that were annotated by [Mr. Bayes](https://nbisweden.github.io/MrBayes/)when creating the summary tree with the "sumt" command. These mean or median rate values are calculated by [Mr. Bayes](https://nbisweden.github.io/MrBayes/)taking into account all trees from the posterior sample. This works for any summary tree produced by [Mr. Bayes](https://nbisweden.github.io/MrBayes/): a majority rule consensus or the fully resolved maximum compatible tree (the latter is used in the examples here).
 
 Please note that analyses must have reached the stationarity phase and independent runs converging for the summary statistics in each node to be meaningful summaries of the posterior sample.
 
 
-
 ```{r}
-#Import summary tree produced by Mr. Bayes
+## Import summary tree produced by Mr. Bayes
 tree<-treeio::read.mrbayes("Tree_3p.t")
 
-#Get table of clock rates with summary stats for each node in the tree for each relaxed clock partition 
+## Get table of clock rates with summary stats for each node in the tree for each relaxed clock partition 
 RateTable_Medians_no_clades <- get_clockrate_table(tree, summary = "median")
 RateTable_Means_no_clades <- get_clockrate_table(tree, summary = "mean")
 ```
@@ -59,22 +58,24 @@ RateTable_Means_no_clades <- get_clockrate_table(tree, summary = "mean")
 This is a necessary step to subsequently open the rate table spreadsheet locally (e.g., using Microsoft Office Excel) and customize the table with clade names associated with with each node in the tree for downstream analysis. To visualize the node values in the tree, you can use ggtree.
 
 ```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
-#Export the rate tables
+## Export the rate tables
 write.csv(RateTable_Medians_no_clades, file="RateTable_Medians.csv")
 write.csv(RateTable_Means_no_clades, file="RateTable_Means.csv")
 ```
 
+
 ### 3. Plot tree node labels
 
 ```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
-#Plot tree node labels
+## Plot tree node labels
 tree_nodes<-ggtree::ggtree(tree, layout = "rectangular", ladderize=TRUE, right=TRUE, 
                  branch.length="none", size = 0.05)+
   geom_tiplab(size=2, linesize = 0.01, color="black",  offset = 0.5)+
   geom_label(aes(label=node), size=2, color="purple", position = "dodge")
 tree_nodes
 
-#Save your plot to your working directory as a PDF
+##(NOT RUN)
+## Save your plot to your working directory as a PDF
 #ggplot2::ggsave	("Tree_nodes.pdf", width=10, height=10)
 ```
 
@@ -84,10 +85,10 @@ tree_nodes
 Obtain summary statistics table and plots for each clade by clock using `clockrate_summary`.
 
 ```{r}
-#Import rate table with clade membership 
+## Import rate table with clade membership 
 RateTable_Medians<- read.csv("RateTable_Medians_Clades.csv", header = TRUE)
 
-#Get summary statistics table for each clade by clock 
+## Get summary statistics table for each clade by clock 
 clockrate_summary(RateTable_Medians, "Sum_RateTable_Medians.csv", digits=2)
 ```
 
@@ -102,21 +103,21 @@ kableExtra::kbl(t1, caption = "Rate table summary statistics") |>
 
 Plot distributions of rates by clock partition and clade with `clockrate_dens_plot`.
 ```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "100%"}
-#Overlapping plots
+## Overlapping plots
 clockrate_dens_plot(RateTable_Medians, stack = FALSE, nrow = 1, scales = "fixed")
 ```
 
 
 Sometimes using stacked plots provides a better visualization as it avoids overlapping distributions
 ```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "100%"}
-#Stacked plots
+## Stacked plots
 clockrate_dens_plot(RateTable_Medians, stack = TRUE, nrow = 1, scales = "fixed")
 ```
 
 
 It is also possible to append the extra `ggplot `layers, such as for changing the color scale
 ```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "100%"}
-#Stacked plots with viridis color scale
+## Stacked plots with viridis color scale
 clockrate_dens_plot(RateTable_Medians, stack = TRUE, nrow = 1, scales = "fixed")+
     ggplot2::scale_color_viridis_d() +
     ggplot2::scale_fill_viridis_d()
@@ -128,13 +129,14 @@ clockrate_dens_plot(RateTable_Medians, stack = TRUE, nrow = 1, scales = "fixed")
 
 We can also plot linear model regressions between rates from two or more clocks with `clockrate_reg_plot`.
 ```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
-#Plot regressions of rates from two clocks
+## Plot regressions of rates from two clocks
 p12 <- clockrate_reg_plot(RateTable_Medians, clock_x = 1, clock_y = 2)
 p13 <- clockrate_reg_plot(RateTable_Medians, clock_x = 1, clock_y = 3)
 p23 <- clockrate_reg_plot(RateTable_Medians, clock_x = 2, clock_y = 3)
 
 gridExtra::grid.arrange(p12, p13, p23, nrow = 2)
 
+##(NOT RUN)
 #Save your plot to your working directory as a PDF
 #ggplot2::ggsave	("Plot_regs.pdf", width=8, height=8)
 ```
@@ -147,17 +149,17 @@ gridExtra::grid.arrange(p12, p13, p23, nrow = 2)
 
 ## Selection strength (mode)
 
-In this section, we will use evolutionary rate based inference of selection strength (or mode), as first introduced by [@baker2016] for continuous traits, and later adapted to clock-based rates by [@simões2021].
+In this section, we will use evolutionary rate based inference of selection strength (or mode), as first introduced by @baker2016 for continuous traits, and later adapted to clock-based rates by @simões2021.
 
 ### 1. Import and transform table
 
 It is necessary to transform the table from wide to long format with `clock_reshape`.
 
 ```{r}
-#Import rate table with clade membership 
+## Import rate table with clade membership 
 RateTable_Means<- read.csv("RateTable_Means_Clades.csv", header = TRUE)
 
-#Transform table from wide to long format
+## Transform table from wide to long format
 RatesByClade <- clock_reshape(RateTable_Means)
 ```
 
@@ -167,21 +169,21 @@ RatesByClade <- clock_reshape(RateTable_Means)
 This is produced by using `import_log`. Alternatively, users can also use **LogCombiner** from the [BEAST2](https://www.beast2.org/beagle-beast-2-in-cluster/index.html) software package. Table is automatically reshaped from wide to long.
 
 ```{r}
-#Import all log (.p) files from all runs and combine them, with burn-in = 25% and downsampling to 2.5k trees in each log file
+## Import all log (.p) files from all runs and combine them, with burn-in = 25% and downsampling to 2.5k trees in each log file
 Comb_posterior3p <- import_log("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/LogFiles3p", burnin = 0.25, downsample = 2500)
 
-#OR
+### OR
 
-#Import combined log file from all runs (if available)
+## Import combined log file from all runs (if available)
 #Comb_posterior3p <- read.table("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/3p_CombLog(4runs).p", header = TRUE)
 
-#Reshape Allruns data from wide to long
+## Reshape Allruns data from wide to long
 #FBD_reshape(Comb_posterior3p)
 ```
 
 
 ```{r, results = 'hide'}
-#Show first 10 lines of combined log file
+## Show first 10 lines of combined log file
 head(Comb_posterior3p, 10)
 ```
 
@@ -190,15 +192,16 @@ head(Comb_posterior3p, 10)
 
 The `get_pwt_rates` will produce a table of pairwise t-tests for differences between the mean clockrate value in the posterior and the absolute rate for each tree node. 
 ```{r}
-#Get table of pairwise t-tests for difference between the posterior mean and the rate for each tree node
+## Get table of pairwise t-tests for difference between the posterior mean and the rate for each tree node
 RateSign_tests<- get_pwt_rates(RateTable_Means, Comb_posterior3p)
 
-#Show first 10 lines of table
+## Show first 10 lines of table
 t3<-head(RateSign_tests, 10)
 kableExtra::kbl(t3, caption = "Combined log file") |> 
   kableExtra::kable_styling(font_size = 15, full_width = FALSE, bootstrap_options = "striped", "condensed")
-#Export the table
-#write.csv(RateSign_tests, file="RateSign_tests.csv")
+
+## Export the table
+write.csv(RateSign_tests, file="RateSign_tests.csv")
 ```
 
 
@@ -208,7 +211,7 @@ kableExtra::kbl(t3, caption = "Combined log file") |>
 Using different thresholds, Identify the strength (or mode) across branches in the tree for each clock partition with `plot_treerates_sgn`.
 ```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
 
-#Plot tree using various thresholds for clock partition 1
+## Plot tree using various thresholds for clock partition 1
 A1<- plot_treerates_sgn(tree, Comb_posterior3p, 
                    clock = 1,               #Show rates for clock partition 1
                    summary = "mean",        #sets summary stats to get from summary tree nodes
@@ -221,8 +224,9 @@ A1
 
 
 Plot tree using various thresholds for other clock partition and combine them
+
 ```{r, fig.width=20, fig.height=8, fig.align = "default", out.width = "100%"}
-#Plot tree using various thresholds for other clock partition and combine them
+## Plot tree using various thresholds for other clock partition and combine them
 A2<-plot_treerates_sgn(tree, Comb_posterior3p, 
                    clock = 2,               #Show rates for clock partition 2
                    summary = "mean",        #sets summary stats to get from summary tree nodes
@@ -239,7 +243,8 @@ A3<-plot_treerates_sgn(tree, Comb_posterior3p,
 
 A1|A2|A3
 
-#Save your plot to your working directory as a PDF
+##(NOT RUN)
+## Save your plot to your working directory as a PDF
 #ggplot2::ggsave	("Tree_Sel_3p.pdf", width=20, height=8)
 ```
 
