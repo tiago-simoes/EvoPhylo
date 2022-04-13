@@ -206,7 +206,7 @@ div.csl-indent {
 <h3>1. Get rates from the clock tree and create a rate table</h3>
 <p>This will extract mean or median rate values for each node in the summary tree (with <code>get_clockrate_table</code>) that were annotated by <a href="https://nbisweden.github.io/MrBayes/">Mr. Bayes</a>when creating the summary tree with the “sumt” command. These mean or median rate values are calculated by <a href="https://nbisweden.github.io/MrBayes/">Mr. Bayes</a>taking into account all trees from the posterior sample. This works for any summary tree produced by <a href="https://nbisweden.github.io/MrBayes/">Mr. Bayes</a>: a majority rule consensus or the fully resolved maximum compatible tree (the latter is used in the examples here).</p>
 <p>Please note that analyses must have reached the stationarity phase and independent runs converging for the summary statistics in each node to be meaningful summaries of the posterior sample.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Import summary tree produced by Mr. Bayes</span></span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Import summary tree produced by Mr. Bayes (.t or .tre files)</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>tree<span class="ot">&lt;-</span>treeio<span class="sc">::</span><span class="fu">read.mrbayes</span>(<span class="st">&quot;Tree_3p.t&quot;</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Get table of clock rates with summary stats for each node in the tree for each relaxed clock partition </span></span>
@@ -235,8 +235,8 @@ div.csl-indent {
 </div>
 <div id="get-summary-statistics-table-and-plots" class="section level3">
 <h3>4. Get summary statistics table and plots</h3>
-<p>Obtain summary statistics table and plots for each clade by clock using <code>clockrate_summary</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Import rate table with clade membership </span></span>
+<p>Import the rate table with clade membership (new “clade” column added) and obtain summary statistics table and plots for each clade by clock using <code>clockrate_summary</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Import rate table with clade membership (new &quot;clade&quot; column added)</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>RateTable_Medians<span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;RateTable_Medians_Clades.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Get summary statistics table for each clade by clock </span></span>
@@ -908,15 +908,12 @@ Other
 <h3>2. Import combined log file from all runs.</h3>
 <p>This is produced by using <code>import_log</code>. Alternatively, users can also use <strong>LogCombiner</strong> from the <a href="https://www.beast2.org/beagle-beast-2-in-cluster/index.html">BEAST2</a> software package. Table is automatically reshaped from wide to long.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Import all log (.p) files from all runs and combine them, with burn-in = 25% and downsampling to 2.5k trees in each log file</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>Comb_posterior3p <span class="ot">&lt;-</span> <span class="fu">import_log</span>(<span class="st">&quot;E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/LogFiles3p&quot;</span>, <span class="at">burnin =</span> <span class="fl">0.25</span>, <span class="at">downsample =</span> <span class="dv">2500</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>Comb_posterior3p <span class="ot">&lt;-</span> <span class="fu">combine_log</span>(<span class="st">&quot;E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/LogFiles3p&quot;</span>, <span class="at">burnin =</span> <span class="fl">0.25</span>, <span class="at">downsample =</span> <span class="dv">2500</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="do">### OR</span></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Import combined log file from all runs (if available)</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Comb_posterior3p &lt;- read.table(&quot;E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/3p_CombLog(4runs).p&quot;, header = TRUE)</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Reshape Allruns data from wide to long</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">#FBD_reshape(Comb_posterior3p)</span></span></code></pre></div>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Comb_posterior3p &lt;- read.table(&quot;E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/3p_CombLog(4runs).p&quot;, header = TRUE)</span></span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Show first 10 lines of combined log file</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Comb_posterior3p, <span class="dv">10</span>)</span></code></pre></div>
 </div>

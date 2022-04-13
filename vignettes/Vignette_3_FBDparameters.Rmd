@@ -48,13 +48,13 @@ Comb_posterior3p <- combine_log("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/Lo
 
 ## Reshape imported combined log file from wide to long with FBD_reshape
 Comb_posterior3p<- FBD_reshape(Comb_posterior3p)
-Comb_posterior3p
+
 ```
 
 
 ### 2. Summarize FBD parameters by time bin
 
-Summer statistics for each FBD parameter by time bin can be quickly summarized using `FBD_summary`:
+Summary statistics for each FBD parameter by time bin can be quickly summarized using `FBD_summary`:
 
 ```{r}
 ## Summarize parameters by time bin and analysis
@@ -89,8 +89,8 @@ FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "violin", s
 ```{r, fig.width=12, fig.height=4, fig.align = "center", out.width = "100%"}
 ## Plot distribution of all FBD parameter by time bin with a violin plot
 p1<-FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "violin", stack = FALSE, color = "red")
-p2<-FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "violin", stack = FALSE, color = "cyan3")
-p3<-FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "violin", stack = FALSE, color = "green3")
+p2<-FBD_dens_plot(Comb_posterior3p, parameter = "relative_extinction", type = "violin", stack = FALSE, color = "cyan3")
+p3<-FBD_dens_plot(Comb_posterior3p, parameter = "relative_fossilization", type = "violin", stack = FALSE, color = "green3")
 
 p1|p2|p3
 

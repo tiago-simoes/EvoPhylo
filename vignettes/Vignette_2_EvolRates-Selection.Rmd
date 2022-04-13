@@ -45,6 +45,7 @@ Please note that analyses must have reached the stationarity phase and independe
 ## Import summary tree produced by Mr. Bayes (.t or .tre files)
 tree<-treeio::read.mrbayes("Tree_3p.t")
 
+
 ## Get table of clock rates with summary stats for each node in the tree for each relaxed clock partition 
 RateTable_Medians_no_clades <- get_clockrate_table(tree, summary = "median")
 RateTable_Means_no_clades <- get_clockrate_table(tree, summary = "mean")
@@ -87,7 +88,7 @@ Import the rate table with clade membership (new "clade" column added) and obtai
 RateTable_Medians<- read.csv("RateTable_Medians_Clades.csv", header = TRUE)
 
 ## Get summary statistics table for each clade by clock 
-clockrate_summary(RateTable_Medians, "Sum_RateTable_Medians.csv", digits=2)
+clockrate_summary(RateTable_Medians, "Sum_RateTable_Medians.csv", digits=3)
 ```
 
 ```{r, echo = FALSE}
@@ -168,7 +169,7 @@ This is produced by using `import_log`. Alternatively, users can also use **LogC
 
 ```{r}
 ## Import all log (.p) files from all runs and combine them, with burn-in = 25% and downsampling to 2.5k trees in each log file
-Comb_posterior3p <- combine_log("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/LogFiles3p", burnin = 0.25, downsample = 2500)
+Comb_posterior3p <- combine_log("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/LogFiles3p", burnin = 0.25, downsample = 1000)
 
 ### OR
 

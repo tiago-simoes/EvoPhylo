@@ -51,7 +51,7 @@ The optimal number of partitions (clusters) will be first determined using parti
 ```{r, fig.width=6, fig.height=4, fig.align = "center", out.width = "70%"}
 ## Estimate and plot number of cluster against silhouette width
 sw <- get_sil_widths(Dmatrix, max.k = 10)
-plot(sw, color = "red", size=1)
+plot(sw, color = "blue", size=1)
 
 #Decide on number of clusters based on plot; here, k = 3 partitions
 ```
@@ -90,7 +90,7 @@ cluster_to_nexus(clusters, file = "Clusters_Nexus.txt")
 ```{r, fig.width=10, fig.height=7, fig.align = "center", out.width = "100%"}
 #User may also generate clusters with PAM and produce a graphic clustering (tSNEs)
 clusters <- make_clusters(Dmatrix, k = 3, tsne = TRUE, tsne_dim = 3)
-plot(clusters, nrow = 2, max.overlaps=12)
+plot(clusters, nrow = 2, max.overlaps=5)
 
 
 #Write clusters/partitions in Nexus file format 
