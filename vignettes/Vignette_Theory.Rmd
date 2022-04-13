@@ -14,6 +14,7 @@ link-citations: true
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(warning=FALSE)
 ```
 
 ## Creating Inter-character Distance Matrices
@@ -28,7 +29,7 @@ Categorical data including symbols for inapplicable and missing data (typically 
 
 In the example provided below, option 1 will convert unknown conditions to `NA` and thus will ignore the respective taxa with inapplicable/missing data to calculate inter-character distances. The resulting distance matrix will introduce `NaN` to every pairwise comparison involving two characters with `NA` (all comparisons including character 5, as well as any pairwise comparisons involving characters 4, 5 and 7) (Table 2-in blue). Statistical tests and clustering methods cannot utilize such matrices with `NaN` as data entries, and removal of observations contributing to excessive `NaN` have to be performed --- such as taxon removal during inter-taxon distance matrix construction using [Claddis](https://cran.r-project.org/web/packages/Claddis/index.html).
 
-```{r, echo=FALSE}
+```{r}
 library(EvoPhylo)
 d <- structure(list(`Taxon A` = c("0", "1", "0", "0", "?", "1", "?", "0", "1", "1"), 
                     `Taxon B` = c("0", "1", "0", "?", "?", "1", "1", "0", "1", "1")),
@@ -43,7 +44,7 @@ With option 2, inapplicables/missing data will be treated as a distinct categori
 
 Contrary to approaches to create inter-taxon distance matrices to estimate morphospace, removing observations with excessive inapplicable/missing data for the final distance matrix is not possible because each character must be assigned to at least one partition (regardless of the amount of missing or inapplicable data). Therefore, here we recommend following the approach in option 2, which maximizes the distance between characters with inapplicables/missing data and avoids inapplicable outputs in the distance matrix. However, as characters with excessive missing data are likely to bias the results of phylogenetic analyses (besides biasing the estimation of the distance matrix), we suggest avoiding or removing such characters for morphological phylogenetic analysis. This will avoid the several phylogenetic analytical issues for characters with excessive inapplicable/missing data, besides the biases introduced in construction of distance matrices and the assessment of character partitioning.
 
-```{r, echo = FALSE, warning=FALSE}
+```{r, warning=FALSE}
 gd <- get_gower_dist(d, numeric = TRUE)
 nas <- which(is.na(gd))
 for (i in nas) {

@@ -15,8 +15,8 @@ link-citations: true
 This vignette explains how to extract evolutionary rate parameters estimated from relaxed clock Bayesian inference analyses produced by the program [Mr. Bayes](https://nbisweden.github.io/MrBayes/). It also shows how to use evolutionary rate based inference of selection strength (or mode) adapted to clock-based rates, as introduced by @simões2021.
 
 ```{r, setup, echo=FALSE}
-knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/")
+knitr::opts_chunk$set(warning=FALSE)
 ```
 
 ## Evolutionary Rates Statistics and Plots
@@ -27,11 +27,9 @@ In this section, we will extract evolutionary rate parameters from each node fro
 
 Load the **EvoPhylo** package
 
-```{r, warning = FALSE}
+```{r}
 library(EvoPhylo)
 library(ggtree)
-#library(ggplot2)
-#library(patchwork)
 ```
 
 
@@ -44,7 +42,7 @@ Please note that analyses must have reached the stationarity phase and independe
 
 
 ```{r}
-## Import summary tree produced by Mr. Bayes
+## Import summary tree produced by Mr. Bayes (.t or .tre files)
 tree<-treeio::read.mrbayes("Tree_3p.t")
 
 ## Get table of clock rates with summary stats for each node in the tree for each relaxed clock partition 
@@ -82,10 +80,10 @@ tree_nodes
 
 ### 4. Get summary statistics table and plots 
 
-Obtain summary statistics table and plots for each clade by clock using `clockrate_summary`.
+Import the rate table with clade membership (new "clade" column added) and obtain summary statistics table and plots for each clade by clock using `clockrate_summary`. 
 
 ```{r}
-## Import rate table with clade membership 
+## Import rate table with clade membership (new "clade" column added)
 RateTable_Medians<- read.csv("RateTable_Medians_Clades.csv", header = TRUE)
 
 ## Get summary statistics table for each clade by clock 
@@ -188,7 +186,7 @@ head(Comb_posterior3p, 10)
 ```
 
 
-### 4. Pairwise t-tests of Rate values 
+### 3. Pairwise t-tests of Rate values 
 
 The `get_pwt_rates` will produce a table of pairwise t-tests for differences between the mean clockrate value in the posterior and the absolute rate for each tree node. 
 ```{r}
@@ -206,7 +204,7 @@ write.csv(RateSign_tests, file="RateSign_tests.csv")
 
 
 
-### 5. Plot selection gradient on the summary tree
+### 4. Plot selection gradient on the summary tree
 
 Using different thresholds, Identify the strength (or mode) across branches in the tree for each clock partition with `plot_treerates_sgn`.
 ```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}

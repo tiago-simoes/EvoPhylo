@@ -1,7 +1,7 @@
 #All functions documented with examples
 
-#Import log (.p) files, optionally downsampling; produces posterior1p-style object
-import_log <- function(path = ".", burnin = .25, downsample = 1e4) {
+#Import and combine log (.p) files from Mr. Bayes, optionally downsampling; produces posterior1p-style object
+combine_log <- function(path = ".", burnin = .25, downsample = 1e4) {
   #Get FBD parameter estimates from collection of log files (.p)
   if (!is.character(path)) files <- NULL
   else if (all(utils::file_test(path, op = "-f"))) {
@@ -53,11 +53,6 @@ import_log <- function(path = ".", burnin = .25, downsample = 1e4) {
     stop("All parameter log files must have the same column names.", call. = FALSE)
   }
 
-  if (!any(startsWith(names(L[[1]]), "net_speciation_")) ||
-      !any(startsWith(names(L[[1]]), "relative_extinction_")) ||
-      !any(startsWith(names(L[[1]]), "relative_fossilization_"))) {
-    stop("The log files must contain the parameters net_speciation, relative_extinction, and relative_fossilization.", call. = FALSE)
-  }
 
   samples <- do.call("rbind", L)
 
@@ -70,19 +65,6 @@ import_log <- function(path = ".", burnin = .25, downsample = 1e4) {
     }
     samples <- samples[d,,drop = FALSE]
   }
-
-  posterior <- reshape(samples, direction = "long",
-                     varying = list(names(samples)[startsWith(names(samples), "net_speciation_")],
-                                    names(samples)[startsWith(names(samples), "relative_extinction_")],
-                                    names(samples)[startsWith(names(samples), "relative_fossilization_")]),
-                     v.names = c("net_speciation", "relative_extinction", "relative_fossilization"),
-                     timevar = "Time_bin",
-                     sep = "_")
-  posterior[["id"]] <- NULL
-  posterior[["Time_bin"]] <- factor(posterior[["Time_bin"]])
-  attr(posterior, "reshapeLong") <- NULL
-
-  posterior
 }
 
 
