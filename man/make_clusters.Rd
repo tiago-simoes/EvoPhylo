@@ -61,7 +61,7 @@ The \code{pam} fit resulting from \code{cluster::pam} is returned in the \code{"
 }
 
 \note{
-When using \code{plot()} on a \code{cluster_df} object, warnings may appear from \code{ggrepel} saying something along the lines of "unlabeled data points (too many overlaps). Consider increasing max.overlaps". See \code{\link[ggrepel:geom_label_repel]{ggrepel::geom_text_repel}} for details; the \code{max.overlaps} argument can be supplied to \code{plot()} to increase the maximum number of element overlap in the plot. Alternatively, users can increase the size of the plot when exporting it, as it will increase the plot area and reduce the number of elements overlap. This warning can generally be ignored, though. 
+When using \code{plot()} on a \code{cluster_df} object, warnings may appear from \code{ggrepel} saying something along the lines of "unlabeled data points (too many overlaps). Consider increasing max.overlaps". See \code{\link[ggrepel:geom_label_repel]{ggrepel::geom_text_repel}} for details; the \code{max.overlaps} argument can be supplied to \code{plot()} to increase the maximum number of element overlap in the plot. Alternatively, users can increase the size of the plot when exporting it, as it will increase the plot area and reduce the number of elements overlap. This warning can generally be ignored, though.
 }
 
 \seealso{
@@ -98,3 +98,4 @@ cluster_df_tsne2 <- make_clusters(Dmatrix, k = 3, tsne = TRUE, tsne_dim = 3)
 #Plot clusters, plots divided into 2 rows, and increasing overlap of text labels (default = 10)
 plot(cluster_df_tsne2, nrow = 2, max.overlaps=20)
 }
+

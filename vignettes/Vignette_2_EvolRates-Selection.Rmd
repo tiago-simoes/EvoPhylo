@@ -124,6 +124,7 @@ clockrate_dens_plot(RateTable_Medians, stack = TRUE, nrow = 1, scales = "fixed")
 
 
 
+
 ### 6. Rate linear models
 
 We can also plot linear model regressions between rates from two or more clocks with `clockrate_reg_plot`.

@@ -1,31 +1,31 @@
 \name{clockrate_reg_plot}
 \alias{clockrate_reg_plot}
 \title{
-Plot the relationship between two sets of clock rates
+Linear regression between sets of rates
 }
 \description{
-Displays a scatterplot and fit regression line of one set of clock rates against another, optionally computing their correlation.
+Displays a scatterplot and fits regression line of one set of clock rates against another, optionally displaying their Pearson correlation coefficient (r) and R-squared values (R^2).
 }
 \usage{
 clockrate_reg_plot(rate_table, clock_x, clock_y,
-                   method = "lm", corr = TRUE,
+                   method = "lm", show_lm = TRUE,
                    ...)
 }
 \arguments{
   \item{rate_table}{
-a table of clock rates, such as from the output of \code{\link{get_clockrate_table}}.
+A table of clock rates, such as from the output of \code{\link{get_clockrate_table}}.
 }
   \item{clock_x, clock_y}{
-which clocks should go on the x- and y-axes, respectively.
+The clock rates that should go on the x- and y-axes, respectively.
 }
   \item{method}{
-the regression method used fit the regression of one clock on the other. Passed to \code{\link{geom_smooth}}. Default is \code{"lm"} for a linear regression. \code{"loess"} is another option.
+The method (function) used fit the regression of one clock on the other. Check the \code{method} argument in the to \code{\link{geom_smooth}} function of \emph{ggplot2} for all options. Default is \code{"lm"} for a linear regression model. \code{"glm"} and \code{"loess"} are alternative options.
 }
-  \item{corr}{
-whether to display the correlation between the two sets of clock rates on the plot.
+  \item{show_lm}{
+Whether to display the Pearson correlation coefficient (r) and R-squared values (R^2) between two sets of clock rates.
 }
   \item{\dots}{
-other arguments passed to \code{\link{geom_smooth}}.
+Other arguments passed to \code{\link{geom_smooth}}.
 }
 
 }

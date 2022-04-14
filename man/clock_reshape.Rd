@@ -1,10 +1,10 @@
 \name{clock_reshape}
 \alias{clock_reshape}
 \title{
-Coverts rate tables from wide to long format
+Coverts clock rate tables from wide to long format
 }
 \description{
-Coverts rate tables, such as those produced by \code{\link{clockrate_summary}} and imported back after including the clade names, from wide to long format. The input must have a \code{clade} column for downstream analyses.
+Coverts clock rate tables, such as those produced by \code{\link{clockrate_summary}} and imported back after including clade names, from wide to long format. The input must have a "clade" column for downstream analyses.
 }
 \usage{
 clock_reshape(rate_table)
@@ -31,7 +31,7 @@ data("rate_table_clades")
 
 head(rate_table_clades)
 
-## Reshape rate table with clade names to long format
+## Reshape a clock rate table with clade names to long format
 RatesByClade <- clock_reshape(RateTable_Medians)
 }
 

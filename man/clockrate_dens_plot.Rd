@@ -1,10 +1,10 @@
 \name{clockrate_dens_plot}
 \alias{clockrate_dens_plot}
 \title{
-Plot the density of clock rates
+Plot clock rate distribution density
 }
 \description{
-Plots the density of clock rates by clock and clade.
+Plots the distribution density of clock rates by clock and clade (when "clade" is provided in a rate table).
 }
 \usage{
 clockrate_dens_plot(rate_table, clock = NULL,
@@ -59,12 +59,16 @@ data("rate_table_means")
 
 head(rate_table_means)
 
-clockrate_dens_plot(rate_table_means, clock = 1)
+# Overlapping plots
+clockrate_dens_plot(RateTable_Medians, stack = FALSE, nrow = 1, scales = "fixed")
+
+## Stacked plots
+clockrate_dens_plot(RateTable_Medians, stack = TRUE, nrow = 1, scales = "fixed")
 
 # Stacked density for all three clocks, changing the color
 # palette to viridis using ggplot2 functions
 clockrate_dens_plot(rate_table_means, clock = 1:3, nrow = 1,
-                    stack = TRUE) +
+                    stack = TRUE, scales = "fixed") +
   ggplot2::scale_color_viridis_d() +
   ggplot2::scale_fill_viridis_d()
 }
