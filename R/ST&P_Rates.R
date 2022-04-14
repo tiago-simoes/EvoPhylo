@@ -125,7 +125,7 @@ clockrate_dens_plot <- function(rate_table, clock = NULL, stack = FALSE, nrow = 
 }
 
 #Plot linear model and Pearson correlation of one rate against another
-clockrate_reg_plot2 <- function(rate_table, clock_x, clock_y, method = "lm", show_lm = TRUE, ...) {
+clockrate_reg_plot <- function(rate_table, clock_x, clock_y, method = "lm", show_lm = TRUE, ...) {
 
   if (!is.data.frame(rate_table)) {
     stop("'rate_table' must be a data frame.", call. = FALSE)
