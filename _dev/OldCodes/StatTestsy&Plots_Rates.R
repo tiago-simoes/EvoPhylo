@@ -16,7 +16,6 @@ library(ggtree)
 library(dplyr)
 
 
-
 ##################### Plotting metadata from an all fossil summary tree (with dummy extant taxon):MrBayes MCT tree #########################
 # For plotting trees without dummy extant, use the following only (not remove.MrB.extant) - for SINGLE & MULTI CLOCK
 
@@ -167,7 +166,7 @@ RateByClocks1 <- as.data.frame(Sum_RateByClock1)
 
 write.csv(RateByClocks1, file="Sum_RateByClocks_medians.csv")
 
-# Summary stats___IF multiple rate parameters available in tree file   
+# Summary stats___IF multiple rate parameters available in tree file
 
 
 Sum_RateByClock1<-Summarize(rates1,
@@ -206,7 +205,7 @@ RateByClocks2 <- as.data.frame(Sum_RateByClock1)
 write.csv(RateByClocks2, file="Sum_RateByClocks_means.csv")
 
 
-# Summary stats___IF multiple rate parameters available in tree file   
+# Summary stats___IF multiple rate parameters available in tree file
 
 
 Sum_RateByClockM1<-Summarize(rates1,
@@ -232,7 +231,7 @@ write.csv(AllRateByClocks2, file="Sum_AllRateByClocks_means.csv")
 
 
 
-############### Clock and clade rate distribution 
+############### Clock and clade rate distribution
 
 ###### Melt data by rate parameters___only IF multiple rate parameters available in tree file (If single rate only, skip this step)
 
@@ -345,7 +344,7 @@ Pl2c
 
 #Combine plots
 par(mar = c(7, 7, 7, 7))
-A2<-plot_grid(Pl2a, Pl2c, Pl2b, ncol = 1)  
+A2<-plot_grid(Pl2a, Pl2c, Pl2b, ncol = 1)
 A2
 
 
@@ -391,5 +390,5 @@ R2c
 
 #Combine plots
 par(mar = c(7, 7, 7, 7))
-A1<-plot_grid(R2a, R2b, R2c, ncol = 3)  
+A1<-plot_grid(R2a, R2b, R2c, ncol = 3)
 A1

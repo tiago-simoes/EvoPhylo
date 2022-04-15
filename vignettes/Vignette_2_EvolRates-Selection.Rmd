@@ -30,6 +30,7 @@ Load the **EvoPhylo** package
 ```{r}
 library(EvoPhylo)
 library(ggtree)
+library(ggplot2)
 ```
 
 
@@ -135,6 +136,7 @@ p13 <- clockrate_reg_plot(RateTable_Medians, clock_x = 1, clock_y = 3)
 p23 <- clockrate_reg_plot(RateTable_Medians, clock_x = 2, clock_y = 3)
 
 gridExtra::grid.arrange(p12, p13, p23, nrow = 2)
+
 
 ##(NOT RUN)
 #Save your plot to your working directory as a PDF

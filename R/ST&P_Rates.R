@@ -178,8 +178,7 @@ clockrate_reg_plot <- function(rate_table, clock_x, clock_y, method = "lm", show
 
   if (show_lm) {
     r <- cor(rate_table$clock_x, rate_table$clock_y)
-    lm <- lm(clock_x~clock_y, rate_table)
-    lms <- summary(lm)
+    lms <- summary(lm(clock_x~clock_y, rate_table))
     R2 <- lms$r.squared
 
     #Extract underlying ggplot data to place correlation in correct place in plot

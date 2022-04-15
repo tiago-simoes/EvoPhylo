@@ -29,15 +29,20 @@ The Gower distance matrix.
 \code{\link[StatMatch:gower.dist]{StatMatch::gower.dist}}
 }
 \examples{
+#Load example phylogenetic data matrix
 data("characters")
 
-#Reading example file as categorical data
+#Create distance matrix
 Dmatrix <- get_gower_dist(characters)
 
-#Reading tetrapod data matrix as categorical data (recommended)
+## OR
+
+#Load tetrapod example data matrix as categorical data
+setwd("EvoPhylo/_dev/Examples/")
 Dmatrix <- get_gower_dist(DataMatrix.nex)
 
 #Reading tetrapod data matrix as numeric data
 Dmatrix <- get_gower_dist(characters, numeric = FALSE)
+# OR
 Dmatrix <- get_gower_dist(DataMatrix.nex, numeric = FALSE)
 }

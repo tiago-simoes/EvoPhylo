@@ -4,14 +4,14 @@
 Compute rate summary statistics across clades and clocks
 }
 \description{
-Computes summary statistics for each clade and/or for each clock partition. The input must have a \code{clade} column.
+Computes summary statistics for each clade and/or for each clock partition. The input must have a \code{"clade"} column.
 }
 \usage{
 clockrate_summary(rate_table, file = NULL, digits = 3)
 }
 \arguments{
   \item{rate_table}{
-a data frame of clock rates, such as from the output of \code{\link{get_clockrate_table}} with an extra \code{clade} column.
+a data frame of clock rates, such as from the output of \code{\link{get_clockrate_table}} with an extra \code{"clade"} column.
 }
   \item{file}{
 an optional file path where the resulting table will be stored using \code{\link{write.csv}}.
@@ -42,13 +42,16 @@ head(rate_table)
 write.csv(rate_table, file = "rate_table.csv",
           row.names = FALSE)
 
-##Then,          
-## 1) Manually edit rate_table.csv, adding a "clade" column. S
-## 2) Save the edited rate table with a different name to differentiate from the original output (e.g., rate_table_clades.csv). Then,
-## 3) Read the file back in:
+##Then,
+# 1) Manually edit rate_table.csv, adding a "clade" column.
+#    This introduces customized clade names to individual nodes in the tree.
+# 2) Save the edited rate table with a different name to differentiate from the original output
+#    (e.g., rate_table_clades.csv)
+# 3) Read the file back in:
 
 rate_table_clades <- read.csv("rate_table_clades.csv")
 }
+
 ## The example dataset rate_table_clades already has clades:
 data("rate_table_clades")
 
