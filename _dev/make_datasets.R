@@ -1,17 +1,20 @@
 #Making posterior3p
-posterior <- read.table("_dev/Examples/SelectionStrength/3p_TipNodeMC_CombLog_8k.p", header = TRUE)
-names(posterior) <- gsub(".all.", "", names(posterior), fixed = T)
-names(posterior)[endsWith(names(posterior), ".")] <- substring(names(posterior)[endsWith(names(posterior), ".")], 1, nchar(names(posterior)[endsWith(names(posterior), ".")]) - 1)
-burnin <- quantile(posterior$Gen, .25)
-posterior <- posterior[posterior$Gen > burnin,]
-posterior <- posterior[round(seq(1, nrow(posterior), length.out = 1000)),]
-posterior3p <- FBD_reshape(posterior)
-save(posterior3p, file = "data/posterior3p.rda")
+posterior3p <- combine_log("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/LogFiles3p/",
+                        burnin = .25, downsample = 10000)
+save(posterior3p, file = "E:/Git/EvoPhylo/data/posterior3p.rda")
+
+#Making posterior3p_long
+posterior3p_long <- FBD_reshape(posterior3p)
+save(posterior3p_long, file = "E:/Git/EvoPhylo/data/posterior3p_long.rda")
 
 #Making posterior1p
-posterior1p <- import_log(paste0("_dev/new files/Input files/1p_run", 1:4, ".p"),
-                        burnin = .25, downsample = 1000)
-save(posterior1p, file = "data/posterior1p.rda")
+posterior1p <- combine_log("E:/Git/EvoPhylo/_dev/Examples/SingleClockTree/LogFiles1p/",
+                        burnin = .25, downsample = 10000)
+save(posterior1p, file = "E:/Git/EvoPhylo/data/posterior1p.rda")
+
+#Making posterior1p_long
+posterior1p_long <- FBD_reshape(posterior1p)
+save(posterior1p_long, file = "E:/Git/EvoPhylo/data/posterior1p_long.rda")
 
 #Making characters
 characters <- as.data.frame(ape::read.nexus.data("_dev/new files/Input files/DataMatrix_noPolys.nex"))

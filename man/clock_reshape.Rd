@@ -11,7 +11,7 @@ clock_reshape(rate_table)
 }
 \arguments{
   \item{rate_table}{
-a data frame of clock rates, such as from the output of \code{\link{get_clockrate_table}} with an extra \code{clade} column.
+A data frame of clock rates, such as from the output of \code{\link{get_clockrate_table}} with an extra \code{clade} column.
 }
 }
 \details{

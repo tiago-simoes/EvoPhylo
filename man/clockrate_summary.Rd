@@ -4,20 +4,20 @@
 Compute rate summary statistics across clades and clocks
 }
 \description{
-Computes summary statistics for each clade and/or for each clock partition. The input must have a \code{"clade"} column.
+Computes summary statistics for each clade and/or for each clock partition. The input must have a "clade" column.
 }
 \usage{
 clockrate_summary(rate_table, file = NULL, digits = 3)
 }
 \arguments{
   \item{rate_table}{
-a data frame of clock rates, such as from the output of \code{\link{get_clockrate_table}} with an extra \code{"clade"} column.
+A data frame of clock rates, such as from the output of \code{\link{get_clockrate_table}} with an extra \code{"clade"} column.
 }
   \item{file}{
-an optional file path where the resulting table will be stored using \code{\link{write.csv}}.
+An optional file path where the resulting table will be stored using \code{\link{write.csv}}.
 }
   \item{digits}{
-the number of digits to round the summary results to. Default is 3. See \code{\link{round}}.
+The number of digits to round the summary results to. Default is 3. See \code{\link{round}}.
 }
 }
 \details{

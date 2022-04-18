@@ -2,7 +2,7 @@
 \alias{cluster_to_nexus}
 
 \title{
-Exports character clusters to a nexus file
+Exports character partitions to a nexus file
 }
 \description{
 Creates and exports a Nexus file with a list of characters and their respective partitions as inferred by the \code{make_clusters} function. The contents can be copied and pasted directly into a Mr. Bayes commands block for a partitioned clock Bayesian inference analysis.
