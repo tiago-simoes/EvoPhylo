@@ -20,7 +20,7 @@ knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/")
 
 ## Installing package **EvoPhylo**
 
-```{r, eval = FALSE}
+```{r, eval = FALSE, warning = FALSE}
 #install.packages("EvoPhylo")
 ### OR
 #devtools::install_github("tiago-simoes/EvoPhylo", lib="C:/Program Files/R/R-4.1.0/library")
@@ -30,7 +30,7 @@ knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/")
 
 Load the **EvoPhylo** package
 
-```{r}
+```{r, warning = FALSE}
 library(EvoPhylo)
 ```
 

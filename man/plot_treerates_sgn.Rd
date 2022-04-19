@@ -2,7 +2,6 @@
 \alias{plot_treerates_sgn}
 
 \title{
-TITLE
 Plots tree with rate thresholds for selection mode
 }
 \description{

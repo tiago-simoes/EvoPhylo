@@ -3,10 +3,10 @@
 
 \title{
 TITLE
-%Needs a title
+Conducts pairwise t-tests between node rates and clock base rate
 }
 \description{
-Produces a data frame containing the results of 1-sample t-tests for the mean of posterior clockrates against each node's absolute clock rate.
+Produces a data frame containing the results of 1-sample t-tests for the mean of posterior clock rates against each node's absolute clock rate.
 }
 \usage{
 get_pwt_rates(rate_table, posterior)
