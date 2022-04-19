@@ -12,7 +12,7 @@ A clock Bayesian phylogenetic tree, imported as an S4 class object using \code{t
 A \code{tidytree} object.
 }
 \details{
-This example tree file was produced by analyzing the data set with a single morphological partition from Simões & Pierce (2021).
+This example tree file was produced by analyzing the data set with 3 morphological clock partitions from Simões & Pierce (2021).
 }
 \seealso{
 \code{\link{tree1p}} for another tree object with a single clock partition.
