@@ -3,10 +3,10 @@
 \alias{plot.sil_width_df}
 
 \title{
-Compute Silhouette Widths for Various Numbers of Clusters
+Calculates Silhouette widths index for various numbers of partitions
 }
 \description{
-Computes silhouette widths for several possible numbers of clusters \code{k}, which determines how well an object falls within their cluster compared to other clusters. The best number of clusters \code{k} is the one with the highest silhouette width.
+Computes silhouette widths index for several possible numbers of clusters(partitions) \code{k}, which determines how well an object falls within their cluster compared to other clusters. The best number of clusters \code{k} is the one with the highest silhouette width.
 }
 \usage{
 get_sil_widths(dist_mat, max.k = 10)
@@ -15,20 +15,20 @@ get_sil_widths(dist_mat, max.k = 10)
 }
 \arguments{
   \item{dist_mat}{
-a Gower distance matrix, the output of a call to \code{\link{get_gower_dist}}.
+A Gower distance matrix, the output of a call to \code{\link{get_gower_dist}}.
 }
   \item{max.k}{
-the maximum number of clusters to search across.
+The maximum number of clusters(partitions) to search across.
 }
   \item{x}{
-a \code{sil_width_df} object; the output of a call to \code{get_sil_widths()}.
+A \code{sil_width_df} object; the output of a call to \code{get_sil_widths()}.
 }
   \item{\dots}{
-further arguments passed to \code{\link[ggplot2:geom_path]{ggplot2::geom_line}} to control the appearance of the plot.
+Further arguments passed to \code{\link[ggplot2:geom_path]{ggplot2::geom_line}} to control the appearance of the plot.
 }
 }
 \details{
-\code{get_sil_widths} calls \code{\link[cluster:pam]{cluster::pam}} on the supplied Gower distance matrix with each number of clusters (partitions) up to \code{max.k} and stores the average silhouette widths across the clustered characters. When \code{plot = TRUE}, a plot of the sillhouette widths against the number of clusters is produced, though this can also be produced seperately on the resulting data frame using \code{plot.sil_width_df()}. The number of clusters with the greatest silhouette width should be selected for use in the final clustering specification. See Examples.
+\code{get_sil_widths} calls \code{\link[cluster:pam]{cluster::pam}} on the supplied Gower distance matrix with each number of clusters (partitions) up to \code{max.k} and stores the average silhouette widths across the clustered characters. When \code{plot = TRUE}, a plot of the sillhouette widths against the number of clusters is produced, though this can also be produced seperately on the resulting data frame using \code{plot.sil_width_df()}. The number of clusters with the greatest silhouette width should be selected for use in the final clustering specification.
 }
 \value{
 For \code{get_sil_widths()}, it produces a data frame, inheriting from class \code{"sil_width_df"}, with two columns: \code{k} is the number of clusters, and \code{sil_width} is the silhouette widths for each number of clusters. If \code{plot = TRUE}, the output is returned invisibly.

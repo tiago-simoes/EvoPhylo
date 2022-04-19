@@ -5,7 +5,7 @@
 Compute Gower distances
 }
 \description{
-Computes Gower distance between features from a phylogenetic data matrix
+Computes Gower distance between characters from a phylogenetic data matrix.
 }
 \usage{
 get_gower_dist(x, numeric = FALSE)
@@ -15,7 +15,7 @@ get_gower_dist(x, numeric = FALSE)
 A phylogenetic data matrix in Nexus (.nex) format, or in any other data frame or matrix format with a column for each character and terminal taxa as rows, which will be read using \code{\link[ape:read.nexus.data]{ape::read.nexus.data}}. The data cannot include polymorphisms.
 }
   \item{numeric}{
-Whether to treat the values contained in the \code{x} as numeric or categorical. If \code{FALSE} (default), features will be considered categorical; if \code{TRUE}, they will be considered numeric. For further details, see "Vignette_ImportData".
+Whether to treat the values contained in the \code{x} as numeric or categorical. If \code{FALSE} (default), features will be considered categorical; if \code{TRUE}, they will be considered numeric.
 }
 }
 \author{
@@ -37,12 +37,12 @@ Dmatrix <- get_gower_dist(characters)
 
 ## OR
 
-#Load tetrapod example data matrix as categorical data
+#Load example data matrix as categorical data
 setwd("EvoPhylo/_dev/Examples/")
 Dmatrix <- get_gower_dist(DataMatrix.nex)
 
-#Reading tetrapod data matrix as numeric data
-Dmatrix <- get_gower_dist(characters, numeric = FALSE)
+#Reading data matrix as numeric data
+Dmatrix <- get_gower_dist(characters, numeric = TRUE)
 # OR
-Dmatrix <- get_gower_dist(DataMatrix.nex, numeric = FALSE)
+Dmatrix <- get_gower_dist(DataMatrix.nex, numeric = TRUE)
 }

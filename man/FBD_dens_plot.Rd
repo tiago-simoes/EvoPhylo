@@ -2,10 +2,10 @@
 \alias{FBD_dens_plot}
 
 \title{
-Density Plot of One FBD Parameter
+Density plots for each FBD parameter
 }
 \description{
-Produces a density or violin plot displaying the distribution of MCMC fossilized birth-death process (FBD) parameter samples by time bin.
+Produces a density or violin plot displaying the distribution of FBD parameter samples by time bin.
 }
 \usage{
 FBD_dens_plot(posterior, parameter, type = "density",
@@ -14,7 +14,7 @@ FBD_dens_plot(posterior, parameter, type = "density",
 
 \arguments{
   \item{posterior}{
-A data frame containing a single "value" column and one column for each FBD parameter (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"), indicating to which FBD parameter each value refers to. Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}} . See the \code{\link{posterior1p_long}} or \code{\link{posterior3p_long}} datasets for an examples of how the input file should look.
+A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"). Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}} . See the \code{\link{posterior1p_long}} or \code{\link{posterior3p_long}} datasets for an examples of how the input file should look.
 }
   \item{parameter}{
 A string containing the name of an FBD parameter "net_speciation", "relative_extinction", or "relative_fossilization"; abbreviations allowed.

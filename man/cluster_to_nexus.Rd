@@ -27,20 +27,28 @@ The text as a string, returned invisibly if \code{file} is not \code{NULL}. Use 
 \code{\link{cat}}
 }
 \examples{
+
+###### Load data matrix
+
 #Load example phylogenetic data matrix
 data("characters")
 
 #Create distance matrix
 Dmatrix <- get_gower_dist(characters)
 
+
+# OR
+
+#Load example phylogenetic data matrix from working directory
+Dmatrix <- get_gower_dist("_dev/Examples/DataMatrix.nex", numeric = FALSE)
+
+######
+
 #Find optimal partitioning scheme using PAM under k=3 partitions
 cluster_df <- make_clusters(Dmatrix, k = 3)
 
-#Name of the desired .nex file, e.g., "clusters.nex"
-file <- tempfile(fileext = ".nex")
-
-#Write to nexus file and store text in cluster_file variable
-cluster_file <- cluster_to_nexus(cluster_df, file = file)
+#Write to Nexus file and export as "cluster_file.txt":
+cluster_to_nexus(cluster_df, file = cluster_file.txt)
 
 cat(cluster_file)
 }

@@ -11,18 +11,18 @@ FBD_reshape(posterior)
 }
 \arguments{
   \item{posterior}{
-Single posterior parameter sample dataset with skyline FBD parameters produced with \code{\link{combine_log}}. See the \code{\link{posterior3p}} or \code{\link{posterior1p}} dataset for an example of how the resulting file should look.
+Single posterior parameter sample dataset with skyline FBD parameters produced with \code{\link{combine_log}}. See the \code{\link{posterior3p_long}} or \code{\link{posterior1p_long}} data sets for an example of how the resulting file should look.
 
 }
 }
 \details{
-The posterior parameters log files produced by Bayesian evolutionary analyses using skyline birth-death tree models, including the skyline FBD model, result into 2 or more estimates for each FBD parameter (e.g., "net diversification", "relative extinction", and "relative fossilization"). This function will convert parameters log files including FBD parameters from wide to long format, with one row per generation per time bin and a new column "Time_bin" containing the time bins as a factor. The long format is necessary for downstream analyses, as similarly done by \code{\link{clock_reshape}} for clock rate tables.
+The posterior parameters log files produced by Bayesian evolutionary analyses using skyline birth-death tree models, including the skyline FBD model, result into two or more estimates for each FBD parameter (e.g., "net diversification", "relative extinction", and "relative fossilization"), one for each time bin. This function will convert parameters (.p) log files with  skyline FBD parameters from wide to long format, with one row per generation per time bin and a new column "Time_bin" containing the respective time bins as a factor. The long format is necessary for downstream analyses using \code{\link{FBD_summary}}, \code{\link{FBD_dens_plot}}, \code{\link{FBD_normality_plot}}, \code{\link{FBD_tests1}}, or \code{\link{FBD_tests2}}, as similarly done by \code{\link{clock_reshape}} for clock rate tables.
 
 The "posterior" data frame can be obtained by combining several output log files (.p files) from Mr. Bayes using \code{\link{combine_log}}.
 }
 
 \value{
-A data frame containing a single "value" column and one column for each FBD parameter (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"), indicating to which FBD parameter each value refers to.
+A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value (e.g.,  "net_speciation", "relative extinction", and "relative fossilization").
 }
 
 \seealso{

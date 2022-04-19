@@ -3,10 +3,10 @@
 \alias{plot.cluster_df}
 
 \title{
-Estimates and Plots Character Clusters
+Estimates and plots character partitions
 }
 \description{
-Determines cluster membership for phylogenetic morphological characters from the supplied Gower distance matrix and requested number of clusters using partitioning around medoids (PAM, or K-medoids). For further and independently testing the quality of the chosen partitioning scheme, users may also poduce graphic clustering (tSNEs), coloring data points according to PAM clusters, to verify PAM clustering results.
+Determines cluster(partition) membership for phylogenetic morphological characters from the supplied Gower distance matrix and requested number of clusters using partitioning around medoids (PAM, or K-medoids). For further and independently testing the quality of the chosen partitioning scheme, users may also poduce graphic clustering (tSNEs), coloring data points according to PAM clusters, to verify PAM clustering results.
 }
 \usage{
 make_clusters(dist_mat, k, tsne = FALSE,
@@ -34,6 +34,7 @@ When \code{tsne = TRUE}, a parameter controlling the speed/accuracy trade-off (i
 }
   \item{\dots}{
 For \code{make_clusters()}, other arguments passed to \code{\link[Rtsne:Rtsne]{Rtsne::Rtsne}} when \code{tsne = TRUE}.
+}
   \item{\dots}{
 For \code{plot()}, when plotting a \code{cluster_df} object, other arguments passed to \code{\link[ggrepel:geom_label_repel]{ggrepel::geom_text_repel}} to control display of the observation labels.
 }
@@ -54,6 +55,7 @@ When \code{tsne = TRUE}, a Barnes-Hut t-distributed stochastic neighbor embeddin
 
 \code{plot()} plots all morphological characters in a scatterplot with points colored based on cluster membership. When \code{tsne = TRUE} in the call to \code{make_clusters()}, the x- and y-axes will correspond to requested tSNE dimensions. With more than 2 dimensions, several plots will be produced, one for each pair of tSNE dimensions. These are displayed together using \code{\link[patchwork:plot_layout]{patchwork::plot_layout}}. When \code{tsne = FALSE}, the points will be arrange horizontally by cluster membership and randomly placed vertically.
 }
+
 \value{
 A data frame, inheriting from class \code{"cluster_df"}, with a row for each character with its number (\code{character_number}) and cluster membership (\code{cluster}). When \code{tsne = TRUE}, additional columns  will be included, one for each requested tSNE dimension, labeled \code{tSNE_Dim1}, \code{tSNE_Dim2}, etc., containing the values on the dimensions computed using \code{Rtsne()}.
 
