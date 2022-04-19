@@ -2,7 +2,7 @@
 \alias{posterior3p_long}
 \docType{data}
 \title{
-Posterior parameter samples (3-partion analysis)
+Posterior parameter samples (3 clock partions) in long format
 }
 \description{
 An example dataset similar to posterior3p, but reshaped from wide to long table format for some downstream analyses.

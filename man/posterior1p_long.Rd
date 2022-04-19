@@ -2,7 +2,7 @@
 \alias{posterior1p_long}
 \docType{data}
 \title{
-Posterior parameter samples (single clock partion analysis)
+Posterior parameter samples (single clock) in long format
 }
 \description{
 An example dataset similar to posterior1p, but reshaped from wide to long table format for some downstream analyses.
