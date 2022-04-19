@@ -4,7 +4,7 @@
 Compute rate summary statistics across clades and clocks
 }
 \description{
-Computes summary statistics for each clade and/or for each clock partition. The input must have a "clade" column.
+Computes summary statistics for each clade and/or each clock partition. The input must have a "clade" column.
 }
 \usage{
 clockrate_summary(rate_table, file = NULL, digits = 3)
@@ -31,31 +31,26 @@ A data frame containing a row for each clade and each clock with summary statist
 \code{\link{get_clockrate_table}}, \code{\link{summary}}
 }
 \examples{
-#Import tree file
+
+########## obtaining rate_table_clades_medians input table #############
+
+# 1) Import tree file:
 data("tree3p")
 
-#Produce clock rate table with, for instance, median rate values from each branch in the tree
+# 2) Produce clock rate table with, for instance, median rate values from each branch in the tree:
 rate_table <- get_clockrate_table(tree3p, summary = "median")
+write.csv(rate_table, file = "rate_table.csv", row.names = FALSE)
 
-#Now, manually add clades using, e.g., Excel:
-\dontrun{
-write.csv(rate_table, file = "rate_table.csv",
-          row.names = FALSE)
+# 3) Now, manually add clades using, e.g., Excel:
 
-##Then,
-# 1) Manually edit rate_table.csv, adding a "clade" column.
-#    This introduces customized clade names to individual nodes in the tree.
-# 2) Save the edited rate table with a different name to differentiate from the original output
-#    (e.g., rate_table_clades_medians.csv)
-# 3) Read the file back in:
+# 3.1) Manually edit rate_table.csv, adding a "clade" column. This introduces customized clade names to individual nodes in the tree.
+# 3.2) Save the edited rate table with a different name to differentiate from the original output (e.g., rate_table_clades_medians.csv).
 
+# 4) Read the file back in:
 rate_table_clades_medians <- read.csv("rate_table_clades_medians.csv")
-}
-
-## The example dataset rate_table_clades_medians already has a "clades" column included:
-data("rate_table_clades_medians")
-
 head(rate_table_clades_medians)
+
+########## clockrate_summary #############
 
 clockrate_summary(rate_table_clades_medians)
 }

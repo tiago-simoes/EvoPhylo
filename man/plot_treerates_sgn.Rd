@@ -6,6 +6,7 @@ Plots tree with rate thresholds for selection mode
 }
 \description{
 Plots the summary Bayesian evolutionary tree with branches, according to user-defined thresholds (in units of standard deviations) used to inferred the strength and mode of selection.
+}
 \usage{
 plot_treerates_sgn(tree, posterior, clock = 1,
    summary = "mean", threshold = c("1 SD", "2 SD"),
@@ -49,7 +50,7 @@ A vector of interval names indicating which intervals should not be labeled. Pas
 \details{
 Plots the phylogentic tree contained in \code{tree} using \code{\link[ggtree:ggtree]{ggtree::ggtree}}. Branches undergoing accelerating evolutionary rates (e.g., >1SD, 3SD, or 5SD from the background rate) for each morphological partition suggest directional (or positive) selection for that morphological partition in that branch of the tree. Branches undergoing decelerating evolutionary rates (e.g., <1SD, 3SD, or 5 SD from the background rate) for each morphological partition suggest stabilizing selection for that morphological partition in that branch of the tree. For details methods and rationale, see Simões & Pierce (2021).
 }
-}
+
 \value{
 A \code{ggtree} object, which inherits from \code{ggplot}.
 }
