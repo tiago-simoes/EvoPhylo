@@ -2,10 +2,10 @@
 \alias{FBD_summary}
 
 \title{
-Summarize FBD Parameter Values
+Summarize FBD posterior parameter estimate values
 }
 \description{
-Produces numerical summaries of each fossilized birth–death process (FBD) parameter (net speciation, relative extinction, and relative fossilization) by time bin.
+Produces numerical summaries of each fossilized birth–death process (FBD) parameter ("net diversification", "relative extinction", and "relative fossilization") by time bin.
 }
 \usage{
 FBD_summary(posterior, file = NULL, digits = 3)
@@ -13,13 +13,13 @@ FBD_summary(posterior, file = NULL, digits = 3)
 
 \arguments{
   \item{posterior}{
-a dataset of FBD parameter MCMC posterior samples imported using \code{\link{import_log}}. See the \code{\link{posterior1p}} dataset for an example of how the resulting file should look.
+A data frame containing a single "value" column and one column for each FBD parameter (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"), indicating to which FBD parameter each value refers to. Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}} . See the \code{\link{posterior1p_long}} or \code{\link{posterior3p_long}} datasets for an examples of how the input file should look.
 }
   \item{file}{
-an optional file path where the resulting table will be stored using \code{\link{write.csv}}.
+An optional file path where the resulting table will be stored using \code{\link{write.csv}}.
 }
   \item{digits}{
-the number of digitis to round the summary results to. Default is 3. See \code{\link{round}}.
+The number of digitis to round the summary results to. Default is 3. See \code{\link{round}}.
 }
 }
 
@@ -28,12 +28,14 @@ A data frame with a row for each paramater and time bin, and columns for differe
 }
 
 \seealso{
-\code{\link{import_log}} for producing a data set of FBD parameter posterior samples from parameter log files.
+\code{\link{combine_log}} for producing a single data set of parameter posterior samples from individual parameter log files.
+
+\code{\link{FBD_reshape}} for converting posterior parameter table from wide to long format.
 
 \code{\link{FBD_dens_plot}}, \code{\link{FBD_normality_plot}}, \code{\link{FBD_tests1}}, and \code{\link{FBD_tests2}} for other functions used to summarize and display the distributions of the parameters.
 }
 \examples{
-data("posterior1p")
+data("posterior3p_long")
 
-FBD_summary(posterior1p)
+FBD_summary(posterior3p_long)
 }

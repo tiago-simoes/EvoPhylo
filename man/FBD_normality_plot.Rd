@@ -5,7 +5,7 @@
 Inspect FBD parameter distributions visually
 }
 \description{
-\code{FBD_normality_plot()} produces plots of the distributions of fossilized birth–death process (FBD) parameters (net speciation, relative exinction, and relative fossilization) to facilitate the assessment of the assumptions of normality within time bins and homogeneity of variance across time bins.
+\code{FBD_normality_plot()} produces plots of the distributions of fossilized birth–death process (FBD) parameters ("net speciation", "relative exinction", and "relative fossilization") to facilitate the assessment of the assumptions of normality within time bins and homogeneity of variance across time bins.
 }
 \usage{
 FBD_normality_plot(posterior)
@@ -13,7 +13,7 @@ FBD_normality_plot(posterior)
 
 \arguments{
   \item{posterior}{
-a dataset of FBD parameter MCMC posterior samples imported using \code{\link{import_log}}. See the \code{\link{posterior1p}} dataset for an example of how the resulting file should look.
+A data frame containing a single "value" column and one column for each FBD parameter (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"), indicating to which FBD parameter each value refers to. Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}} . See the \code{\link{posterior1p_long}} or \code{\link{posterior3p_long}} datasets for an examples of how the input file should look.
 }
 }
 \details{
@@ -24,14 +24,16 @@ A \code{ggplot} object, which can be modified using \pkg{ggplot2} functions.
 }
 
 \seealso{
-\code{\link{import_log}} for producing a data set of FBD parameter posterior samples from parameter log files.
+\code{\link{combine_log}} for producing a single data set of parameter posterior samples from individual parameter log files.
+
+\code{\link{FBD_reshape}} for converting posterior parameter table from wide to long format.
 
 \code{\link{FBD_tests1}} for statistical tests of normality and homogeneity of variance.
 
 \code{\link{FBD_tests2}} for tests of differences in parameter means.
 }
 \examples{
-data("posterior1p")
+data("posterior3p_long")
 
-FBD_normality_plot(posterior1p)
+FBD_normality_plot(posterior3p_long)
 }

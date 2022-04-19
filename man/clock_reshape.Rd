@@ -1,10 +1,10 @@
 \name{clock_reshape}
 \alias{clock_reshape}
 \title{
-Coverts clock rate tables from wide to long format
+Converts clock rate tables from wide to long format
 }
 \description{
-Coverts clock rate tables, such as those produced by \code{\link{clockrate_summary}} and imported back after including clade names, from wide to long format. The input must have a "clade" column for downstream analyses.
+Converts clock rate tables, such as those produced by \code{\link{clockrate_summary}} and imported back after including clade names, from wide to long format. The input must have a "clade" column for downstream analyses.
 }
 \usage{
 clock_reshape(rate_table)

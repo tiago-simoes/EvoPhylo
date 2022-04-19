@@ -69,25 +69,25 @@ combine_log <- function(path = ".", burnin = .25, downsample = 1e4) {
 
 
 #Reshape AllRuns from wide to long with Time_bins as time and parameters as varying
-FBD_reshape <- function(samples) {
-  if (!is.data.frame(samples) ||
-      !any(startsWith(names(samples), "net_speciation_")) ||
-      !any(startsWith(names(samples), "relative_extinction_")) ||
-      !any(startsWith(names(samples), "relative_fossilization_"))) {
-    stop("'samples' must be a data frame with two or more columns for net_speciation, relative_extinction, and relative_fossilization.", call. = FALSE)
+FBD_reshape <- function(posterior) {
+  if (!is.data.frame(posterior) ||
+      !any(startsWith(names(posterior), "net_speciation_")) ||
+      !any(startsWith(names(posterior), "relative_extinction_")) ||
+      !any(startsWith(names(posterior), "relative_fossilization_"))) {
+    stop("'posterior' must be a data frame with two or more columns for net_speciation, relative_extinction, and relative_fossilization.", call. = FALSE)
   }
 
-  samples_long <- reshape(samples, direction = "long",
-                          varying = list(names(samples)[startsWith(names(samples), "net_speciation_")],
-                                         names(samples)[startsWith(names(samples), "relative_extinction_")],
-                                         names(samples)[startsWith(names(samples), "relative_fossilization_")]),
+  posterior_long <- reshape(posterior, direction = "long",
+                          varying = list(names(posterior)[startsWith(names(posterior), "net_speciation_")],
+                                         names(posterior)[startsWith(names(posterior), "relative_extinction_")],
+                                         names(posterior)[startsWith(names(posterior), "relative_fossilization_")]),
                           v.names = c("net_speciation", "relative_extinction", "relative_fossilization"),
                           timevar = "Time_bin",
                           sep = "_",
-                          idvar = "Gen", ids = samples[["Gen"]])
-  samples_long[["Time_bin"]] <- factor(samples_long[["Time_bin"]])
-  attr(samples_long, "reshapeLong") <- NULL
-  samples_long
+                          idvar = "Gen", ids = posterior[["Gen"]])
+  posterior_long[["Time_bin"]] <- factor(posterior_long[["Time_bin"]])
+  attr(posterior_long, "reshapeLong") <- NULL
+  posterior_long
 }
 
 

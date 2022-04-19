@@ -2,21 +2,27 @@
 \alias{tree1p}
 \docType{data}
 \title{
-Phylogenetic tree with 1 partition
+Phylogenetic tree with a single clock partition
 }
 \description{
-A phylogenetic tree, the output of a call to \code{treeio::read.mrbayes()}.
+A clock Bayesian phylogenetic tree, imported as an S4 class object using \code{treeio::read.mrbayes()}.
+
 }
 \usage{data("tree1p")}
 \format{
 A \code{tidytree} object.
 }
 \details{
-%%  ~~ If necessary, more details than the __description__ above ~~
+This example tree file was produced by analyzing the data set with a single morphological partition from Simões & Pierce (2021).
 }
 \seealso{
-\code{\link{tree3p}} for another tree object with 3 partitions
+\code{\link{tree3p}} for another tree object with 3 clock partitions
 
 \code{\link{get_clockrate_table}} for extratcing the poserior clockrates from a tree object.
 }
 \keyword{datasets}
+
+\references{
+Simões, T. R. and S. E. Pierce (2021). Sustained High Rates of Morphological Evolution During the Rise of Tetrapods. \emph{Nature Ecology & Evolution} 5: 1403–1414.
+}
+

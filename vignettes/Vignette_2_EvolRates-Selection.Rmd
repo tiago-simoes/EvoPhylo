@@ -87,6 +87,7 @@ Import the rate table with clade membership (new "clade" column added) and obtai
 ```{r}
 ## Import rate table with clade membership (new "clade" column added)
 RateTable_Medians<- read.csv("RateTable_Medians_Clades.csv", header = TRUE)
+head(RateTable_Medians)
 
 ## Get summary statistics table for each clade by clock 
 clockrate_summary(RateTable_Medians, "Sum_RateTable_Medians.csv", digits=3)

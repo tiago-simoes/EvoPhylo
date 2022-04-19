@@ -31,11 +31,11 @@ A data frame containing a row for each clade and each clock with summary statist
 \code{\link{get_clockrate_table}}, \code{\link{summary}}
 }
 \examples{
-data("tree1p")
+#Import tree file
+data("tree3p")
 
-rate_table <- get_clockrate_table(tree1p, summary = "median")
-
-head(rate_table)
+#Produce clock rate table with, for instance, median rate values from each branch in the tree
+rate_table <- get_clockrate_table(tree3p, summary = "median")
 
 #Now, manually add clades using, e.g., Excel:
 \dontrun{
@@ -46,16 +46,16 @@ write.csv(rate_table, file = "rate_table.csv",
 # 1) Manually edit rate_table.csv, adding a "clade" column.
 #    This introduces customized clade names to individual nodes in the tree.
 # 2) Save the edited rate table with a different name to differentiate from the original output
-#    (e.g., rate_table_clades.csv)
+#    (e.g., rate_table_clades_medians.csv)
 # 3) Read the file back in:
 
-rate_table_clades <- read.csv("rate_table_clades.csv")
+rate_table_clades_medians <- read.csv("rate_table_clades_medians.csv")
 }
 
-## The example dataset rate_table_clades already has clades:
-data("rate_table_clades")
+## The example dataset rate_table_clades_medians already has a "clades" column included:
+data("rate_table_clades_medians")
 
-head(rate_table_clades)
+head(rate_table_clades_medians)
 
-clockrate_summary(rate_table_clades)
+clockrate_summary(rate_table_clades_medians)
 }

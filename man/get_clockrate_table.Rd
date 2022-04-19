@@ -13,27 +13,33 @@ get_clockrate_table(tree, summary = "median",
 }
 \arguments{
   \item{tree}{
-An S4 class object of type \code{treedata}; a Bayesian clock tree imported using \code{\link[treeio:read.mrbayes]{treeio::read.mrbayes}} for Mr. Bayes summary trees and \code{\link[treeio:read.beast]{treeio::read.beast}} for BEAST summary trees.
+An S4 class object of type \code{treedata}; a Bayesian clock tree imported using \code{\link[treeio:read.mrbayes]{treeio::read.mrbayes}} for Mr. Bayes summary trees.
 }
   \item{summary}{
 The name of the rate summary. Should be one of \code{"mean"} or \code{"median"}.
 }
   \item{drop_dummyextant}{
-\code{logical}; whether to drop a "dummy" extant tip labeled as "Dummyextant" from the Mr. Bayes summary tree prior to extracting the clock rates. Default is \code{TRUE}.
+\code{logical}; whether to drop a "dummy" extant tip labeled as "Dummyextant" from the Mr. Bayes summary tree prior to extracting the clock rates (when present). Default is \code{TRUE}.
 }
 }
 
 \value{
-A data frame containing a column containing the node identifer (\code{node}) and one column for each relaxed clock partition in the tree object containing the rates.
+A data frame with a column containing the node identifer (\code{node}) and one column for each relaxed clock partition in the tree object containing clock rates.
 }
 
 \seealso{
-\code{\link{clockrate_summary}}, \code{\link{clockrate_summary}}, and \code{\link{clockrate_summary}} for summarizing and examining properties of the resulting rate table. Note that clade membership each node must be customized (manually added) before these functions can be used, since this is tree and dataset dependent.
+\code{\link{clockrate_summary}} for summarizing and examining properties of the resulting rate table. Note that clade membership each node must be customized (manually added) before these functions can be used, since this is tree and dataset dependent.
 }
 \examples{
-data("tree1p")
+#Load example tree file
+data("tree3p")
 
-rate_table <- get_clockrate_table(tree1p)
+#OR
+
+#Import example tree (.t or .tre) file from example directory
+tree3p<-treeio::read.mrbayes("_dev/Examples/MultiClockTree/Tree_3p.t")
+
+rate_table <- get_clockrate_table(tree3p)
 
 head(rate_table)
 }

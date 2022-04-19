@@ -12,10 +12,10 @@ FBD_tests2(posterior, p.adjust.method = "fdr")
 }
 \arguments{
   \item{posterior}{
-a dataset of FBD parameter MCMC posterior samples imported using \code{\link{import_log}}. See the \code{\link{posterior1p}} dataset for an example of how the resulting file should look.
+A data frame containing a single "value" column and one column for each FBD parameter (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"), indicating to which FBD parameter each value refers to. Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}} . See the \code{\link{posterior1p_long}} or \code{\link{posterior3p_long}} datasets for an examples of how the input file should look.
 }
   \item{p.adjust.method}{
-the method use to adjust the p-values for multiple testing. See \code{\link{p.adjust}} for details and options. Default if \code{"fdr"} for the Benjamini-Hochberg false discovery rate correction.
+The method use to adjust the p-values for multiple testing. See \code{\link{p.adjust}} for details and options. Default if \code{"fdr"} for the Benjamini-Hochberg false discovery rate correction.
 }
 }
 \details{
@@ -26,14 +26,16 @@ A list with an element for each test, each of which contains a list of test resu
 }
 
 \seealso{
-\code{\link{import_log}} for producing a data set of FBD parameter posterior samples from parameter log files.
+\code{\link{combine_log}} for producing a single data set of parameter posterior samples from individual parameter log files.
+
+\code{\link{FBD_reshape}} for converting posterior parameter table from wide to long format.
 
 \code{\link{FBD_dens_plot}}, \code{\link{FBD_normality_plot}}, \code{\link{FBD_tests1}}, and \code{\link{FBD_tests2}} for other functions used to summarize and display the distributions of the parameter posteriors.
 
 \code{\link{pairwise.t.test}} and \code{\link{pairwise.wilcox.test}} for the tests used.
 }
 \examples{
-data("posterior1p")
+data("posterior3p_long")
 
-FBD_tests2(posterior1p)
+FBD_tests2(posterior3p_long)
 }
