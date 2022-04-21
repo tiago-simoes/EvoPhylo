@@ -34,7 +34,7 @@ A long data frame with one row per node per clock and the following columns:
 }
 
 \seealso{
-
+\code{\link{combine_log}}
 }
 \examples{
 # Load example rate table and posterior data sets
