@@ -15,15 +15,15 @@ This vignette explains how to conduct automated morphological character partitio
 
 ```{r, setup, echo=FALSE}
 knitr::opts_chunk$set(warning = FALSE)
-knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/")
+knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/")
 ```
 
 ## Installing package **EvoPhylo**
 
 ```{r, eval = FALSE, warning = FALSE}
-#install.packages("EvoPhylo")
+install.packages("EvoPhylo")
 ### OR
-devtools::install_github("tiago-simoes/EvoPhylo", lib="C:/Program Files/R/R-4.1.0/library")
+devtools::install_github("tiago-simoes/EvoPhylo")
 ```
 
 ## Character Partitioning
@@ -39,8 +39,13 @@ library(EvoPhylo)
 
 Generate a Gower distance matrix with `get_gower_dist`:
 ```{r}
-#Load character a data matrix and produce a Gower distance matrix
-Dmatrix <- get_gower_dist("DataMatrix.nex", numeric = FALSE)
+#Load a character data matrix and produce a Gower distance matrix
+Dmatrix <- get_gower_dist("examples/DataMatrix.nex", numeric = FALSE)
+
+#OR from example data file
+data(characters)
+
+Dmatrix <- get_gower_dist(characters, numeric = FALSE)
 ```
 
 

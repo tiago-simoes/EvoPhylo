@@ -15,8 +15,8 @@ link-citations: true
 This vignette explains how to extract evolutionary rate parameters estimated from relaxed clock Bayesian inference analyses produced by the program [Mr. Bayes](https://nbisweden.github.io/MrBayes/). It also shows how to use evolutionary rate based inference of selection strength (or mode) adapted to clock-based rates, as introduced by @simões2021.
 
 ```{r, setup, echo=FALSE}
-knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/")
+knitr::opts_chunk$set(warning=FALSE)
 ```
 
 ## Evolutionary Rates Statistics and Plots
@@ -27,11 +27,10 @@ In this section, we will extract evolutionary rate parameters from each node fro
 
 Load the **EvoPhylo** package
 
-```{r, warning = FALSE}
+```{r}
 library(EvoPhylo)
 library(ggtree)
-#library(ggplot2)
-#library(patchwork)
+library(ggplot2)
 ```
 
 
@@ -44,8 +43,9 @@ Please note that analyses must have reached the stationarity phase and independe
 
 
 ```{r}
-## Import summary tree produced by Mr. Bayes
+## Import summary tree produced by Mr. Bayes (.t or .tre files)
 tree<-treeio::read.mrbayes("Tree_3p.t")
+
 
 ## Get table of clock rates with summary stats for each node in the tree for each relaxed clock partition 
 RateTable_Medians_no_clades <- get_clockrate_table(tree, summary = "median")
@@ -82,14 +82,15 @@ tree_nodes
 
 ### 4. Get summary statistics table and plots 
 
-Obtain summary statistics table and plots for each clade by clock using `clockrate_summary`.
+Import the rate table with clade membership (new "clade" column added) and obtain summary statistics table and plots for each clade by clock using `clockrate_summary`. 
 
 ```{r}
-## Import rate table with clade membership 
+## Import rate table with clade membership (new "clade" column added)
 RateTable_Medians<- read.csv("RateTable_Medians_Clades.csv", header = TRUE)
+head(RateTable_Medians)
 
 ## Get summary statistics table for each clade by clock 
-clockrate_summary(RateTable_Medians, "Sum_RateTable_Medians.csv", digits=2)
+clockrate_summary(RateTable_Medians, "Sum_RateTable_Medians.csv", digits=3)
 ```
 
 ```{r, echo = FALSE}
@@ -125,6 +126,7 @@ clockrate_dens_plot(RateTable_Medians, stack = TRUE, nrow = 1, scales = "fixed")
 
 
 
+
 ### 6. Rate linear models
 
 We can also plot linear model regressions between rates from two or more clocks with `clockrate_reg_plot`.
@@ -135,6 +137,7 @@ p13 <- clockrate_reg_plot(RateTable_Medians, clock_x = 1, clock_y = 3)
 p23 <- clockrate_reg_plot(RateTable_Medians, clock_x = 2, clock_y = 3)
 
 gridExtra::grid.arrange(p12, p13, p23, nrow = 2)
+
 
 ##(NOT RUN)
 #Save your plot to your working directory as a PDF
@@ -170,15 +173,12 @@ This is produced by using `import_log`. Alternatively, users can also use **LogC
 
 ```{r}
 ## Import all log (.p) files from all runs and combine them, with burn-in = 25% and downsampling to 2.5k trees in each log file
-Comb_posterior3p <- import_log("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/LogFiles3p", burnin = 0.25, downsample = 2500)
+Comb_posterior3p <- combine_log("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/LogFiles3p", burnin = 0.25, downsample = 1000)
 
 ### OR
 
 ## Import combined log file from all runs (if available)
 #Comb_posterior3p <- read.table("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/3p_CombLog(4runs).p", header = TRUE)
-
-## Reshape Allruns data from wide to long
-#FBD_reshape(Comb_posterior3p)
 ```
 
 
@@ -188,7 +188,7 @@ head(Comb_posterior3p, 10)
 ```
 
 
-### 4. Pairwise t-tests of Rate values 
+### 3. Pairwise t-tests of Rate values 
 
 The `get_pwt_rates` will produce a table of pairwise t-tests for differences between the mean clockrate value in the posterior and the absolute rate for each tree node. 
 ```{r}
@@ -206,7 +206,7 @@ write.csv(RateSign_tests, file="RateSign_tests.csv")
 
 
 
-### 5. Plot selection gradient on the summary tree
+### 4. Plot selection gradient on the summary tree
 
 Using different thresholds, Identify the strength (or mode) across branches in the tree for each clock partition with `plot_treerates_sgn`.
 ```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}

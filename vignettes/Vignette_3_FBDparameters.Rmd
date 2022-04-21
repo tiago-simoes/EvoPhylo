@@ -38,17 +38,15 @@ This is produced by using `import_log`. Alternatively, users can also use **LogC
 
 ```{r}
 ## Import all log (.p) files from all runs and combine them, with burn-in = 25% and downsampling to 2.5k trees in each log file
-Comb_posterior3p <- combine_log("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/LogFiles3p", burnin = 0.25, downsample = 2500)
+posterior3p <- combine_log("examples/MultiClockTree/LogFiles3p", burnin = 0.25, downsample = 1000)
 
-##### OR
+### OR
 
-##(NOT RUN)
-## Import combined log file from all runs (if available)
-#Comb_posterior3p <- read.table("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/3p_CombLog(4runs).p", header = TRUE)
+#OR from example data file
+data(posterior3p)
 
 ## Reshape imported combined log file from wide to long with FBD_reshape
-Comb_posterior3p<- FBD_reshape(Comb_posterior3p)
-
+posterior3p_long<- FBD_reshape(posterior3p)
 ```
 
 
@@ -58,7 +56,7 @@ Summary statistics for each FBD parameter by time bin can be quickly summarized 
 
 ```{r}
 ## Summarize parameters by time bin and analysis
-t3.1<- FBD_summary(Comb_posterior3p, digits = 2)
+t3.1<- FBD_summary(posterior3p, digits = 2)
 
 kableExtra::kbl(t3.1, caption = "FBD parameters by time bin") |> 
   kableExtra::kable_styling(font_size = 15, full_width = FALSE, bootstrap_options = "striped", "condensed")
@@ -74,23 +72,23 @@ Each of (or all) FBD parameter distributions can be plotted by time bin using va
 
 ```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "70%"}
 ## Plot distribution of the desired FBD parameter by time bin with kernel density plot
-FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "density", stack = FALSE)
+FBD_dens_plot(posterior3p, parameter = "net_speciation", type = "density", stack = FALSE)
 ```
 
 ```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "70%"}
 ## Plot distribution of the desired FBD parameter by time bin with stacked kernel density plot
-FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "density", stack = TRUE)
+FBD_dens_plot(posterior3p, parameter = "net_speciation", type = "density", stack = TRUE)
 ```
 
 ```{r, fig.width=4, fig.height=4, fig.align = "center", out.width = "50%"}
 ## Plot distribution of the desired FBD parameter by time bin with a violin plot
-FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "violin", stack = FALSE, color = "red")
+FBD_dens_plot(posterior3p, parameter = "net_speciation", type = "violin", stack = FALSE, color = "red")
 ```
 ```{r, fig.width=12, fig.height=4, fig.align = "center", out.width = "100%"}
 ## Plot distribution of all FBD parameter by time bin with a violin plot
-p1<-FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "violin", stack = FALSE, color = "red")
-p2<-FBD_dens_plot(Comb_posterior3p, parameter = "relative_extinction", type = "violin", stack = FALSE, color = "cyan3")
-p3<-FBD_dens_plot(Comb_posterior3p, parameter = "relative_fossilization", type = "violin", stack = FALSE, color = "green3")
+p1<-FBD_dens_plot(posterior3p, parameter = "net_speciation", type = "violin", stack = FALSE, color = "red")
+p2<-FBD_dens_plot(posterior3p, parameter = "relative_extinction", type = "violin", stack = FALSE, color = "cyan3")
+p3<-FBD_dens_plot(posterior3p, parameter = "relative_fossilization", type = "violin", stack = FALSE, color = "green3")
 
 p1|p2|p3
 
@@ -108,7 +106,7 @@ In this step, users can perform tests for normality and homoscedasticity in data
 ```{r}
 ##### Tests for normality and homoscedasticity for each FBD parameter for all time bins
 
-t3.2<- FBD_tests1(Comb_posterior3p)
+t3.2<- FBD_tests1(posterior3p)
 
 ### Export the output table for all tests
 openxlsx::write.xlsx(t3.2, file="FBD_Tests1_Assum.xlsx")
@@ -149,7 +147,7 @@ Deviations from normality can be displayed graphically using `FBD_normality_plot
 
 ```{r, fig.width=8, fig.height=6, fig.align = "center", out.width = "100%"}
 ## Visualize deviations from normality and similarity of variances
-FBD_normality_plot(Comb_posterior3p)
+FBD_normality_plot(posterior3p)
 
 ##(NOT RUN)
 ## Save your plot to your working directory as a PDF
@@ -164,7 +162,7 @@ Significant shifts in FBD parameters across time bins can be easily tested using
 ```{r}
 ##### Test for significant differences between each time bin for each FBD parameter
 
-t3.3<- FBD_tests2(Comb_posterior3p)
+t3.3<- FBD_tests2(posterior3p)
 
 ### Export the output table for all tests
 openxlsx::write.xlsx(t3.3, file="FBD_Tests2_Sign.xlsx")

@@ -38,26 +38,23 @@ This is produced by using `import_log`. Alternatively, users can also use **LogC
 
 ```{r}
 ## Import all log (.p) files from all runs and combine them, with burn-in = 25% and downsampling to 2.5k trees in each log file
-Comb_posterior3p <- import_log("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/LogFiles3p", burnin = 0.25, downsample = 2500)
-
+Comb_posterior3p <- combine_log("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/LogFiles3p", burnin = 0.25, downsample = 2500)
 
 ##### OR
 
 ##(NOT RUN)
 ## Import combined log file from all runs (if available)
-
 #Comb_posterior3p <- read.table("E:/Git/EvoPhylo/_dev/Examples/MultiClockTree/3p_CombLog(4runs).p", header = TRUE)
 
 ## Reshape imported combined log file from wide to long with FBD_reshape
-## (reshaping is done automatically when using the import_log function)
+Comb_posterior3p<- FBD_reshape(Comb_posterior3p)
 
-#FBD_reshape(Comb_posterior3p)
 ```
 
 
 ### 2. Summarize FBD parameters by time bin
 
-Summer statistics for each FBD parameter by time bin can be quickly summarized using `FBD_summary`:
+Summary statistics for each FBD parameter by time bin can be quickly summarized using `FBD_summary`:
 
 ```{r}
 ## Summarize parameters by time bin and analysis
@@ -92,8 +89,8 @@ FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "violin", s
 ```{r, fig.width=12, fig.height=4, fig.align = "center", out.width = "100%"}
 ## Plot distribution of all FBD parameter by time bin with a violin plot
 p1<-FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "violin", stack = FALSE, color = "red")
-p2<-FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "violin", stack = FALSE, color = "cyan3")
-p3<-FBD_dens_plot(Comb_posterior3p, parameter = "net_speciation", type = "violin", stack = FALSE, color = "green3")
+p2<-FBD_dens_plot(Comb_posterior3p, parameter = "relative_extinction", type = "violin", stack = FALSE, color = "cyan3")
+p3<-FBD_dens_plot(Comb_posterior3p, parameter = "relative_fossilization", type = "violin", stack = FALSE, color = "green3")
 
 p1|p2|p3
 

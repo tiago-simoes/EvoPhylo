@@ -195,7 +195,7 @@ clockrate_reg_plot <- function(rate_table, clock_x, clock_y, method = "lm", show
                  if (hasName(ggbd2, "ymax")) max(ggbd2$ymax)) #FALSE when se = FALSE
 
     regplot <- regplot +
-      annotate("label", label = paste0("italic(R)^2 == ", round(R2, 2)), parse = TRUE,
+      annotate("label", label = paste0("italic(R)^2 == ", round(lms$r.squared, 2)), parse = TRUE,
                x = .3*min_x + .7*max_x,
                y = .8*min_y + .01*max_y)+
       annotate("label", label = paste0("italic(r) == ", round(r, 2)), parse = TRUE,
