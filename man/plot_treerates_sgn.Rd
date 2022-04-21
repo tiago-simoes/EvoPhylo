@@ -47,8 +47,11 @@ The font size for the tips of the tree.
   \item{xlim}{
 The x-axis limits. Should be two negative numbers (though the axis labels will be in absolute value, i.e., Ma).
 }
+  \item{nbreaks}{
+The number of interval breaks in the geological timescale.
+}
   \item{geo_size}{
-The font size for the labels in the geological scale. The first value in \code{list()} is the font size for geological epochs and the second value is for geological periods.
+The font size for the labels in the geological scale. The first value in \code{list()} is the font size for geological epochs and the second value is for geological periods. Passed directly to the \code{size} argument of \code{\link[deeptime:coord_geo]{deeptime::coord_geo}}.
 }
  \item{geo_skip}{
 A vector of interval names indicating which intervals should not be labeled. Passed directly to the \code{skip} argument of \code{\link[deeptime:coord_geo]{deeptime::coord_geo}}.

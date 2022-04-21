@@ -43,7 +43,7 @@ When setting \code{type = "violin"}, a warning may appear saying something like 
 
 \code{\link{combine_log}} for producing a single data frame of FBD parameter posterior samples from multiple log files.
 
-\code{\link{FBD_reshape}} for converting a single data frame of FBD parameter estimates, such as those imported using \code{\link{import_log}}, from wide to long format.
+\code{\link{FBD_reshape}} for converting a single data frame of FBD parameter estimates, such as those imported using \code{\link{combine_log}}, from wide to long format.
 
 \code{\link{FBD_summary}}, \code{\link{FBD_normality_plot}}, \code{\link{FBD_tests1}}, and \code{\link{FBD_tests2}} for other functions used to summarize and display the distributions of the parameters.
 }

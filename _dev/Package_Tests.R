@@ -1,4 +1,7 @@
 library(devtools)
+
+devtools::install_github("tiago-simoes/EvoPhylo", lib="C:/Program Files/R/R-4.1.0/library")
+
 library(EvoPhylo)
 
 # TESTS

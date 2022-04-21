@@ -35,17 +35,17 @@ When \code{tsne = TRUE}, a parameter controlling the speed/accuracy trade-off (i
   \item{\dots}{
 For \code{make_clusters()}, other arguments passed to \code{\link[Rtsne:Rtsne]{Rtsne::Rtsne}} when \code{tsne = TRUE}.
 }
-  \item{\dots}{
-For \code{plot()}, when plotting a \code{cluster_df} object, other arguments passed to \code{\link[ggrepel:geom_label_repel]{ggrepel::geom_text_repel}} to control display of the observation labels.
-}
   \item{x}{
-A \code{cluster_df} object; the output of a call to \code{make_clusters()}.
+For \code{plot()}, a \code{cluster_df} object; the output of a call to \code{make_clusters()}.
 }
   \item{seed}{
-The seed used to control the placement of the labels and the jittering of the points. Jittering only occurs when \code{tsne = FALSE} in the call to \code{make_clusters()}. Using a non-\code{NA} seed ensure replicability across uses.
+For \code{plot()}, the seed used to control the placement of the labels and the jittering of the points. Jittering only occurs when \code{tsne = FALSE} in the call to \code{make_clusters()}. Using a non-\code{NA} seed ensure replicability across uses.
 }
   \item{nrow}{
-When \code{tsne = TRUE} in the call to \code{make_clusters()} and \code{tsne_dim} is greater than 2, the number of rows used to display the resulting 2-dimensional plots. Default is 1 for side-by-side plots.
+For \code{plot()}, when \code{tsne = TRUE} in the call to \code{make_clusters()} and \code{tsne_dim} is greater than 2, the number of rows used to display the resulting 2-dimensional plots. Default is 1 for side-by-side plots.
+}
+  \item{plot(\dots)}{
+For \code{plot()}, when plotting a \code{cluster_df} object, other arguments passed to \code{\link[ggrepel:geom_label_repel]{ggrepel::geom_text_repel}} to control display of the observation labels.
 }
 }
 \details{
