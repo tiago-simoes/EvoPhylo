@@ -5,17 +5,17 @@
 Compute Gower distances
 }
 \description{
-Computes Gower distance between features from a phylogenetic data matrix
+Computes Gower distance between characters from a phylogenetic data matrix.
 }
 \usage{
 get_gower_dist(x, numeric = FALSE)
 }
 \arguments{
   \item{x}{
-a data frame or matrix with a column for each character containing feature qualities in the rows, or the path of a .nex file containing such a phylogenetic data matrix, which will be read using \code{\link[ape:read.nexus.data]{ape::read.nexus.data}}. The data cannot include polymorphisms.
+A phylogenetic data matrix in Nexus (.nex) format, or in any other data frame or matrix format with a column for each character and terminal taxa as rows, which will be read using \code{\link[ape:read.nexus.data]{ape::read.nexus.data}}. The data cannot include polymorphisms.
 }
   \item{numeric}{
-whether to treat the values contained in the \code{x} as numeric or categorical. If \code{FALSE} (default), features will be considered categorical; if \code{TRUE}, they will be considered numeric.
+Whether to treat the values contained in the \code{x} as numeric or categorical. If \code{FALSE} (default), features will be considered categorical; if \code{TRUE}, they will be considered numeric.
 }
 }
 \author{
@@ -29,7 +29,20 @@ The Gower distance matrix.
 \code{\link[StatMatch:gower.dist]{StatMatch::gower.dist}}
 }
 \examples{
+#Load example phylogenetic data matrix
 data("characters")
 
-dist_matrix <- get_gower_dist(characters)
+#Create distance matrix
+Dmatrix <- get_gower_dist(characters)
+
+## OR
+
+#Load example data matrix as categorical data
+setwd("EvoPhylo/_dev/Examples/")
+Dmatrix <- get_gower_dist(DataMatrix.nex)
+
+#Reading data matrix as numeric data
+Dmatrix <- get_gower_dist(characters, numeric = TRUE)
+# OR
+Dmatrix <- get_gower_dist(DataMatrix.nex, numeric = TRUE)
 }

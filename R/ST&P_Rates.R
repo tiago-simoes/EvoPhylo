@@ -1,9 +1,9 @@
 #All functions documented with examples
 
 #Rate Table
-get_clockrate_table <- function(tree, summary = "mean", drop_dummyextent = TRUE) {
+get_clockrate_table <- function(tree, summary = "median", drop_dummyextant = TRUE) {
 
-  if (drop_dummyextent) {
+  if (drop_dummyextant) {
     tree <- treeio::drop.tip(tree, "Dummyextant")
   }
 
@@ -124,8 +124,8 @@ clockrate_dens_plot <- function(rate_table, clock = NULL, stack = FALSE, nrow = 
   rateplot
 }
 
-#Regression plot of one rate against another
-clockrate_reg_plot <- function(rate_table, clock_x, clock_y, method = "lm", corr = TRUE, ...) {
+#Plot linear model and Pearson correlation of one rate against another
+clockrate_reg_plot <- function(rate_table, clock_x, clock_y, method = "lm", show_lm = TRUE, ...) {
 
   if (!is.data.frame(rate_table)) {
     stop("'rate_table' must be a data frame.", call. = FALSE)
@@ -176,8 +176,9 @@ clockrate_reg_plot <- function(rate_table, clock_x, clock_y, method = "lm", corr
     labs(x = paste("Clock", clock_x), y = paste("Clock", clock_y)) +
     theme_bw()
 
-  if (corr) {
+  if (show_lm) {
     r <- cor(rate_table$clock_x, rate_table$clock_y)
+    lms <- summary(lm(clock_x~clock_y, rate_table))
 
     #Extract underlying ggplot data to place correlation in correct place in plot
     ggbd <- ggplot_build(regplot)$data
@@ -194,11 +195,15 @@ clockrate_reg_plot <- function(rate_table, clock_x, clock_y, method = "lm", corr
                  if (hasName(ggbd2, "ymax")) max(ggbd2$ymax)) #FALSE when se = FALSE
 
     regplot <- regplot +
+      annotate("label", label = paste0("italic(R)^2 == ", round(lms$r.squared, 2)), parse = TRUE,
+               x = .3*min_x + .7*max_x,
+               y = .8*min_y + .01*max_y)+
       annotate("label", label = paste0("italic(r) == ", round(r, 2)), parse = TRUE,
                x = .3*min_x + .7*max_x,
-               y = .9*min_y + .1*max_y)
+               y = .9*min_y + .15*max_y)
   }
 
   regplot
 }
+
 

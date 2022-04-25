@@ -1,27 +1,27 @@
 \name{clockrate_summary}
 \alias{clockrate_summary}
 \title{
-Compute rate summary statistics across clade and clock
+Compute rate summary statistics across clades and clocks
 }
 \description{
-Computes summary statistics for each clade for each clock. The input must have a \code{clade} column.
+Computes summary statistics for each clade and/or each clock partition. The input must have a "clade" column.
 }
 \usage{
 clockrate_summary(rate_table, file = NULL, digits = 3)
 }
 \arguments{
   \item{rate_table}{
-a data frame of clock rates, such as from the output of \code{\link{get_clockrate_table}} with an extra \code{clade} column.
+A data frame of clock rates, such as from the output of \code{\link{get_clockrate_table}} with an extra \code{"clade"} column.
 }
   \item{file}{
-an optional file path where the resulting table will be stored using \code{\link{write.csv}}.
+An optional file path where the resulting table will be stored using \code{\link{write.csv}}.
 }
   \item{digits}{
-the number of digits to round the summary results to. Default is 3. See \code{\link{round}}.
+The number of digits to round the summary results to. Default is 3. See \code{\link{round}}.
 }
 }
 \details{
-The user must manually add clades to the rate table produced by \code{\link{get_clockrate_table}} before it can be used with this function. This can be doen manually with in R, such as by using a graphical user interface for editing data like the \pkg{DataEditR} package, or by writing the rate table to a spreadsheet and reading it back in after adding the clades. The example below uses a table that has had the clades added.
+The user must manually add clades to the rate table produced by \code{\link{get_clockrate_table}} before it can be used with this function. This can be doen manually within R, such as by using a graphical user interface for editing data like the \pkg{DataEditR} package, or by writing the rate table to a spreadsheet and reading it back in after adding the clades. The example below uses a table that has had the clades added.
 }
 \value{
 A data frame containing a row for each clade and each clock with summary statistics (n, mean, standard deviation, minimum, 1st quartile, median, third quartile, maximum).
@@ -31,25 +31,26 @@ A data frame containing a row for each clade and each clock with summary statist
 \code{\link{get_clockrate_table}}, \code{\link{summary}}
 }
 \examples{
-data("tree1p")
 
-rate_table <- get_clockrate_table(tree1p, summary = "mean")
+########## obtaining rate_table_clades_medians input table #############
 
-head(rate_table)
+# 1) Import tree file:
+data("tree3p")
 
-#Now, manually add clades using, e.g., Excel:
-\dontrun{
-write.csv(rate_table, file = "rate_table.csv",
-          row.names = FALSE)
-## Manually edit rate_table.csv, adding a "clade" column, then
-## read the file back in
+# 2) Produce clock rate table with, for instance, median rate values from each branch in the tree:
+rate_table <- get_clockrate_table(tree3p, summary = "median")
+write.csv(rate_table, file = "rate_table.csv", row.names = FALSE)
 
-rate_table_clades <- read.csv("rate_table.csv")
-}
-## The example dataset rate_table_means already has clades:
-data("rate_table_means")
+# 3) Now, manually add clades using, e.g., Excel:
 
-head(rate_table_means)
+# 3.1) Manually edit rate_table.csv, adding a "clade" column. This introduces customized clade names to individual nodes in the tree.
+# 3.2) Save the edited rate table with a different name to differentiate from the original output (e.g., rate_table_clades_medians.csv).
 
-clockrate_summary(rate_table_means)
+# 4) Read the file back in:
+rate_table_clades_medians <- read.csv("rate_table_clades_medians.csv")
+head(rate_table_clades_medians)
+
+########## clockrate_summary #############
+
+clockrate_summary(rate_table_clades_medians)
 }

@@ -1,7 +1,7 @@
 #All functions documented with examples
 
-#Import log (.p) files, optionally downsampling; produces posterior1p-style object
-import_log <- function(path = ".", burnin = .25, downsample = 1e4) {
+#Import and combine log (.p) files from Mr. Bayes, optionally downsampling; produces posterior1p-style object
+combine_log <- function(path = ".", burnin = .25, downsample = 1e4) {
   #Get FBD parameter estimates from collection of log files (.p)
   if (!is.character(path)) files <- NULL
   else if (all(utils::file_test(path, op = "-f"))) {
@@ -53,11 +53,6 @@ import_log <- function(path = ".", burnin = .25, downsample = 1e4) {
     stop("All parameter log files must have the same column names.", call. = FALSE)
   }
 
-  if (!any(startsWith(names(L[[1]]), "net_speciation_")) ||
-      !any(startsWith(names(L[[1]]), "relative_extinction_")) ||
-      !any(startsWith(names(L[[1]]), "relative_fossilization_"))) {
-    stop("The log files must contain the parameters net_speciation, relative_extinction, and relative_fossilization.", call. = FALSE)
-  }
 
   samples <- do.call("rbind", L)
 
@@ -70,20 +65,31 @@ import_log <- function(path = ".", burnin = .25, downsample = 1e4) {
     }
     samples <- samples[d,,drop = FALSE]
   }
-
-  posterior <- reshape(samples, direction = "long",
-                     varying = list(names(samples)[startsWith(names(samples), "net_speciation_")],
-                                    names(samples)[startsWith(names(samples), "relative_extinction_")],
-                                    names(samples)[startsWith(names(samples), "relative_fossilization_")]),
-                     v.names = c("net_speciation", "relative_extinction", "relative_fossilization"),
-                     timevar = "Time_bin",
-                     sep = "_")
-  posterior[["id"]] <- NULL
-  posterior[["Time_bin"]] <- factor(posterior[["Time_bin"]])
-  attr(posterior, "reshapeLong") <- NULL
-
-  posterior
 }
+
+
+#Reshape AllRuns from wide to long with Time_bins as time and parameters as varying
+FBD_reshape <- function(posterior) {
+  if (!is.data.frame(posterior) ||
+      !any(startsWith(names(posterior), "net_speciation_")) ||
+      !any(startsWith(names(posterior), "relative_extinction_")) ||
+      !any(startsWith(names(posterior), "relative_fossilization_"))) {
+    stop("'posterior' must be a data frame with two or more columns for net_speciation, relative_extinction, and relative_fossilization.", call. = FALSE)
+  }
+
+  posterior_long <- reshape(posterior, direction = "long",
+                          varying = list(names(posterior)[startsWith(names(posterior), "net_speciation_")],
+                                         names(posterior)[startsWith(names(posterior), "relative_extinction_")],
+                                         names(posterior)[startsWith(names(posterior), "relative_fossilization_")]),
+                          v.names = c("net_speciation", "relative_extinction", "relative_fossilization"),
+                          timevar = "Time_bin",
+                          sep = "_",
+                          idvar = "Gen", ids = posterior[["Gen"]])
+  posterior_long[["Time_bin"]] <- factor(posterior_long[["Time_bin"]])
+  attr(posterior_long, "reshapeLong") <- NULL
+  posterior_long
+}
+
 
 #Get summary (n, mean, sd, 5 number) of parameters values by time bin
 FBD_summary <- function(posterior, file = NULL, digits = 3) {
@@ -121,6 +127,24 @@ FBD_summary <- function(posterior, file = NULL, digits = 3) {
   else {
     return(out)
   }
+}
+
+#New summary function
+oneSummary <- function(x, digits = 3) {
+  qq <- unname(quantile(x, c(0, .25, .5, .75, 1)))
+  d <- data.frame(
+    n = length(x),
+    mean = round(mean(x), digits),
+    sd = round(sd(x), digits),
+    min = round(qq[1], digits),
+    Q1 = round(qq[2], digits),
+    median = round(qq[3], digits),
+    Q3 = round(qq[4], digits),
+    max = round(qq[5], digits)
+  )
+  rownames(d) <- NULL
+
+  d
 }
 
 #Plot density of one parameter by time bin; density or violin plots

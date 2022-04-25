@@ -2,10 +2,10 @@
 \alias{cluster_to_nexus}
 
 \title{
-Create a NEXUS text file of cluster membership
+Exports character partitions to a nexus file
 }
 \description{
-Creates a text file readable by NEXUS containing cluster membership.
+Creates and exports a Nexus file with a list of characters and their respective partitions as inferred by the \code{make_clusters} function. The contents can be copied and pasted directly into a Mr. Bayes commands block for a partitioned clock Bayesian inference analysis.
 }
 \usage{
 cluster_to_nexus(cluster_df, file = NULL)
@@ -13,10 +13,10 @@ cluster_to_nexus(cluster_df, file = NULL)
 
 \arguments{
   \item{cluster_df}{
-a \code{cluster_df} object; the output of a call to \code{\link{make_clusters}}.
+A \code{cluster_df} object; the output of a call to \code{\link{make_clusters}}.
 }
   \item{file}{
-the path of the text file to be created that is to contain the cluster information in a NEXUS-readable format. If \code{NULL} (the default), no file will be written and the output will be returned as a string. If \code{""}, the text will be printed to the console. Passed directly to the \code{file} argument of \code{\link{cat}}.
+The path of the text file to be created containing the partitioning information in Nexus format. If \code{NULL} (the default), no file will be written and the output will be returned as a string. If \code{""}, the text will be printed to the console. Passed directly to the \code{file} argument of \code{\link{cat}}.
 }
 }
 \value{
@@ -27,18 +27,28 @@ The text as a string, returned invisibly if \code{file} is not \code{NULL}. Use 
 \code{\link{cat}}
 }
 \examples{
+
+###### Load data matrix
+
+#Load example phylogenetic data matrix
 data("characters")
 
-dist_matrix <- get_gower_dist(characters)
+#Create distance matrix
+Dmatrix <- get_gower_dist(characters)
 
-#Create 3 clusters
-cluster_df <- make_clusters(dist_matrix, k = 3)
 
-#Name of the desired .nex file, e.g., "clusters.nex"
-file <- tempfile(fileext = ".nex")
+# OR
 
-#Write to nexus file and store text in cluster_file variable
-cluster_file <- cluster_to_nexus(cluster_df, file = file)
+#Load example phylogenetic data matrix from working directory
+Dmatrix <- get_gower_dist("_dev/Examples/DataMatrix.nex", numeric = FALSE)
+
+######
+
+#Find optimal partitioning scheme using PAM under k=3 partitions
+cluster_df <- make_clusters(Dmatrix, k = 3)
+
+#Write to Nexus file and export as "cluster_file.txt":
+cluster_to_nexus(cluster_df, file = cluster_file.txt)
 
 cat(cluster_file)
 }

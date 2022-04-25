@@ -1,0 +1,201 @@
+---
+title: "Analyzing FBD Parameters"
+date: '2022-04-08'
+output:
+  html_vignette:
+    toc: yes
+vignette: |
+  %\VignetteIndexEntry{Analyzing FBD Parameters} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+link-citations: true
+---
+
+This vignette explains how to extract FBD (fossilized birth-death) parameters (*net diversification*, *relative extinction (turnover)*, and *relative fossilization*) estimated from relaxed clock Bayesian inference analyses produced by the program [Mr. Bayes](https://nbisweden.github.io/MrBayes/), as used in @simões2021.
+
+```{r, setup, echo=FALSE}
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_knit$set(root.dir = "E:/Git/EvoPhylo/")
+```
+
+
+## FBD Parameters Statistics and Plots
+
+Extract evolutionary rate summary statistics from each node from a Bayesian clock (time-calibrate) summary tree produced by Mr. Bayes, store them in a data frame, produce summary tables, and plots:
+
+Open the **EvoPhylo** package
+
+```{r, warning = FALSE}
+library(EvoPhylo)
+library(openxlsx)
+```
+
+
+### 1. Import combined log file from all runs. 
+
+This is produced by using `import_log`. Alternatively, users can also use **LogCombiner** from the [BEAST2](https://www.beast2.org/beagle-beast-2-in-cluster/index.html) software package. Table is automatically reshaped from wide to long.
+
+```{r}
+## Import all log (.p) files from all runs and combine them, with burn-in = 25% and downsampling to 2.5k trees in each log file
+posterior3p <- combine_log("examples/MultiClockTree/LogFiles3p", burnin = 0.25, downsample = 1000)
+
+### OR
+
+#OR from example data file
+data(posterior3p)
+
+## Reshape imported combined log file from wide to long with FBD_reshape
+posterior3p_long<- FBD_reshape(posterior3p)
+```
+
+
+### 2. Summarize FBD parameters by time bin
+
+Summary statistics for each FBD parameter by time bin can be quickly summarized using `FBD_summary`:
+
+```{r}
+## Summarize parameters by time bin and analysis
+t3.1<- FBD_summary(posterior3p_long, digits = 2)
+
+kableExtra::kbl(t3.1, caption = "FBD parameters by time bin") |> 
+  kableExtra::kable_styling(font_size = 15, full_width = FALSE, bootstrap_options = "striped", "condensed")
+
+## Export the table
+write.csv(t3.1, file="FBD_summary.csv")
+```
+
+
+### 3. Plot the distribution of each FBD parameter
+
+Each of (or all) FBD parameter distributions can be plotted by time bin using various plotting alternatives with `FBD_dens_plot`:
+
+```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "70%"}
+## Plot distribution of the desired FBD parameter by time bin with kernel density plot
+FBD_dens_plot(posterior3p_long, parameter = "net_speciation", type = "density", stack = FALSE)
+```
+
+```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "70%"}
+## Plot distribution of the desired FBD parameter by time bin with stacked kernel density plot
+FBD_dens_plot(posterior3p_long, parameter = "net_speciation", type = "density", stack = TRUE)
+```
+
+```{r, fig.width=4, fig.height=4, fig.align = "center", out.width = "50%"}
+## Plot distribution of the desired FBD parameter by time bin with a violin plot
+FBD_dens_plot(posterior3p_long, parameter = "net_speciation", type = "violin", stack = FALSE, color = "red")
+```
+```{r, fig.width=12, fig.height=4, fig.align = "center", out.width = "100%"}
+## Plot distribution of all FBD parameter by time bin with a violin plot
+p1<-FBD_dens_plot(posterior3p_long, parameter = "net_speciation", type = "violin", stack = FALSE, color = "red")
+p2<-FBD_dens_plot(posterior3p_long, parameter = "relative_extinction", type = "violin", stack = FALSE, color = "cyan3")
+p3<-FBD_dens_plot(posterior3p_long, parameter = "relative_fossilization", type = "violin", stack = FALSE, color = "green3")
+
+p1|p2|p3
+
+
+##(NOT RUN)
+## Save your plot to your working directory as a PDF
+#ggplot2::ggsave	("Plot_regs.pdf", width=12, height=4)
+```
+
+
+### 4. Test for assumptions 
+
+In this step, users can perform tests for normality and homoscedasticity in data distribution for each of the FBD parameters under consideration. The output will determine whether parametric or nonparametric tests will be performed subsequently.
+
+```{r}
+##### Tests for normality and homoscedasticity for each FBD parameter for all time bins
+
+t3.2<- FBD_tests1(posterior3p_long)
+
+### Export the output table for all tests
+openxlsx::write.xlsx(t3.2, file="FBD_Tests1_Assum.xlsx")
+
+### Plot the output table for each test
+## Shapiro-Wilk normality test for each parameter 
+# Output as separate tables 
+kableExtra::kbl(t3.2$shapiro, digits=4, align=c('c','c','c','c'),  caption = "Shapiro-Wilk normality test ") |> 
+  kableExtra::kable_styling(font_size = 12, full_width = FALSE, 
+                            bootstrap_options = "striped", "condensed")
+
+# OR as single merged table
+t3.2$shapiro$net_speciation$bin <- row.names(t3.2$shapiro$net_speciation)  
+t3.2$shapiro$relative_extinction$bin <- row.names(t3.2$shapiro$relative_extinction)  
+t3.2$shapiro$relative_fossilization$bin <- row.names(t3.2$shapiro$relative_fossilization)  
+
+k1all <- rbind (t3.2$shapiro$net_speciation, t3.2$shapiro$relative_extinction, t3.2$shapiro$relative_fossilization,
+                make.row.names = FALSE)
+
+k1<-kableExtra::kbl(k1all, digits=4, caption = "Shapiro-Wilk normality test ") |> 
+  kableExtra::kable_styling(font_size = 12, full_width = FALSE, bootstrap_options = "striped", "condensed")
+k1
+
+## Bartlett's test for homogeneity of variance 
+k2<-kableExtra::kbl(t3.2$bartlett, caption = "Bartlett's test") |> 
+  kableExtra::kable_styling(font_size = 12, full_width = FALSE, bootstrap_options = "striped", "condensed")
+k2 
+
+## Fligner-Killeen test for homogeneity of variance 
+k3<-kableExtra::kbl(t3.2$fligner, caption = "Fligner-Killeen test") |> 
+  kableExtra::kable_styling(font_size = 12, full_width = FALSE, bootstrap_options = "striped", "condensed")
+k3
+
+```
+
+
+Deviations from normality can be displayed graphically using `FBD_normality_plot`:
+
+```{r, fig.width=8, fig.height=6, fig.align = "center", out.width = "100%"}
+## Visualize deviations from normality and similarity of variances
+FBD_normality_plot(posterior3p_long)
+
+##(NOT RUN)
+## Save your plot to your working directory as a PDF
+#ggplot2::ggsave	("Plot_normTests.pdf", width=8, height=6)
+```
+
+
+### 5. Test for significant FBD shifts between time bins
+
+Significant shifts in FBD parameters across time bins can be easily tested using parametric (Student's t-test) and nonparametric (Mann-Whitney test) pairwise comparisons with `FBD_tests2`. Both are automatically calculated and the preferred pairwise comparison will be chosen by the user depending on the results of the assumption tests **step #4** (above).
+
+```{r}
+##### Test for significant differences between each time bin for each FBD parameter
+
+t3.3<- FBD_tests2(posterior3p_long)
+
+### Export the output table for all tests
+openxlsx::write.xlsx(t3.3, file="FBD_Tests2_Sign.xlsx")
+
+### Plot the output table for each test
+## Pairwise t-tests
+# Output as separate tables 
+kableExtra::kbl(t3.3$t_tests, digits=4, align=c('c','c','c','c'),  caption = "Significant tests ") |> 
+  kableExtra::kable_styling(font_size = 10, full_width = FALSE, 
+                            bootstrap_options = "striped", "condensed")
+
+# OR as single merged table
+k3.3a <- rbind (t3.3$t_tests$net_speciation, t3.3$t_tests$relative_extinction, t3.3$t_tests$relative_fossilization,
+                make.row.names = FALSE)
+
+kableExtra::kbl(k3.3a, digits=4, align=c('c','c','c','c'), caption = "Pairwise t-tests") |> 
+  kableExtra::kable_styling(font_size = 12, full_width = FALSE, 
+                            bootstrap_options = "striped", "condensed")
+
+
+## Mann-Whitney tests #Use if Tests in step #4 fail assumptions
+
+# Output as separate tables 
+kableExtra::kbl(t3.3$mwu_tests, digits=4, align=c('c','c','c','c'), caption = "Mann-Whitney tests") |> 
+  kableExtra::kable_styling(font_size = 10, full_width = FALSE, 
+                            bootstrap_options = "striped", "condensed")
+
+# OR as single merged table
+k3.3b <- rbind (t3.3$mwu_tests$net_speciation, t3.3$mwu_tests$relative_extinction, t3.3$mwu_tests$relative_fossilization,
+                make.row.names = FALSE)
+
+kableExtra::kbl(k3.3b, digits=4, align=c('c','c','c','c'), caption = "Mann-Whitney tests") |> 
+  kableExtra::kable_styling(font_size = 12, full_width = FALSE, 
+                            bootstrap_options = "striped", "condensed")
+```
+## References

@@ -1,8 +1,24 @@
+#Reshape rate_table with a column for each rate to long
+clock_reshape <- function(rate_table) {
+  rate_table_long <- reshape(rate_table, direction = "long",
+                             varying = which(startsWith(names(rate_table), "rates")),
+                             v.names = "rate",
+                             timevar = "clock",
+                             idvar = "nodes",
+                             sep = "_")
+  rate_table_long[["clock"]] <- factor(rate_table_long[["clock"]])
+  rownames(rate_table_long) <- NULL
+  attr(rate_table_long, "reshapeLong") <- NULL
+
+  rate_table_long
+}
+
+
+
 #t-tests
 #rate_table = rate_table_means
 #posterior.clockrate = samples$clockrate?
 get_pwt_rates <- function(rate_table, posterior) {
-
   if (missing(rate_table) || !is.data.frame(rate_table)) {
     stop("'rate_table' must be a data frame.", call. = FALSE)
   }
@@ -15,8 +31,8 @@ get_pwt_rates <- function(rate_table, posterior) {
   if (missing(posterior) || !is.data.frame(posterior)) {
     stop("'posterior' must be a data frame.", call. = FALSE)
   }
-  if (!hasName(posterior, "clockrate")) {
-    stop("A 'clockrate' column must be present in 'posterior'.", call. = FALSE)
+  if (hasName(posterior, "clockrate.all.")) {
+    colnames(posterior)[which(names(posterior) == "clockrate.all.")] <- "clockrate"
   }
 
   posterior.clockrate <- posterior$clockrate
@@ -41,10 +57,13 @@ get_pwt_rates <- function(rate_table, posterior) {
   out
 }
 
+
 #Plot tree with colored thresholds
 plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", threshold = c("1 SD", "2 SD"),
-                               drop.dummyextent = TRUE,
-                               low = "blue", mid = "gray90", high = "red", size = 2, xlim = NULL,
+                               drop.dummyextant = TRUE,
+                               low = "blue", mid = "gray90", high = "red",
+                               branch_size = 2, tip_size = 2,
+                               xlim = NULL, nbreaks = 10, geo_size=list(2, 3),
                                geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")) {
 
   #Process threshold
@@ -52,8 +71,8 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
     if (missing(posterior) || !is.data.frame(posterior)) {
       stop("'posterior' must be a data frame.", call. = FALSE)
     }
-    if (!hasName(posterior, "clockrate")) {
-      stop("A 'clockrate' column must be present in 'posterior'.", call. = FALSE)
+  if (hasName(posterior, "clockrate.all.")) {
+    colnames(posterior)[which(names(posterior) == "clockrate.all.")] <- "clockrate"
     }
 
     if (!is.character(threshold)) stop("'threshold' must be a character vector.", call. = FALSE)
@@ -104,7 +123,7 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
   }
 
   #Drop extant "dummy" tip
-  if (drop.dummyextent) {
+  if (drop.dummyextant) {
     tree <- treeio::drop.tip(tree, "Dummyextant")
   }
 
@@ -153,9 +172,9 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
 
   selection_plot <- ggtree::ggtree(tree, layout = "rectangular", ladderize = TRUE, right = TRUE,
                                    position = position_nudge(x = -offset),
-                                   size = size,
+                                   size = branch_size,
                                    mapping = aes(color = .data$clockfac)) +
-    ggtree::geom_tiplab(size = 3, linesize = 0.01, fontface = "italic",
+    ggtree::geom_tiplab(size = tip_size, linesize = 0.01, fontface = "italic",
                         color = "black", offset = -offset + .5) +
     scale_color_steps2("Background Rate\nThreshold",
                        low = low, high = high,
@@ -164,17 +183,19 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
                        breaks = seq_along(breaks) + .5,
                        labels = labels,
                        limits = c(1.5 - 1e-8, length(breaks) + .5 + 1e-8)) +
-    deeptime::coord_geo(xlim = c(x1, x2), ylim = c(0, treeio::Ntip(tree) + 2), expand = FALSE,
+    deeptime::coord_geo(xlim = c(x1, x2), ylim = c(-1, treeio::Ntip(tree) + 2), expand = FALSE,
                         dat = list("epochs", "periods"), abbrv = list(TRUE, FALSE),
                         skip = geo_skip,
                         pos = list("bottom", "bottom"), alpha = 1, height = unit(1, "line"),
-                        rot = 0, size = list(2.5, 3), neg = TRUE) +
-    scale_x_continuous(n.breaks = 7, labels = abs) +
+                        rot = 0, size = geo_size, neg = TRUE) +
+    scale_x_continuous(n.breaks = nbreaks, labels = abs) +
     ggtree::theme_tree2() +
-    labs(title = "Selection Strength") +
+    labs(title = paste0("Selection for partition: ", paste(clock), collapse = ", "), call. = FALSE) +
     theme(plot.title = element_text(size = 12, face = "bold", hjust = 0.5),
-          legend.position = c(.9, .2),
-          legend.title = element_text(size = 10, face = "bold"))
+          legend.position = c(.05, .25),
+          legend.title = element_text(size = 8, face = "bold"),
+          legend.key.size = unit(0.5,'cm'),
+          legend.text = element_text(size=7))
 
   selection_plot <- ggtree::revts(selection_plot)
 

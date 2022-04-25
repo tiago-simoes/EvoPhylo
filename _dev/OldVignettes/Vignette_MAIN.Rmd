@@ -1,0 +1,120 @@
+---
+title: "Main vignette"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+```{r setup}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+An R package to implement data pre-processing steps for analyses like those in [Simões & Pierce 2021](https://www.nature.com/articles/s41559-021-01532-x). 
+
+### Install package EvoPhylo
+
+```{r}
+#devtools::install_github("tiago-simoes/EvoPhylo")
+#install.packages("EvoPhylo")
+library(EvoPhylo)
+```
+
+
+#### Character Partitioning
+(Documented)
+
+Workflow:
+```{r}
+data("characters")
+
+#Load character data and produce Gower distance matrix
+Dmatrix <- get_gower_dist(characters, numeric = FALSE)
+
+#Plot number of cluster against silhouette width
+sw <- get_sil_widths(Dmatrix, max.k = 10)
+plot(sw)
+#Decide on number of clusters based on plot; here, k = 3
+
+#Generate and visualize clusters
+clusters <- make_clusters(Dmatrix, k = 3, tsne = TRUE)
+plot(clusters)
+
+#Write clusters to Nexus file
+cluster_to_nexus(clusters, file = "Clusters_Nexus.txt")
+```
+
+
+#### ST&P_Rates
+(Documented)
+
+Workflow:
+```{r}
+tree<- data("tree1p")
+
+#Get table of clock rates with given summary stat
+RateTable_Medians_no_clades <- get_clockrate_table(tree, summary = "median")
+
+#Get summary statistic table for each clade by clock 
+RateTable_Medians<- data("rate_table_clades_medians") #has clade added
+clockrate_summary(RateTable_Medians)
+
+#Plot distributions of rates by clock and clade
+clockrate_dens_plot(RateTable_Medians, stack = TRUE, nrow = 1)
+
+#Plot regressions of rates from two clocks
+p12 <- clockrate_reg_plot(RateTable_Medians, clock_x = 1, clock_y = 2)
+p13 <- clockrate_reg_plot(RateTable_Medians, clock_x = 1, clock_y = 3)
+p23 <- clockrate_reg_plot(RateTable_Medians, clock_x = 2, clock_y = 3)
+
+gridExtra::grid.arrange(p12, p13, p23, nrow = 2)
+
+```
+
+
+#### SelectionStrength
+(Documented)
+
+Workflow:
+```{r}
+RateTable_Medians<- data("rate_table_clades_medians") #has clade added
+tree<- data("tree1p")
+posterior <- data("posterior3p")
+
+RatesByClade <- clock_reshape(RateTable_Medians)
+
+#Get matrix of t-tests for difference between the posterior mean and each rate
+get_pwt_rates(RateTable_Medians, posterior$clockrate.all.)
+
+#Plot tree using various thresholds
+plot_treerates_sgn(tree, posterior$clockrate.all., clock = 1,
+   threshold = c("1 SD", "2 SD", "95%"))
+
+```
+
+
+#### ST&P_FBD
+(Documented)
+
+Workflow:
+```{r}
+#Reshape Allruns data from wide to long
+#import_log()
+data("posterior1p")
+
+#Summarize parameters by time bin and analysis
+FBD_summary(posterior1p)
+
+#Plot density of parameter by time bin
+FBD_dens_plot(posterior1p, parameter = "net_speciation", type = "density")
+FBD_dens_plot(posterior1p, parameter = "net_speciation", type = "violin")
+
+#Tests for normality and homoscedasticity for each parameter across time bins
+#and analyses
+FBD_tests1(posterior1p)
+
+#Visualize deviations from normality and similarity of variances
+FBD_normality_plot(posterior1p)
+
+#Test differences in location for each parameter between time bins 
+FBD_tests2(posterior1p)
+
+```

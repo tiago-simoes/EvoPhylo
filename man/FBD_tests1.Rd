@@ -2,10 +2,10 @@
 \alias{FBD_tests1}
 
 \title{
-Test assumptions of normality and homoscedasticity for FBD parameter samples
+Test assumptions of normality and homoscedasticity for FBD posterior parameters
 }
 \description{
-Produces tests of normality (within time bin, ignoring time bin, and pooling within-time bin values) and homoscedasticity (equality of variances) for each fossilized birth–death process (FBD) parameter.
+Produces tests of normality (within time bin, ignoring time bin, and pooling within-time bin values) and homoscedasticity (homogeneity of variances) for each fossilized birth–death process (FBD) parameter in the combined posterior parameter (.p) log file.
 }
 \usage{
 FBD_tests1(posterior, downsample = TRUE)
@@ -13,10 +13,10 @@ FBD_tests1(posterior, downsample = TRUE)
 
 \arguments{
   \item{posterior}{
-a dataset of FBD parameter MCMC posterior samples imported using \code{\link{import_log}}. See the \code{\link{posterior1p}} dataset for an example of how the resulting file should look.
+A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"). Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}} . See the \code{\link{posterior1p_long}} or \code{\link{posterior3p_long}} datasets for an examples of how the input file should look.
 }
   \item{downsample}{
-whether to downsample the observations to ensure Shapiro-Wilk normality tests can be run. If \code{TRUE}, observations will be dropped so that no more than 5000 observations are used for the tests on the full dataset, as required by \code{\link{shapiro.test}}. They will be dropped in evenly spaced intervals. If \code{FALSE} and there are more than 5000 observations for any test, that test will not be run.
+Whether to downsample the observations to ensure Shapiro-Wilk normality tests can be run. If \code{TRUE}, observations will be dropped so that no more than 5000 observations are used for the tests on the full dataset, as required by \code{\link{shapiro.test}}. They will be dropped in evenly spaced intervals. If \code{FALSE} and there are more than 5000 observations for any test, that test will not be run.
 }
 }
 \details{
@@ -30,16 +30,18 @@ A list containing the results of the three tests with the following elements:
 }
 
 \seealso{
-\code{\link{import_log}} for producing a data set of FBD parameter posterior samples from parameter log files.
+\code{\link{combine_log}} for producing a single data set of parameter posterior samples from individual parameter log files.
+
+\code{\link{FBD_reshape}} for converting posterior parameter table from wide to long format.
 
 \code{\link{FBD_normality_plot}} for visual assessments.
 
-\code{\link{FBD_tests2}} for tests of differences in parameter means.
+\code{\link{FBD_tests2}} for tests of differences between parameter means.
 
 \code{\link{shapiro.test}}, \code{\link{bartlett.test}}, and \code{\link{fligner.test}} for the statistical tests used.
 }
 \examples{
-data("posterior1p")
+data("posterior3p_long")
 
-FBD_tests1(posterior1p)
+FBD_tests1(posterior3p_long)
 }
