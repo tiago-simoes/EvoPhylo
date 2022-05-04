@@ -13,7 +13,7 @@ FBD_normality_plot(posterior)
 
 \arguments{
   \item{posterior}{
-A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"). Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}} . See the \code{\link{posterior1p_long}} or \code{\link{posterior3p_long}} datasets for an examples of how the input file should look.
+A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"). Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}}.
 }
 }
 \details{
@@ -33,7 +33,9 @@ A \code{ggplot} object, which can be modified using \pkg{ggplot2} functions.
 \code{\link{FBD_tests2}} for tests of differences in parameter means.
 }
 \examples{
-data("posterior3p_long")
+data("posterior3p")
+
+posterior3p_long <- FBD_reshape(posterior3p)
 
 FBD_normality_plot(posterior3p_long)
 }

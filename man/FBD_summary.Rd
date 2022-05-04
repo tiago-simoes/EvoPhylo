@@ -13,7 +13,7 @@ FBD_summary(posterior, file = NULL, digits = 3)
 
 \arguments{
   \item{posterior}{
-A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"). Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}} . See the \code{\link{posterior1p_long}} or \code{\link{posterior3p_long}} datasets for an examples of how the input file should look.
+A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"). Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}}.
 }
   \item{file}{
 An optional file path where the resulting table will be stored using \code{\link{write.csv}}.
@@ -35,7 +35,9 @@ A data frame with a row for each paramater and time bin, and columns for differe
 \code{\link{FBD_dens_plot}}, \code{\link{FBD_normality_plot}}, \code{\link{FBD_tests1}}, and \code{\link{FBD_tests2}} for other functions used to summarize and display the distributions of the parameters.
 }
 \examples{
-data("posterior3p_long")
+data("posterior3p")
+
+posterior3p_long <- FBD_reshape(posterior3p)
 
 FBD_summary(posterior3p_long)
 }

@@ -64,24 +64,40 @@ Plots the phylogentic tree contained in \code{tree} using \code{\link[ggtree:ggt
 \value{
 A \code{ggtree} object, which inherits from \code{ggplot}.
 }
-
+\references{
+Simões, T. R. and S. E. Pierce (2021). Sustained High Rates of Morphological Evolution During the Rise of Tetrapods. \emph{Nature Ecology & Evolution} 5: 1403–1414.
+}
 \seealso{
 \code{\link[ggtree:ggtree]{ggtree::ggtree}}, \code{\link[deeptime:coord_geo]{deeptime::coord_geo}}
 }
 \examples{
+\dontrun{
+# 1) Import tree file
+tree3p <- treeio::read.mrbayes("Tree3p.t")
+
+# 2) Import posterior parameter file (no
+#    need to reshape from wide to long)
+posterior3p <- combine_log("LogFiles3p", burnin = 0.25,
+                           downsample = 1000)
+}
+
+# Or load example tree and posterior
 data("tree3p")
 data("posterior3p")
 
-plot_treerates_sgn(tree3p, posterior3p,
-                   clock = 1,                           #shows rates for clock partition 1
-                   summary = "mean",                    #sets summary stats to get from summary tree nodes
-                   branch_size = 1.5, tip_size = 3,     #sets size for tree elements
-                   xlim=c(-450,-260), nbreaks = 8, geo_size=list(3, 3),  #sets limits, breaks, and size for geological scale
-                   threshold = c("1 SD", "2 SD"))       #sets rate threshold for selection strength
-
+plot_treerates_sgn(
+  tree3p, posterior3p,
+  # show rates for clock partition 1
+  clock = 1,
+  # set summary stats to get from summary tree nodes
+  summary = "mean",
+  # set size for tree elements
+  branch_size = 1.5, tip_size = 3,
+  # set limits, breaks, and size for geological scale
+  xlim = c(-450, -260), nbreaks = 8, geo_size = list(3, 3),
+  # set rate threshold for selection strength
+  threshold = c("1 SD", "2 SD"))
 }
 
 
-\references{
-Simões, T. R. and S. E. Pierce (2021). Sustained High Rates of Morphological Evolution During the Rise of Tetrapods. \emph{Nature Ecology & Evolution} 5: 1403–1414.
-}
+

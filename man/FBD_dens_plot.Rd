@@ -14,7 +14,7 @@ FBD_dens_plot(posterior, parameter, type = "density",
 
 \arguments{
   \item{posterior}{
-A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"). Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}} . See the \code{\link{posterior1p_long}} or \code{\link{posterior3p_long}} datasets for an examples of how the input file should look.
+A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"). Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}}.
 }
   \item{parameter}{
 A string containing the name of an FBD parameter "net_speciation", "relative_extinction", or "relative_fossilization"; abbreviations allowed.
@@ -48,7 +48,9 @@ When setting \code{type = "violin"}, a warning may appear saying something like 
 \code{\link{FBD_summary}}, \code{\link{FBD_normality_plot}}, \code{\link{FBD_tests1}}, and \code{\link{FBD_tests2}} for other functions used to summarize and display the distributions of the parameters.
 }
 \examples{
-data("posterior3p_long")
+data("posterior3p")
+
+posterior3p_long <- FBD_reshape(posterior3p)
 
 FBD_dens_plot(posterior3p_long, parameter = "net_speciation",
               type = "density", stack = FALSE)

@@ -34,6 +34,8 @@ When \code{tsne = TRUE}, a parameter controlling the speed/accuracy trade-off (i
 }
   \item{\dots}{
 For \code{make_clusters()}, other arguments passed to \code{\link[Rtsne:Rtsne]{Rtsne::Rtsne}} when \code{tsne = TRUE}.
+
+For \code{plot()}, when plotting a \code{cluster_df} object, other arguments passed to \code{\link[ggrepel:geom_label_repel]{ggrepel::geom_text_repel}} to control display of the observation labels.
 }
   \item{x}{
 For \code{plot()}, a \code{cluster_df} object; the output of a call to \code{make_clusters()}.
@@ -43,9 +45,6 @@ For \code{plot()}, the seed used to control the placement of the labels and the 
 }
   \item{nrow}{
 For \code{plot()}, when \code{tsne = TRUE} in the call to \code{make_clusters()} and \code{tsne_dim} is greater than 2, the number of rows used to display the resulting 2-dimensional plots. Default is 1 for side-by-side plots.
-}
-  \item{plot(\dots)}{
-For \code{plot()}, when plotting a \code{cluster_df} object, other arguments passed to \code{\link[ggrepel:geom_label_repel]{ggrepel::geom_text_repel}} to control display of the observation labels.
 }
 }
 \details{
@@ -74,7 +73,7 @@ When using \code{plot()} on a \code{cluster_df} object, warnings may appear from
 \examples{
 data("characters")
 
-#Reading example file as categorical data
+# Reading example file as categorical data
 Dmatrix <- get_gower_dist(characters)
 
 sil_widths <- get_sil_widths(Dmatrix, max.k = 7)
@@ -82,22 +81,19 @@ sil_widths <- get_sil_widths(Dmatrix, max.k = 7)
 sil_widths
 # 3 clusters yields the highest silhouette width
 
-#Create clusters with PAM under k=3 partitions
+# Create clusters with PAM under k=3 partitions
 cluster_df <- make_clusters(Dmatrix, k = 3)
 
-#Simple plot of clusters
+# Simple plot of clusters
 plot(cluster_df, seed = 12345)
 
-#Create clusters with PAM under k=3 partitions and perform tSNE (default = 2 dimensions)
-cluster_df_tsne1 <- make_clusters(Dmatrix, k = 3, tsne = TRUE)
+# Create clusters with PAM under k=3 partitions and perform
+# tSNE (3 dimensions; default is 2)
+cluster_df_tsne <- make_clusters(Dmatrix, k = 3, tsne = TRUE,
+                                 tsne_dim = 2)
 
-#Plot clusters
-plot(cluster_df_tsne1)
-
-#Create clusters with PAM under k=3 partitions and perform tSNE (3 dimensions)
-cluster_df_tsne2 <- make_clusters(Dmatrix, k = 3, tsne = TRUE, tsne_dim = 3)
-
-#Plot clusters, plots divided into 2 rows, and increasing overlap of text labels (default = 10)
-plot(cluster_df_tsne2, nrow = 2, max.overlaps=20)
+# Plot clusters, plots divided into 2 rows, and increasing
+# overlap of text labels (default = 10)
+plot(cluster_df_tsne, nrow = 2, max.overlaps = 20)
 }
 

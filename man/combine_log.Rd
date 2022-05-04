@@ -28,7 +28,10 @@ The output can be supplied to \code{\link{get_pwt_rates}} and to \code{\link{FBD
 
 }
 \value{
-A data frame with columns corresponding to the columns in the supplied log files and rows containing the sampled parameter values. Examples of the kind of output produced can be accessed using \code{\link[=posterior1p_long]{data("posterior1p_long")}} and \code{\link[=posterior3p_long]{data("posterior3p_long")}}.
+A data frame with columns corresponding to the columns in the supplied log files and rows containing the sampled parameter values. Examples of the kind of output produced can be accessed using \code{\link[=posterior1p]{data("posterior1p")}} and \code{\link[=posterior3p]{data("posterior3p")}}.
+}
+\seealso{
+\code{\link{FBD_reshape}}, which reshapes a combined parameter log file for use in some other package functions.
 }
 \examples{
 \dontrun{

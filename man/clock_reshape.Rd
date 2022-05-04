@@ -26,13 +26,14 @@ A data frame containing a single "value" column (for all rate values) and one co
 }
 \examples{
 
-## The example dataset rate_table_clades_medians already has clades and 3 clock rate columns:
-data("rate_table_clades_medians")
+## The example dataset rate_table_clades_means3 already
+## has clades and 3 clock rate columns:
+data("rate_table_clades_means3")
 
-head(rate_table_clades_medians)
+head(rate_table_clades_means3)
 
 ## Reshape a clock rate table with clade names to long format
-RatesByClade <- clock_reshape(rate_table_clades_medians)
+rates_by_clade <- clock_reshape(rate_table_clades_means3)
 }
 
 

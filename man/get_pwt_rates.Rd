@@ -37,21 +37,17 @@ A long data frame with one row per node per clock and the following columns:
 \code{\link{combine_log}}
 }
 \examples{
-# Load example rate table and posterior data sets
-data("rate_table_means")
+\dontrun{
+# 1) Import rate table with clade membership from working directory.
+rate_table_clades_means3 <- read.csv("RateTable_Means_Clades.csv", header = TRUE)
+
+# 2) Import posterior parameter file (no need to reshape from wide to long)
+posterior3p <- combine_log("LogFiles3p", burnin = 0.25, downsample = 1000)
+}
+
+# Or load example rate table and posterior data sets
+data("rate_table_clades_means3")
 data("posterior3p")
 
-# OR
-
-# 1) Import rate table with clade membership from working directory.
-RateTable_Means<- read.csv("_dev/Examples/MultiClockTree/RateTable_Means_Clades.csv", header = TRUE)
-
-# 2) Transform table from wide to long format
-RatesByClade <- clock_reshape(RateTable_Means)
-
-#3) Import posterior parameter file (no need to reshape from wide to long)
-posterior3p <- combine_log("_dev/Examples/MultiClockTree/LogFiles3p", burnin = 0.25, downsample = 1000)
-
-
-get_pwt_rates(rate_table_means, posterior3p)
+get_pwt_rates(rate_table_clades_means3, posterior3p)
 }

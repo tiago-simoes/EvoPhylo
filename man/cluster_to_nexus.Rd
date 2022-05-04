@@ -5,7 +5,7 @@
 Exports character partitions to a nexus file
 }
 \description{
-Creates and exports a Nexus file with a list of characters and their respective partitions as inferred by the \code{make_clusters} function. The contents can be copied and pasted directly into a Mr. Bayes commands block for a partitioned clock Bayesian inference analysis.
+Creates and exports a Nexus file with a list of characters and their respective partitions as inferred by the \code{\link{make_clusters}} function. The contents can be copied and pasted directly into a Mr. Bayes commands block for a partitioned clock Bayesian inference analysis.
 }
 \usage{
 cluster_to_nexus(cluster_df, file = NULL)
@@ -24,31 +24,28 @@ The text as a string, returned invisibly if \code{file} is not \code{NULL}. Use 
 }
 
 \seealso{
-\code{\link{cat}}
+\code{\link{make_clusters}}
 }
 \examples{
-
 ###### Load data matrix
 
-#Load example phylogenetic data matrix
+# Load example phylogenetic data matrix
 data("characters")
 
-#Create distance matrix
+# Create distance matrix
 Dmatrix <- get_gower_dist(characters)
-
-
-# OR
-
-#Load example phylogenetic data matrix from working directory
-Dmatrix <- get_gower_dist("_dev/Examples/DataMatrix.nex", numeric = FALSE)
-
+\dontshow{if (FALSE) \{}
+# OR Load example phylogenetic data matrix from
+# working directory
+Dmatrix <- get_gower_dist("DataMatrix.nex", numeric = FALSE)
+\dontshow{\}}
 ######
 
-#Find optimal partitioning scheme using PAM under k=3 partitions
+# Find optimal partitioning scheme using PAM under k=3
+# partitions
 cluster_df <- make_clusters(Dmatrix, k = 3)
 
-#Write to Nexus file and export as "cluster_file.txt":
-cluster_to_nexus(cluster_df, file = cluster_file.txt)
-
-cat(cluster_file)
+# Write to Nexus file and export as "cluster_file.txt":
+\dontrun{
+cluster_to_nexus(cluster_df, file = "cluster_file.txt")}
 }

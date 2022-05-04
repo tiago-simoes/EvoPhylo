@@ -31,13 +31,12 @@ A data frame with a column containing the node identifer (\code{node}) and one c
 \code{\link{clockrate_summary}} for summarizing and examining properties of the resulting rate table. Note that clade membership for each node must be customized (manually added) before these functions can be used, since this is tree and dataset dependent.
 }
 \examples{
-#Load example tree file
+# Import example tree (.t or .tre) file from example directory
+\dontrun{
+tree3p <- treeio::read.mrbayes("Tree_3p.t")}
+
+# Or load example tree file
 data("tree3p")
-
-#OR
-
-#Import example tree (.t or .tre) file from example directory
-tree3p<-treeio::read.mrbayes("_dev/Examples/MultiClockTree/Tree_3p.t")
 
 rate_table <- get_clockrate_table(tree3p)
 

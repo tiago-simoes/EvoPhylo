@@ -41,12 +41,12 @@ A \code{ggplot} object, which can be modified using \pkg{ggplot2} functions.
 \code{\link{geom_point}}, \code{\link{geom_smooth}}
 }
 \examples{
-data("rate_table_means")
+data("rate_table_clades_means3")
 
 #Plot correlations between clocks 1 and 3
-clockrate_reg_plot(rate_table_means, clock_x = 1, clock_y = 3)
+clockrate_reg_plot(rate_table_clades_means3, clock_x = 1, clock_y = 3)
 
 #Use arguments supplied to geom_smooth():
-clockrate_reg_plot(rate_table_means, clock_x = 1, clock_y = 3,
+clockrate_reg_plot(rate_table_clades_means3, clock_x = 1, clock_y = 3,
                    color = "red", se = FALSE)
 }
