@@ -12,9 +12,8 @@ bibliography: references.bib
 link-citations: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-knitr::opts_chunk$set(warning=FALSE)
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE)
 ```
 
 ## Creating Inter-character Distance Matrices
@@ -25,9 +24,9 @@ Categorical morphological data (discrete characters) should be treated as factor
 
 ### Treatment of inapplicable and missing data
 
-Categorical data including symbols for inapplicable and missing data (typically `"-"` and `"?"`, respectively) will be read in and treated as separate categories of data relative to numerical symbols for different character states (`"0"`, `"1"`, `"2"`, etc.). Two options are available: option 1---converting inapplicables/missing to `NA` (as done by default in the package [Claddis](https://cran.r-project.org/web/packages/Claddis/index.html)) or option 2---keeping the original symbols.
+Categorical data including symbols for inapplicable and missing data (typically `"-"` and `"?"`, respectively) will be read in and treated as separate categories of data relative to numerical symbols for different character states (`"0"`, `"1"`, `"2"`, etc.). Two options are available: option 1---converting inapplicables/missing to `NA` (as done by default in the package [Claddis](https://cran.r-project.org/package=Claddis)) or option 2---keeping the original symbols.
 
-In the example provided below, option 1 will convert unknown conditions to `NA` and thus will ignore the respective taxa with inapplicable/missing data to calculate inter-character distances. The resulting distance matrix will introduce `NaN` to every pairwise comparison involving two characters with `NA` (all comparisons including character 5, as well as any pairwise comparisons involving characters 4, 5 and 7) (Table 2-in blue). Statistical tests and clustering methods cannot utilize such matrices with `NaN` as data entries, and removal of observations contributing to excessive `NaN` have to be performed --- such as taxon removal during inter-taxon distance matrix construction using [Claddis](https://cran.r-project.org/web/packages/Claddis/index.html).
+In the example provided below, option 1 will convert unknown conditions to `NA` and thus will ignore the respective taxa with inapplicable/missing data to calculate inter-character distances. The resulting distance matrix will introduce `NaN` to every pairwise comparison involving two characters with `NA` (all comparisons including character 5, as well as any pairwise comparisons involving characters 4, 5 and 7) (Table 2-in blue). Statistical tests and clustering methods cannot utilize such matrices with `NaN` as data entries, and removal of observations contributing to excessive `NaN` have to be performed --- such as taxon removal during inter-taxon distance matrix construction using [Claddis](https://cran.r-project.org/package=Claddis).
 
 ```{r}
 library(EvoPhylo)
@@ -35,7 +34,8 @@ d <- structure(list(`Taxon A` = c("0", "1", "0", "0", "?", "1", "?", "0", "1", "
                     `Taxon B` = c("0", "1", "0", "?", "?", "1", "1", "0", "1", "1")),
                row.names = paste0("Char", 1:10),
                class = "data.frame")
-kableExtra::kbl(d, caption = "Example dataset") |> kableExtra::kable_styling(full_width = FALSE)
+kableExtra::kbl(d, caption = "Example dataset") |>
+  kableExtra::kable_styling(full_width = FALSE)
 ```
 
 Besides, in comparisons between characters inclusive of states with `NA`, the latter will contribute 0 difference to the distance matrix. For instance, distance between characters 6 (0,0) and 7 (`NA`, 0) and in the table below is 0 (Table 2-in red). The implicit assumption with option 1 is that unknown characters contribute 0 distance. Therefore, this approach biases the distance matrix by minimizing the overall distance between characters to the lowest possible values. It assumes that, whatever the true condition represented by the unknown state, it is always assumed to be equal to the known character states (e.g., character states scored as "1" for Taxa A and B).
@@ -44,7 +44,7 @@ With option 2, inapplicables/missing data will be treated as a distinct categori
 
 Contrary to approaches to create inter-taxon distance matrices to estimate morphospace, removing observations with excessive inapplicable/missing data for the final distance matrix is not possible because each character must be assigned to at least one partition (regardless of the amount of missing or inapplicable data). Therefore, here we recommend following the approach in option 2, which maximizes the distance between characters with inapplicables/missing data and avoids inapplicable outputs in the distance matrix. However, as characters with excessive missing data are likely to bias the results of phylogenetic analyses (besides biasing the estimation of the distance matrix), we suggest avoiding or removing such characters for morphological phylogenetic analysis. This will avoid the several phylogenetic analytical issues for characters with excessive inapplicable/missing data, besides the biases introduced in construction of distance matrices and the assessment of character partitioning.
 
-```{r, warning=FALSE}
+```{r}
 gd <- get_gower_dist(d, numeric = TRUE)
 nas <- which(is.na(gd))
 for (i in nas) {
@@ -77,7 +77,7 @@ Euclidean distances are extremely sensitive to missing data, and alternative cho
 
 Therefore, this package uses Gower distances to create the inter-character distance matrix "D", following the original description of this approach in [@simões2021]. For the clustering analysis, we utilize here partitioning around medoids (PAM, or K-medoids), which can estimate clusters using Gower distances. PAM is analogous to K-means, but it has its clusters centered around medoids instead of centered around centroids, which are less prone to the impact from outliers and heterogeneous cluster sizes [@rencher2012; @budiaji2019].
 
-To define how many clusters the data could be partitioned into, various PAM partitioning schemes are tested and the quality of each clustering scheme using the silhouette index (Si) approach [@rousseeuw1987], which determines how well an object falls within their cluster compared to other clusters. PAM partitioning schemes tested range from the minimum number of possible partitions ($K=2$) to a large number of partitions (user-defined, default $K = 10$).
+To define how many clusters the data could be partitioned into, various PAM partitioning schemes are tested and the quality of each clustering scheme using the silhouette index (Si) approach [@rousseeuw1987], which determines how well an object falls within their cluster compared to other clusters. PAM partitioning schemes tested range from the minimum number of possible partitions ($k=2$) to a large number of partitions (user-defined, default $k = 10$).
 
 ```{r Si-plot, fig.align="center", fig.cap="Si plot indicating the higher quality of clustering when the number of partitions (k) = 3"}
 data("characters")
@@ -92,7 +92,7 @@ As an additional and independent test of the quality of the chosen partitioning 
 
 ### The best candidate clustering scheme
 
-The resulting clustering scheme obtained from PAM+Si is directly mapped on top of the graphics produced by t-SNEs (Fig 2) in order to test the congruence of cluster size and composition between both approaches [@simões2021]. If major discrepancies occur, it is suggested that other values of $K$ considered suboptimal by Si may be attempted and compared against t-SNEs. As an additional alternative, the group limitation for t-SNEs can be based on anatomical subdivisions instead of the clustering scheme obtained by PAM+Si. If there is a closer correspondence between t-SNEs and anatomical partitioning as compared to PAM+Si and t-SNEs, it might be more reasonable to follow anatomical partitioning.
+The resulting clustering scheme obtained from PAM+Si is directly mapped on top of the graphics produced by t-SNEs (Fig 2) in order to test the congruence of cluster size and composition between both approaches [@simões2021]. If major discrepancies occur, it is suggested that other values of $k$ considered suboptimal by Si may be attempted and compared against t-SNEs. As an additional alternative, the group limitation for t-SNEs can be based on anatomical subdivisions instead of the clustering scheme obtained by PAM+Si. If there is a closer correspondence between t-SNEs and anatomical partitioning as compared to PAM+Si and t-SNEs, it might be more reasonable to follow anatomical partitioning.
 
 ```{r cluster-plot, fig.align="center", fig.cap="tSNE plot of the first two dimensions with data points colored according to the partitioning scheme determined by PAM+Si", warning=FALSE, fig.width=6, fig.height=4}
 clusters <- make_clusters(gd, k = 3, tsne = TRUE)
