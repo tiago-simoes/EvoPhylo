@@ -1,6 +1,6 @@
 ---
 title: "Evolutionary Rates & Selection Strength"
-date: '2022-04-08'
+date: "`r Sys.Date()`"
 output:
   html_vignette:
     toc: yes

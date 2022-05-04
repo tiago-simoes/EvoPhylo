@@ -1,6 +1,6 @@
 ---
 title: "Analyzing FBD Parameters"
-date: '2022-04-08'
+date: "`r Sys.Date()`"
 output:
   html_vignette:
     toc: yes
@@ -50,8 +50,8 @@ The posterior data must first be transformed from wide to long to be used with t
 ## Reshape imported combined log file from wide to long with FBD_reshape
 posterior3p_long <- FBD_reshape(posterior3p)
 
-## Show first 10 lines of combined log file
-head(posterior3p_long, 10)
+## Show first 5 lines of combined log file
+head(posterior3p_long, 5)
 ```
 
 ### 2. Summarize FBD parameters by time bin

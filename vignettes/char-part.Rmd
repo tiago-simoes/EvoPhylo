@@ -1,6 +1,6 @@
 ---
 title: "Character Partitioning"
-date: '2022-04-08'
+date: "`r Sys.Date()`"
 output:
   html_vignette:
     toc: yes
@@ -34,7 +34,7 @@ library(EvoPhylo)
 ```
 
 
-### 1.Generate distance matrix
+### 1. Generate distance matrix
 
 Generate a Gower distance matrix with `get_gower_dist()` by supplying the file path of a .nex file containing a character data matrix:
 
@@ -50,7 +50,6 @@ data(characters)
 
 dist_matrix <- get_gower_dist(characters, numeric = FALSE)
 ```
-
 
 ### 2. Estimate the optimal number of partitions
 
