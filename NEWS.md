@@ -3,9 +3,9 @@ output:
   html_document: default
   pdf_document: default
 ---
-`PACKAGE` News and Updates
+`EvoPhylo` News and Updates
 ======
 
-# PACKAGE 0.1.0
+# EvoPhylo 0.1.0
 
 * First version!
