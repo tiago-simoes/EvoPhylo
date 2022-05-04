@@ -3,10 +3,10 @@
 \alias{plot.cluster_df}
 
 \title{
-Estimates and plots character partitions
+Estimate and plot character partitions
 }
 \description{
-Determines cluster(partition) membership for phylogenetic morphological characters from the supplied Gower distance matrix and requested number of clusters using partitioning around medoids (PAM, or K-medoids). For further and independently testing the quality of the chosen partitioning scheme, users may also poduce graphic clustering (tSNEs), coloring data points according to PAM clusters, to verify PAM clustering results.
+Determines cluster (partition) membership for phylogenetic morphological characters from the supplied Gower distance matrix and requested number of clusters using partitioning around medoids (PAM, or K-medoids). For further and independently testing the quality of the chosen partitioning scheme, users may also poduce graphic clustering (tSNEs), coloring data points according to PAM clusters, to verify PAM clustering results.
 }
 \usage{
 make_clusters(dist_mat, k, tsne = FALSE,

@@ -1,7 +1,7 @@
 \name{FBD_reshape}
 \alias{FBD_reshape}
 \title{
-Converts an FBD posterior parameter table from wide to long format
+Convert an FBD posterior parameter table from wide to long format
 }
 \description{
 Converts FBD posterior parameter table, such as those imported using \code{\link{combine_log}}, from wide to long format.

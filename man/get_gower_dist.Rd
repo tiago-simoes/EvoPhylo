@@ -2,7 +2,7 @@
 \alias{get_gower_dist}
 
 \title{
-Compute Gower distances
+Compute Gower distances between characters
 }
 \description{
 Computes Gower distance between characters from a phylogenetic data matrix.

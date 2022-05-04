@@ -1,7 +1,7 @@
 \name{clock_reshape}
 \alias{clock_reshape}
 \title{
-Converts clock rate tables from wide to long format
+Convert clock rate tables from wide to long format
 }
 \description{
 Converts clock rate tables, such as those produced by \code{\link{clockrate_summary}} and imported back after including clade names, from wide to long format.

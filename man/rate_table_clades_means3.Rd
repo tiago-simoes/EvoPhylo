@@ -2,7 +2,7 @@
 \alias{rate_table_clades_means3}
 \docType{data}
 \title{
-Table with mean clock rates by node and clade
+Mean clock rates by node and clade (3 clock partitions)
 }
 \description{
 A data set containing the mean clock rates for a tree with 3 clock partitions, such as the output of \code{\link{get_clockrate_table}} but with an additional "clade" column added, which is required for use in \code{\link{clockrate_summary}} and \code{\link{clockrate_dens_plot}}.

@@ -1,7 +1,7 @@
 \name{clockrate_reg_plot}
 \alias{clockrate_reg_plot}
 \title{
-Linear regression between sets of rates
+Plot regression lines between sets of rates
 }
 \description{
 Displays a scatterplot and fits regression line of one set of clock rates against another, optionally displaying their Pearson correlation coefficient (r) and R-squared values (R^2).

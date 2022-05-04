@@ -3,7 +3,7 @@
 \alias{plot.sil_width_df}
 
 \title{
-Calculates Silhouette widths index for various numbers of partitions
+Calculate silhouette widths index for various numbers of partitions
 }
 \description{
 Computes silhouette widths index for several possible numbers of clusters(partitions) \code{k}, which determines how well an object falls within their cluster compared to other clusters. The best number of clusters \code{k} is the one with the highest silhouette width.

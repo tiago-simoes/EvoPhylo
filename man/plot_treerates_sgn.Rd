@@ -2,7 +2,7 @@
 \alias{plot_treerates_sgn}
 
 \title{
-Plots tree with rate thresholds for selection mode
+Plot Bayesian evolutionary tree with rate thresholds for selection mode
 }
 \description{
 Plots the summary Bayesian evolutionary tree with branches, according to user-defined thresholds (in units of standard deviations) used to infer the strength and mode of selection.

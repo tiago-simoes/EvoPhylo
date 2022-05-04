@@ -2,7 +2,7 @@
 \alias{FBD_tests2}
 
 \title{
-Tests for differences in FBD parameter values
+Test for differences in FBD parameter values
 }
 \description{
 \code{FBD_tests2()} performs t-tests and Mann-Whitney U-tests to compare the average value of fossilized birth–death process (FBD) parameters between time bins.
