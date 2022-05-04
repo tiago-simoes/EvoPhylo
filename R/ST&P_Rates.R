@@ -63,6 +63,8 @@ clockrate_summary <- function(rate_table, file = NULL, digits = 3) {
 
   rownames(out) <- NULL
 
+  if (all(clocks == "")) out$clock <- NULL
+
   if (length(file) > 0) {
     write.csv(out, file = file)
     invisible(out)
@@ -178,7 +180,6 @@ clockrate_reg_plot <- function(rate_table, clock_x, clock_y, method = "lm", show
 
   if (show_lm) {
     r <- cor(rate_table$clock_x, rate_table$clock_y)
-    lms <- summary(lm(clock_x~clock_y, rate_table))
 
     #Extract underlying ggplot data to place correlation in correct place in plot
     ggbd <- ggplot_build(regplot)$data
@@ -195,12 +196,11 @@ clockrate_reg_plot <- function(rate_table, clock_x, clock_y, method = "lm", show
                  if (hasName(ggbd2, "ymax")) max(ggbd2$ymax)) #FALSE when se = FALSE
 
     regplot <- regplot +
-      annotate("label", label = paste0("italic(R)^2 == ", round(lms$r.squared, 2)), parse = TRUE,
+      annotate("text", label = c(paste0("italic(R)^2 == ", round(r^2, 2)),
+                                  paste0("italic(r) == ", round(r, 2))), parse = TRUE,
                x = .3*min_x + .7*max_x,
-               y = .8*min_y + .01*max_y)+
-      annotate("label", label = paste0("italic(r) == ", round(r, 2)), parse = TRUE,
-               x = .3*min_x + .7*max_x,
-               y = .9*min_y + .15*max_y)
+               y = c(.85*min_y + .15*max_y,
+                     .8*min_y + .2*max_y))
   }
 
   regplot

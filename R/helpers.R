@@ -1,63 +1,8 @@
 #Helpers
-
-oneSummary <- function(x, digits = 3) {
-  qq <- unname(quantile(x, c(0, .25, .5, .75, 1)))
-  d <- data.frame(
-    n = length(x),
-    mean = round(mean(x), digits),
-    sd = round(sd(x), digits),
-    min = round(qq[1], digits),
-    Q1 = round(qq[2], digits),
-    median = round(qq[3], digits),
-    Q3 = round(qq[4], digits),
-    max = round(qq[5], digits)
-  )
-  rownames(d) <- NULL
-
-  d
-}
-
 firstup <- function(x) {
   #Capitalize first letter
   substr(x, 1, 1) <- toupper(substr(x, 1, 1))
   x
-}
-
-#Reshape AllRuns from wide to long with Time_bins as time and parameters as varying
-FBD_reshape <- function(samples) {
-  if (!is.data.frame(samples) ||
-      !any(startsWith(names(samples), "net_speciation_")) ||
-      !any(startsWith(names(samples), "relative_extinction_")) ||
-      !any(startsWith(names(samples), "relative_fossilization_"))) {
-    stop("'samples' must be a data frame with columns for net_speciation, relative_extinction, and relative_fossilization.", call. = FALSE)
-  }
-
-  samples_long <- reshape(samples, direction = "long",
-                          varying = list(names(samples)[startsWith(names(samples), "net_speciation_")],
-                                         names(samples)[startsWith(names(samples), "relative_extinction_")],
-                                         names(samples)[startsWith(names(samples), "relative_fossilization_")]),
-                          v.names = c("net_speciation", "relative_extinction", "relative_fossilization"),
-                          timevar = "Time_bin",
-                          sep = "_",
-                          idvar = "Gen", ids = samples[["Gen"]])
-  samples_long[["Time_bin"]] <- factor(samples_long[["Time_bin"]])
-  attr(samples_long, "reshapeLong") <- NULL
-  samples_long
-}
-
-#Reshape rate_table with a column for each rate to long
-clock_reshape <- function(rate_table) {
-  rate_table_long <- reshape(rate_table, direction = "long",
-                             varying = which(startsWith(names(rate_table), "rates")),
-                             v.names = "rate",
-                             timevar = "clock",
-                             idvar = "nodes",
-                             sep = "_")
-  rate_table_long[["clock"]] <- factor(rate_table_long[["clock"]])
-  rownames(rate_table_long) <- NULL
-  attr(rate_table_long, "reshapeLong") <- NULL
-
-  rate_table_long
 }
 
 #Port of StatMatch::gower.dist() with default opts but slightly faster

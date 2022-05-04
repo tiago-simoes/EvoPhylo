@@ -53,7 +53,6 @@ combine_log <- function(path = ".", burnin = .25, downsample = 1e4) {
     stop("All parameter log files must have the same column names.", call. = FALSE)
   }
 
-
   samples <- do.call("rbind", L)
 
   if (downsample > 0) {
@@ -65,6 +64,10 @@ combine_log <- function(path = ".", burnin = .25, downsample = 1e4) {
     }
     samples <- samples[d,,drop = FALSE]
   }
+
+  rownames(samples) <- NULL
+
+  return(samples)
 }
 
 

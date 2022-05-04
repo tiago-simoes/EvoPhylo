@@ -13,8 +13,6 @@ clock_reshape <- function(rate_table) {
   rate_table_long
 }
 
-
-
 #t-tests
 #rate_table = rate_table_means
 #posterior.clockrate = samples$clockrate?
@@ -32,7 +30,10 @@ get_pwt_rates <- function(rate_table, posterior) {
     stop("'posterior' must be a data frame.", call. = FALSE)
   }
   if (hasName(posterior, "clockrate.all.")) {
-    colnames(posterior)[which(names(posterior) == "clockrate.all.")] <- "clockrate"
+    names(posterior)[which(names(posterior) == "clockrate.all.")] <- "clockrate"
+  }
+  if (!hasName(posterior, "clockrate")) {
+    stop("A 'clockrate' column must be present in 'posterior'.", call. = FALSE)
   }
 
   posterior.clockrate <- posterior$clockrate
@@ -63,7 +64,7 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
                                drop.dummyextant = TRUE,
                                low = "blue", mid = "gray90", high = "red",
                                branch_size = 2, tip_size = 2,
-                               xlim = NULL, nbreaks = 10, geo_size=list(2, 3),
+                               xlim = NULL, nbreaks = 10, geo_size = list(2, 3),
                                geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")) {
 
   #Process threshold
@@ -71,8 +72,11 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
     if (missing(posterior) || !is.data.frame(posterior)) {
       stop("'posterior' must be a data frame.", call. = FALSE)
     }
-  if (hasName(posterior, "clockrate.all.")) {
-    colnames(posterior)[which(names(posterior) == "clockrate.all.")] <- "clockrate"
+    if (hasName(posterior, "clockrate.all.")) {
+      names(posterior)[which(names(posterior) == "clockrate.all.")] <- "clockrate"
+    }
+    if (!hasName(posterior, "clockrate")) {
+      stop("A 'clockrate' column must be present in 'posterior'.", call. = FALSE)
     }
 
     if (!is.character(threshold)) stop("'threshold' must be a character vector.", call. = FALSE)
@@ -190,7 +194,7 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
                         rot = 0, size = geo_size, neg = TRUE) +
     scale_x_continuous(n.breaks = nbreaks, labels = abs) +
     ggtree::theme_tree2() +
-    labs(title = paste0("Selection for partition: ", paste(clock), collapse = ", "), call. = FALSE) +
+    labs(title = sprintf("Selection for partition %s", clock), call. = FALSE) +
     theme(plot.title = element_text(size = 12, face = "bold", hjust = 0.5),
           legend.position = c(.05, .25),
           legend.title = element_text(size = 8, face = "bold"),
