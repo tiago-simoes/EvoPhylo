@@ -1,5 +1,3 @@
-#All functions documented with examples
-
 #Import and combine log (.p) files from Mr. Bayes, optionally downsampling; produces posterior1p-style object
 combine_log <- function(path = ".", burnin = .25, downsample = 1e4) {
   #Get FBD parameter estimates from collection of log files (.p)
@@ -70,7 +68,6 @@ combine_log <- function(path = ".", burnin = .25, downsample = 1e4) {
   return(samples)
 }
 
-
 #Reshape AllRuns from wide to long with Time_bins as time and parameters as varying
 FBD_reshape <- function(posterior) {
   if (!is.data.frame(posterior) ||
@@ -89,10 +86,11 @@ FBD_reshape <- function(posterior) {
                           sep = "_",
                           idvar = "Gen", ids = posterior[["Gen"]])
   posterior_long[["Time_bin"]] <- factor(posterior_long[["Time_bin"]])
+  rownames(posterior_long) <- NULL
   attr(posterior_long, "reshapeLong") <- NULL
+
   posterior_long
 }
-
 
 #Get summary (n, mean, sd, 5 number) of parameters values by time bin
 FBD_summary <- function(posterior, file = NULL, digits = 3) {

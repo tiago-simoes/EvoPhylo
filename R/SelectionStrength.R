@@ -14,8 +14,6 @@ clock_reshape <- function(rate_table) {
 }
 
 #t-tests
-#rate_table = rate_table_means
-#posterior.clockrate = samples$clockrate?
 get_pwt_rates <- function(rate_table, posterior) {
   if (missing(rate_table) || !is.data.frame(rate_table)) {
     stop("'rate_table' must be a data frame.", call. = FALSE)
