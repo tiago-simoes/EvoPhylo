@@ -14,3 +14,4 @@
 ^.*\.o$
 ^.*\.so$
 ^README\.Rmd$
+^cran-comments\.md$
