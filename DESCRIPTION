@@ -1,6 +1,6 @@
 Package: EvoPhylo
 Version: 0.1
-Title: Pre- and Postprocessing of Morphological Data from Relaxed Clock Bayesian Phylogenetics
+Title: Pre- And Postprocessing of Morphological Data from Relaxed Clock Bayesian Phylogenetics
 Description: Performs automated morphological character partitioning for 
              phylogenetic analyses and analyze macroevolutionary parameter 
              outputs from clock (time-calibrated) Bayesian inference analyses.
