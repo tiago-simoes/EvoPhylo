@@ -24,28 +24,29 @@ The text as a string, returned invisibly if \code{file} is not \code{NULL}. Use 
 }
 
 \seealso{
+\code{vignette("char-part")} for the use of this function as part of an analysis pipeline.
+
 \code{\link{make_clusters}}
 }
 \examples{
-###### Load data matrix
+# See vignette("char-part") for how to use this
+# function as part of an analysis pipeline
 
 # Load example phylogenetic data matrix
 data("characters")
 
 # Create distance matrix
 Dmatrix <- get_gower_dist(characters)
-\dontshow{if (FALSE) \{}
-# OR Load example phylogenetic data matrix from
-# working directory
-Dmatrix <- get_gower_dist("DataMatrix.nex", numeric = FALSE)
-\dontshow{\}}
-######
 
 # Find optimal partitioning scheme using PAM under k=3
 # partitions
 cluster_df <- make_clusters(Dmatrix, k = 3)
 
-# Write to Nexus file and export as "cluster_file.txt":
-\dontrun{
-cluster_to_nexus(cluster_df, file = "cluster_file.txt")}
+# Write to Nexus file and export to .txt file:
+file <- tempfile(fileext = ".txt")
+
+# You would set, e.g.,
+# file <- "path/to/file.txt"
+
+cluster_to_nexus(cluster_df, file = file)
 }

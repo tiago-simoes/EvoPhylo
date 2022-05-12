@@ -66,11 +66,16 @@ When using \code{plot()} on a \code{cluster_df} object, warnings may appear from
 }
 
 \seealso{
-\code{\link{get_gower_dist}}, \code{\link{get_sil_widths}}
+\code{vignette("char-part")} for the use of this function as part of an analysis pipeline.
+
+\code{\link{get_gower_dist}}, \code{\link{get_sil_widths}}, \code{\link{cluster_to_nexus}}
 
 \code{\link[cluster:pam]{cluster::pam}}, \code{\link[Rtsne:Rtsne]{Rtsne::Rtsne}}
 }
 \examples{
+# See vignette("char-part") for how to use this
+# function as part of an analysis pipeline
+
 data("characters")
 
 # Reading example file as categorical data

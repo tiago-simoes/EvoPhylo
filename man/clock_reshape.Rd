@@ -22,9 +22,13 @@ A data frame containing a single "value" column (for all rate values) and one co
 }
 
 \seealso{
+\code{vignette("rates-selection")} for the use of this function as part of an analysis pipeline.
+
 \code{\link{get_clockrate_table}}, \code{\link{summary}}, \code{\link{clockrate_summary}}, \code{\link{FBD_reshape}}
 }
 \examples{
+# See vignette("rates-selection") for how to use this
+# function as part of an analysis pipeline
 
 ## The example dataset rate_table_clades_means3 already
 ## has clades and 3 clock rate columns:

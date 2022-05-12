@@ -28,6 +28,8 @@ A data frame with a row for each paramater and time bin, and columns for differe
 }
 
 \seealso{
+\code{vignette("fbd-params")} for the use of this function as part of an analysis pipeline.
+
 \code{\link{combine_log}} for producing a single data set of parameter posterior samples from individual parameter log files.
 
 \code{\link{FBD_reshape}} for converting posterior parameter table from wide to long format.
@@ -35,6 +37,9 @@ A data frame with a row for each paramater and time bin, and columns for differe
 \code{\link{FBD_dens_plot}}, \code{\link{FBD_normality_plot}}, \code{\link{FBD_tests1}}, and \code{\link{FBD_tests2}} for other functions used to summarize and display the distributions of the parameters.
 }
 \examples{
+# See vignette("fbd-params") for how to use this
+# function as part of an analysis pipeline
+
 data("posterior3p")
 
 posterior3p_long <- FBD_reshape(posterior3p)

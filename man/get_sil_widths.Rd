@@ -37,9 +37,14 @@ For \code{plot()} on a \code{get_sil_widths()} object, it produces a \code{ggplo
 }
 
 \seealso{
+\code{vignette("char-part")} for the use of this function as part of an analysis pipeline.
+
 \code{\link{get_gower_dist}}, \code{\link[cluster:pam]{cluster::pam}}
 }
 \examples{
+# See vignette("char-part") for how to use this
+# function as part of an analysis pipeline
+
 data("characters")
 
 #Reading example file as categorical data

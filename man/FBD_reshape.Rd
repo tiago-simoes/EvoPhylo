@@ -25,9 +25,14 @@ A data frame of posterior parameter estimates containing a single "Time_bin" col
 }
 
 \seealso{
+\code{vignette("fbd-params")} for the use of this function as part of an analysis pipeline.
+
 \code{\link{combine_log}}, \code{\link{reshape}}
 }
 \examples{
+# See vignette("fbd-params") for how to use this
+# function as part of an analysis pipeline
+
 data("posterior3p")
 
 head(posterior3p)

@@ -39,6 +39,8 @@ A \code{ggplot} object, which can be modified using \pkg{ggplot2} functions.
 When setting \code{type = "violin"}, a warning may appear saying something like "In regularize.values(x, y, ties, missing(ties), na.rm = na.rm) : collapsing to unique 'x' values". This warning can be ignored.
 }
 \seealso{
+\code{vignette("fbd-params")} for the use of this function as part of an analysis pipeline.
+
 \code{\link[ggplot2:stat_density]{ggplot2::stat_density}}, \code{\link[ggplot2:geom_violin]{ggplot2::geom_violin}} for the underlying functions to produce the plots.
 
 \code{\link{combine_log}} for producing a single data frame of FBD parameter posterior samples from multiple log files.
@@ -48,6 +50,9 @@ When setting \code{type = "violin"}, a warning may appear saying something like 
 \code{\link{FBD_summary}}, \code{\link{FBD_normality_plot}}, \code{\link{FBD_tests1}}, and \code{\link{FBD_tests2}} for other functions used to summarize and display the distributions of the parameters.
 }
 \examples{
+# See vignette("fbd-params") for how to use this
+# function as part of an analysis pipeline
+
 data("posterior3p")
 
 posterior3p_long <- FBD_reshape(posterior3p)
