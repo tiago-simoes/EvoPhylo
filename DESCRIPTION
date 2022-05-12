@@ -3,7 +3,8 @@ Version: 0.1
 Title: Pre- And Postprocessing of Morphological Data from Relaxed Clock Bayesian Phylogenetics
 Description: Performs automated morphological character partitioning for 
              phylogenetic analyses and analyze macroevolutionary parameter 
-             outputs from clock (time-calibrated) Bayesian inference analyses.
+             outputs from clock (time-calibrated) Bayesian inference analyses, following 
+             concepts introduced by Simões and Pierce (2021) <doi:10.1038/s41559-021-01532-x>.
 Authors@R: c(
   person("Tiago", "Simoes", role = c("cre", "aut"),
          email = "tsimoes@fas.harvard.edu", 
