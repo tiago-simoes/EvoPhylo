@@ -24,22 +24,20 @@ This function uses code adapted from \code{StatMatch::gower.dist()} written by M
 \value{
 The Gower distance matrix.
 }
+\seealso{
+\code{vignette("char-part")} for the use of this function as part of an analysis pipeline.
+}
 
 \examples{
-# Load phylogenetic data matrix as categorical data and
-# create distance matrix
-\dontrun{
-Dmatrix <- get_gower_dist("DataMatrix.nex")}
+# See vignette("char-part") for how to use this
+# function as part of an analysis pipeline
 
-# Or load example phylogenetic data matrix
+# Load example phylogenetic data matrix
 data("characters")
 
 # Create distance matrix
 Dmatrix <- get_gower_dist(characters)
 
-#Reading data matrix as numeric data
+# Reading data matrix as numeric data
 Dmatrix <- get_gower_dist(characters, numeric = TRUE)
-# OR
-\dontrun{
-Dmatrix <- get_gower_dist("DataMatrix.nex", numeric = TRUE)}
 }

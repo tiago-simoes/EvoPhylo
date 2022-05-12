@@ -26,6 +26,8 @@ A list with an element for each test, each of which contains a list of test resu
 }
 
 \seealso{
+\code{vignette("fbd-params")} for the use of this function as part of an analysis pipeline.
+
 \code{\link{combine_log}} for producing a single data set of parameter posterior samples from individual parameter log files.
 
 \code{\link{FBD_reshape}} for converting posterior parameter table from wide to long format.
@@ -35,6 +37,9 @@ A list with an element for each test, each of which contains a list of test resu
 \code{\link{pairwise.t.test}} and \code{\link{pairwise.wilcox.test}} for the tests used.
 }
 \examples{
+# See vignette("fbd-params") for how to use this
+# function as part of an analysis pipeline
+
 data("posterior3p")
 
 posterior3p_long <- FBD_reshape(posterior3p)

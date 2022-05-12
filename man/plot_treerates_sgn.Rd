@@ -68,20 +68,15 @@ A \code{ggtree} object, which inherits from \code{ggplot}.
 Simões, T. R. and S. E. Pierce (2021). Sustained High Rates of Morphological Evolution During the Rise of Tetrapods. \emph{Nature Ecology & Evolution} 5: 1403–1414.
 }
 \seealso{
+\code{vignette("rates-selection")} for the use of this function as part of an analysis pipeline.
+
 \code{\link[ggtree:ggtree]{ggtree::ggtree}}, \code{\link[deeptime:coord_geo]{deeptime::coord_geo}}
 }
 \examples{
-\dontrun{
-# 1) Import tree file
-tree3p <- treeio::read.mrbayes("Tree3p.t")
+# See vignette("rates-selection") for how to use this
+# function as part of an analysis pipeline
 
-# 2) Import posterior parameter file (no
-#    need to reshape from wide to long)
-posterior3p <- combine_log("LogFiles3p", burnin = 0.25,
-                           downsample = 1000)
-}
-
-# Or load example tree and posterior
+# Load example tree and posterior
 data("tree3p")
 data("posterior3p")
 

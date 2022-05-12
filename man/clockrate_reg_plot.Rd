@@ -38,15 +38,22 @@ A \code{ggplot} object, which can be modified using \pkg{ggplot2} functions.
 
 
 \seealso{
+\code{vignette("rates-selection")} for the use of this function as part of an analysis pipeline.
+
 \code{\link{geom_point}}, \code{\link{geom_smooth}}
 }
 \examples{
+# See vignette("rates-selection") for how to use this
+# function as part of an analysis pipeline
+
 data("rate_table_clades_means3")
 
 #Plot correlations between clocks 1 and 3
-clockrate_reg_plot(rate_table_clades_means3, clock_x = 1, clock_y = 3)
+clockrate_reg_plot(rate_table_clades_means3,
+                   clock_x = 1, clock_y = 3)
 
 #Use arguments supplied to geom_smooth():
-clockrate_reg_plot(rate_table_clades_means3, clock_x = 1, clock_y = 3,
+clockrate_reg_plot(rate_table_clades_means3,
+                   clock_x = 1, clock_y = 3,
                    color = "red", se = FALSE)
 }

@@ -31,12 +31,16 @@ The output can be supplied to \code{\link{get_pwt_rates}} and to \code{\link{FBD
 A data frame with columns corresponding to the columns in the supplied log files and rows containing the sampled parameter values. Examples of the kind of output produced can be accessed using \code{\link[=posterior1p]{data("posterior1p")}} and \code{\link[=posterior3p]{data("posterior3p")}}.
 }
 \seealso{
+\code{vignette("fbd-params")} for the use of this function as part of an analysis pipeline.
+
 \code{\link{FBD_reshape}}, which reshapes a combined parameter log file for use in some other package functions.
 }
 \examples{
+# See vignette("fbd-params") for how to use this
+# function as part of an analysis pipeline
 \dontrun{
 posterior <- combine_log("path/to/folder", burnin = .25,
-                        downsample = 10000)
+                         downsample = 10000)
 }
 }
 

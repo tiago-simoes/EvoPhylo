@@ -28,14 +28,14 @@ A data frame with a column containing the node identifer (\code{node}) and one c
 }
 
 \seealso{
+\code{vignette("rates-selection")} for the use of this function as part of an analysis pipeline.
+
 \code{\link{clockrate_summary}} for summarizing and examining properties of the resulting rate table. Note that clade membership for each node must be customized (manually added) before these functions can be used, since this is tree and dataset dependent.
 }
 \examples{
-# Import example tree (.t or .tre) file from example directory
-\dontrun{
-tree3p <- treeio::read.mrbayes("Tree_3p.t")}
+# See vignette("rates-selection") for how to use this
+# function as part of an analysis pipeline
 
-# Or load example tree file
 data("tree3p")
 
 rate_table <- get_clockrate_table(tree3p)

@@ -34,18 +34,15 @@ A long data frame with one row per node per clock and the following columns:
 }
 
 \seealso{
+\code{vignette("rates-selection")} for the use of this function as part of an analysis pipeline.
+
 \code{\link{combine_log}}
 }
 \examples{
-\dontrun{
-# 1) Import rate table with clade membership from working directory.
-rate_table_clades_means3 <- read.csv("RateTable_Means_Clades.csv", header = TRUE)
+# See vignette("rates-selection") for how to use this
+# function as part of an analysis pipeline
 
-# 2) Import posterior parameter file (no need to reshape from wide to long)
-posterior3p <- combine_log("LogFiles3p", burnin = 0.25, downsample = 1000)
-}
-
-# Or load example rate table and posterior data sets
+# Load example rate table and posterior data sets
 data("rate_table_clades_means3")
 data("posterior3p")
 

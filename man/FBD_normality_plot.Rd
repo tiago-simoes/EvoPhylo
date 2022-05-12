@@ -24,6 +24,8 @@ A \code{ggplot} object, which can be modified using \pkg{ggplot2} functions.
 }
 
 \seealso{
+\code{vignette("fbd-params")} for the use of this function as part of an analysis pipeline.
+
 \code{\link{combine_log}} for producing a single data set of parameter posterior samples from individual parameter log files.
 
 \code{\link{FBD_reshape}} for converting posterior parameter table from wide to long format.
@@ -33,6 +35,9 @@ A \code{ggplot} object, which can be modified using \pkg{ggplot2} functions.
 \code{\link{FBD_tests2}} for tests of differences in parameter means.
 }
 \examples{
+# See vignette("fbd-params") for how to use this
+# function as part of an analysis pipeline
+
 data("posterior3p")
 
 posterior3p_long <- FBD_reshape(posterior3p)

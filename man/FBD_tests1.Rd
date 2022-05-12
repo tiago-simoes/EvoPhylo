@@ -30,6 +30,8 @@ A list containing the results of the three tests with the following elements:
 }
 
 \seealso{
+\code{vignette("fbd-params")} for the use of this function as part of an analysis pipeline.
+
 \code{\link{combine_log}} for producing a single data set of parameter posterior samples from individual parameter log files.
 
 \code{\link{FBD_reshape}} for converting posterior parameter table from wide to long format.
@@ -41,6 +43,9 @@ A list containing the results of the three tests with the following elements:
 \code{\link{shapiro.test}}, \code{\link{bartlett.test}}, and \code{\link{fligner.test}} for the statistical tests used.
 }
 \examples{
+# See vignette("fbd-params") for how to use this
+# function as part of an analysis pipeline
+
 data("posterior3p")
 
 posterior3p_long <- FBD_reshape(posterior3p)
