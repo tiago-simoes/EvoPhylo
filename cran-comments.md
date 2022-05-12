@@ -1,10 +1,7 @@
-## Test environments
-* local R installation, R 4.1.0
-* ubuntu 16.04 (on travis-ci), R 4.1.0
-* win-builder (devel)
-
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 0 note
 
 * This is a new release.
+
+\dontrun is used in one example because it requires having files in a directory that would be too big for extdata in a CRAN package. All instances of file read/write in the vignettes are not evaluated.

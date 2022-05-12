@@ -1,7 +1,6 @@
 import(ggplot2)
 import(patchwork)
 
-
 importFrom("stats",
            "aggregate", "ave", "bartlett.test", "cor",
            "dnorm", "fligner.test", "p.adjust", "pairwise.t.test",
