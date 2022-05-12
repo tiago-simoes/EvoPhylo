@@ -79,16 +79,15 @@
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="clockrate_summary.html">clockrate_summary</a></code> for summarizing and examining properties of the resulting rate table. Note that clade membership for each node must be customized (manually added) before these functions can be used, since this is tree and dataset dependent.</p></div>
+    <div class="dont-index"><p><code><a href="../articles/rates-selection.html">vignette("rates-selection")</a></code> for the use of this function as part of an analysis pipeline.</p>
+<p><code><a href="clockrate_summary.html">clockrate_summary</a></code> for summarizing and examining properties of the resulting rate table. Note that clade membership for each node must be customized (manually added) before these functions can be used, since this is tree and dataset dependent.</p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Import example tree (.t or .tre) file from example directory</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">tree3p</span> <span class="op">&lt;-</span> <span class="fu">treeio</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/treeio/reference/beast-parser.html" class="external-link">read.mrbayes</a></span><span class="op">(</span><span class="st">"Tree_3p.t"</span><span class="op">)</span><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># See vignette("rates-selection") for how to use this</span></span>
+<span class="r-in"><span class="co"># function as part of an analysis pipeline</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># Or load example tree file</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"tree3p"</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">rate_table</span> <span class="op">&lt;-</span> <span class="fu">get_clockrate_table</span><span class="op">(</span><span class="va">tree3p</span><span class="op">)</span></span>

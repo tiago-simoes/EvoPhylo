@@ -108,13 +108,17 @@ The <code>pam</code> fit resulting from <code><a href="https://rdrr.io/pkg/clust
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="get_gower_dist.html">get_gower_dist</a></code>, <code><a href="get_sil_widths.html">get_sil_widths</a></code></p>
+    <div class="dont-index"><p><code><a href="../articles/char-part.html">vignette("char-part")</a></code> for the use of this function as part of an analysis pipeline.</p>
+<p><code><a href="get_gower_dist.html">get_gower_dist</a></code>, <code><a href="get_sil_widths.html">get_sil_widths</a></code>, <code><a href="cluster_to_nexus.html">cluster_to_nexus</a></code></p>
 <p><code><a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">cluster::pam</a></code>, <code><a href="https://rdrr.io/pkg/Rtsne/man/Rtsne.html" class="external-link">Rtsne::Rtsne</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"characters"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># See vignette("char-part") for how to use this</span></span>
+<span class="r-in"><span class="co"># function as part of an analysis pipeline</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"characters"</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Reading example file as categorical data</span></span>
 <span class="r-in"><span class="va">Dmatrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_gower_dist.html">get_gower_dist</a></span><span class="op">(</span><span class="va">characters</span><span class="op">)</span></span>

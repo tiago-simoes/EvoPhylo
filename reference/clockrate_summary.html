@@ -82,50 +82,16 @@
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="get_clockrate_table.html">get_clockrate_table</a></code>, <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></code></p></div>
+    <div class="dont-index"><p><code><a href="../articles/rates-selection.html">vignette("rates-selection")</a></code> for the use of this function as part of an analysis pipeline.</p>
+<p><code><a href="get_clockrate_table.html">get_clockrate_table</a></code>, <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co">########## obtaining rate_table_clades_medians input table #############</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># See vignette("rates-selection") for how to use this</span></span>
+<span class="r-in"><span class="co"># function as part of an analysis pipeline</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># 1) Import tree file:</span></span>
-<span class="r-in"><span class="va">tree3p</span> <span class="op">&lt;-</span> <span class="fu">treeio</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/treeio/reference/beast-parser.html" class="external-link">read.mrbayes</a></span><span class="op">(</span><span class="st">"Tree3p.t"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># 2) Produce clock rate table with, for instance, mean</span></span>
-<span class="r-in"><span class="co">#    rate values from each branch in the tree:</span></span>
-<span class="r-in"><span class="va">rate_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_clockrate_table.html">get_clockrate_table</a></span><span class="op">(</span><span class="va">tree3p</span>, summary <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">rate_table</span>, file <span class="op">=</span> <span class="st">"rate_table.csv"</span>,</span>
-<span class="r-in">          row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># 3) Now, manually add clades using, e.g., Excel:</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># 3.1) Manually edit rate_table.csv, adding a "clade" column.</span></span>
-<span class="r-in"><span class="co">#      This introduces customized clade names to individual</span></span>
-<span class="r-in"><span class="co">#      nodes in the tree.</span></span>
-<span class="r-in"><span class="co"># 3.2) Save the edited rate table with a different name to</span></span>
-<span class="r-in"><span class="co">#      differentiate from the original output (e.g.,</span></span>
-<span class="r-in"><span class="co">#      rate_table_clades_means.csv).</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># 4) Read the file back in:</span></span>
-<span class="r-in"><span class="va">rate_table_clades_means3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"rate_table_clades_means.csv"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## In the example below, we use the dataset</span></span>
-<span class="r-in"><span class="co">## rate_table_clades_means3, which has already been</span></span>
-<span class="r-in"><span class="co">## processed as above.</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"rate_table_clades_means3"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">rate_table_clades_means3</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         clade nodes   rates1   rates2   rates3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Dipnomorpha     1 0.943696 0.981486 1.006164</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Dipnomorpha     2 1.065326 0.772074 0.913194</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Dipnomorpha     3 1.182460 0.656872 0.813618</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Dipnomorpha     4 1.229767 0.523709 0.722519</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Dipnomorpha     5 1.230564 0.517773 0.720479</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       Other     6 0.658855 0.717277 0.663950</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">########## clockrate_summary #############</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">clockrate_summary</span><span class="op">(</span><span class="va">rate_table_clades_means3</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                clade clock  n  mean    sd   min    Q1 median    Q3   max</span>
