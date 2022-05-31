@@ -24,7 +24,8 @@
 #' 
 #' @export
 #' @importFrom stats median
-#' @seealso offset.to.dummy (faster version discarding metadata)
+#' @seealso [offset.to.dummy()] (faster version discarding metadata)
+#' @md
 offset.to.dummy.metadata = function(trees.file, log.file, output.file = NULL, 
                                     dummy.name = "dummy") {
   trees = treeio::read.beast(trees.file)
@@ -65,7 +66,7 @@ offset.to.dummy.metadata = function(trees.file, log.file, output.file = NULL,
 #' in order to have correct ages (otherwise the most recent tip is assumed to be at 0).
 #' This is a workaround to get the proper ages of the trees into other tools such as TreeAnnotator.
 #' 
-#' *NB:* Any metadata present on the tips will be discarded. If you want to keep metadata (such as clock rate values),
+#' **NB:** Any metadata present on the tips will be discarded. If you want to keep metadata (such as clock rate values),
 #' use \code{offset.to.dummy.metadata} instead.
 #'
 #' @param trees.file path to BEAST2 output file containing posterior trees
@@ -87,7 +88,8 @@ offset.to.dummy.metadata = function(trees.file, log.file, output.file = NULL,
 #' 
 #' @export
 #' @importFrom stats median
-#' @seealso offset.to.dummy.metadata (slower version, keeping metadata)
+#' @seealso [offset.to.dummy.metadata()] (slower version, keeping metadata)
+#' @md
 offset.to.dummy = function(trees.file, log.file, output.file = NULL, 
                            dummy.name = "dummy") {
   trees = ape::read.nexus(trees.file)

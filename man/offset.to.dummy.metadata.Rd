@@ -25,7 +25,7 @@ offset.to.dummy.metadata(
 list of converted trees (as treedata)
 }
 \description{
-This method adds a dummy tip at the present (t = 0) to fully extinct trees with offsets, 
+This method adds a dummy tip at the present (t = 0) to fully extinct trees with offsets,
 in order to have correct ages (otherwise the most recent tip is assumed to be at 0).
 This is a workaround to get the proper ages of the trees into other tools such as TreeAnnotator.
 }
@@ -41,5 +41,5 @@ mcc.tree = drop.dummy(system.file("extdata", "example.MCC.tre", package = "EvoPh
 
 }
 \seealso{
-offset.to.dummy (faster version discarding metadata)
+\code{\link[=offset.to.dummy]{offset.to.dummy()}} (faster version discarding metadata)
 }
