@@ -6,12 +6,15 @@ Description: Performs automated morphological character partitioning for
              outputs from clock (time-calibrated) Bayesian inference analyses, following 
              concepts introduced by Simões and Pierce (2021) <doi:10.1038/s41559-021-01532-x>.
 Authors@R: c(
-  person("Tiago", "Simoes", role = c("cre", "aut"),
+  person("Tiago", "Simões", role = c("cre", "aut"),
          email = "tsimoes@fas.harvard.edu", 
          comment = c(ORCID = "0000-0003-4716-649X")),
   person("Noah", "Greifer", role = c("aut"), 
          email = "ngreifer@iq.harvard.edu",
 	       comment = c(ORCID="0000-0003-3067-7154")),
+person("Joëlle", "Barido-Sottani", role = c("aut"), 
+         email = "joelle.barido-sottani@wanadoo.fr",
+	       comment = c(ORCID="0000-0002-5220-5468")),
   person("Stephanie", "Pierce", role = c("aut"),
          email = "spierce@oeb.harvard.edu", 
          comment = c(ORCID = "0000-0003-0717-1841"))

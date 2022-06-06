@@ -40,15 +40,12 @@ See `vignette("char-part")`, `vignette("fbd-params")`,
 guides on using `EvoPhylo` to perform these analyses, also available on
 the [EvoPhylo website](https://tiago-simoes.github.io/EvoPhylo/).
 
-## Authors
+## Authors (including current developers)
 
--   [**Tiago R. Simões**](https://tiago-simoes.com/): *Conceptualization
-    and code development* - [Github
-    Profile](https://github.com/tiago-simoes)
+-   [**Tiago R. Simões**](https://tiago-simoes.com/): *Conceptualization and code development* - [Github Profile](https://github.com/tiago-simoes)
 -   [**Noah Greifer**](https://github.com/ngreifer): *Code development*
--   [**Stephanie E.
-    Pierce**](https://projects.iq.harvard.edu/spierce/home): *Project
-    supervision*
+-   [**Joëlle Barido-Sottani**](https://github.com/bjoelle): *Code development*
+-   [**Stephanie E.Pierce**](https://projects.iq.harvard.edu/spierce/home): *Project supervision*
 
 ## License
 

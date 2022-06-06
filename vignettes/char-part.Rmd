@@ -17,14 +17,6 @@ This vignette explains how to conduct automated morphological character partitio
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, collapse = TRUE)
 ```
 
-## Installing package **EvoPhylo**
-
-```{r, eval = FALSE}
-install.packages("EvoPhylo")
-### OR
-devtools::install_github("tiago-simoes/EvoPhylo")
-```
-
 ## Character Partitioning
 
 Load the **EvoPhylo** package
