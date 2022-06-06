@@ -43,7 +43,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/theory.html">Theoretical background</a>
     <a class="dropdown-item" href="../articles/char-part.html">Character Partitioning</a>
-    <a class="dropdown-item" href="../articles/rates-selection.html">Evolutionary Rates &amp; Selection Strength</a>
+    <a class="dropdown-item" href="../articles/rates-selection.html">Evolutionary Rates &amp; Selection Mode</a>
     <a class="dropdown-item" href="../articles/fbd-params.html">Analyzing FBD Parameters</a>
   </div>
 </li>
@@ -76,7 +76,7 @@
   <main id="main"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Theoretical background</h1>
             
-            <h4 data-toc-skip class="date">2022-05-12</h4>
+            <h4 data-toc-skip class="date">2022-06-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/tiago-simoes/EvoPhylo/blob/HEAD/vignettes/theory.Rmd" class="external-link"><code>vignettes/theory.Rmd</code></a></small>
       <div class="d-none name"><code>theory.Rmd</code></div>
@@ -95,11 +95,11 @@
 <div class="section level3">
 <h3 id="treatment-of-inapplicable-and-missing-data">Treatment of inapplicable and missing data<a class="anchor" aria-label="anchor" href="#treatment-of-inapplicable-and-missing-data"></a>
 </h3>
-<p>Categorical data including symbols for inapplicable and missing data (typically <code>"-"</code> and <code>"?"</code>, respectively) will be read in and treated as separate categories of data relative to numerical symbols for different character states (<code>"0"</code>, <code>"1"</code>, <code>"2"</code>, etc.). Two options are available: option 1—converting inapplicables/missing to <code>NA</code> (as done by default in the package <a href="https://cran.r-project.org/package=Claddis" class="external-link">Claddis</a>) or option 2—keeping the original symbols.</p>
-<p>In the example provided below, option 1 will convert unknown conditions to <code>NA</code> and thus will ignore the respective taxa with inapplicable/missing data to calculate inter-character distances. The resulting distance matrix will introduce <code>NaN</code> to every pairwise comparison involving two characters with <code>NA</code> (all comparisons including character 5, as well as any pairwise comparisons involving characters 4, 5 and 7) (Table 2-in blue). Statistical tests and clustering methods cannot utilize such matrices with <code>NaN</code> as data entries, and removal of observations contributing to excessive <code>NaN</code> have to be performed — such as taxon removal during inter-taxon distance matrix construction using <a href="https://cran.r-project.org/package=Claddis" class="external-link">Claddis</a>.</p>
+<p>Categorical data including symbols for inapplicable and missing data (typically <code>"-"</code> and <code>"?"</code>, respectively) will be read in and treated as separate categories of data relative to numerical symbols for different character states (<code>"0"</code>, <code>"1"</code>, <code>"2"</code>, etc.). Therefore, there are a few options users may follow for handling morphological phylogenetic datasets to account for inapplicable/missing data before importing it into <code>EvoPhylo</code>. Users may either convert inapplicable/missing to <code>NA</code> or they may choose to keep the original symbols.</p>
+<p>In the example provided below, converting inapplicable/missing conditions to <code>NA</code> will ignore the respective taxa with inapplicable/missing data to calculate inter-character distances. The resulting distance matrix will introduce <code>NaN</code> to every pairwise comparison involving two characters with <code>NA</code> (all comparisons including character 5, as well as any pairwise comparisons involving characters 4, 5 and 7) (Table 2-in blue). Statistical tests and clustering methods cannot utilize such matrices with <code>NaN</code> as data entries and removal of observations contributing to excessive <code>NaN</code> would have to be performed. However, removing observations with excessive inapplicable/missing data is not possible for character partitioning because each character in the dataset must be assigned to at least one partition (regardless of the amount of missing or inapplicable data).</p>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-Example dataset
+Table 1. Example dataset
 </caption>
 <thead><tr>
 <th style="text-align:left;">
@@ -225,13 +225,12 @@ Char10
 </tbody>
 </table>
 <p>Besides, in comparisons between characters inclusive of states with <code>NA</code>, the latter will contribute 0 difference to the distance matrix. For instance, distance between characters 6 (1,1) and 7 (<code>NA</code>, 1) is 0 (Table 2-in red). The implicit assumption with option 1 is that unknown characters contribute 0 distance. Therefore, this approach biases the distance matrix by minimizing the overall distance between characters to the lowest possible values. It assumes that, whatever the true condition represented by the unknown state, it is always assumed to be equal to the known character states (e.g., character states scored as “1” for Taxa A and B).</p>
-<p>With option 2, inapplicables/missing data will be treated as a distinct categorical variable relative to numeric symbols. As a result, pairwise comparisons with characters with unknown data will avoid the introduction of <code>NaN</code>, allowing all characters to be considered (Table 3-in blue). However, by considering the unknown states (<code>"-"</code> and <code>"?"</code>) as always distinct from all character states with information provided (<code>"0"</code>, <code>"1"</code>, <code>"2"</code>, etc.), this approach will bias the distance matrix by maximizing the overall distance between characters to the maximum possible values— the opposite pattern to option 1. As a result, in contrast to option 1 that introduces a distance of 0 between characters six and seven, option 2 will introduce a distance of 0.5 (Table 3-in red).</p>
-<p>Contrary to approaches to create inter-taxon distance matrices to estimate a morphospace, removing observations with excessive inapplicable/missing data for the final distance matrix is not possible because each character must be assigned to at least one partition (regardless of the amount of missing or inapplicable data). Therefore, here we recommend following the approach in option 2, which maximizes the distance between characters with inapplicables/missing data and avoids inapplicable outputs in the distance matrix. However, as characters with excessive missing data are likely to bias the results of phylogenetic analyses (besides biasing the estimation of the distance matrix), we suggest avoiding or removing such characters for morphological phylogenetic analysis. This will avoid the several phylogenetic analytical issues for characters with excessive inapplicable/missing data, besides the biases introduced in construction of distance matrices and the assessment of character partitioning.</p>
+<p>Alternatively, keeping the original inapplicable/missing data symbol will make the inapplicables/missing data to be treated as a distinct categorical variable relative to numeric symbols. As a result, pairwise comparisons with characters with unknown data will avoid the introduction of <code>NaN</code>, allowing all characters to be considered (Table 3-in blue). This approach assumes that unknown states are always different from any known states, which will bias the distance matrix by increasing the overall distance between characters. Fortunately, however, Gower distances (as used here) are normalized by the number of variables in the dataset (number of taxa in this case), which reduces this bias. For instance, in a simple comparison between two characters sampled from two taxa (A and B), e.g., character 6 (1,1) and character 7 (NA, 1) from the example in the online vignette, the raw distance between these characters is 1.0, but the Gower distance between them is 1/2 = 0.5 (Table 3-in red).</p>
 <table class="table kable_wrapper"><tbody><tr>
 <td>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-Distance matrix (option 1)
+Table 2. Distance matrix when converting inapplicable/missing conditions to “NA”
 </caption>
 <thead><tr>
 <th style="text-align:left;">
@@ -626,7 +625,7 @@ Char10
 <td>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-Distance matrix (option 2)
+Table 3. Distance matrix when keeping the original inapplicable/missing data symbols
 </caption>
 <thead><tr>
 <th style="text-align:left;">
@@ -1018,89 +1017,6 @@ Char10
 </td>
 </tr></tbody></table>
 </div>
-<div class="section level3">
-<h3 id="cluster-identification">Cluster identification<a class="anchor" aria-label="anchor" href="#cluster-identification"></a>
-</h3>
-<div class="section level4">
-<h4 id="using-pam-and-silhouettes-width-index-si">Using PAM and silhouettes width index (Si)<a class="anchor" aria-label="anchor" href="#using-pam-and-silhouettes-width-index-si"></a>
-</h4>
-<p>Euclidean distances are extremely sensitive to missing data, and alternative choices such as Gower distances provide more suitable alternatives for the handling of missing data <span class="citation">(Lloyd <a href="#ref-lloyd2016" role="doc-biblioref">2016</a>; Lehmann et al. <a href="#ref-lehmann2019" role="doc-biblioref">2019</a>)</span>. This issue creates a subsequent problem for estimating clusters using K-means, perhaps the most popular clustering approach, as it depends on an Euclidean-based distance matrix. Further, K-means are based on measuring the distance between samples and cluster centroids (i.e., the center of mass or mean vector of the cluster). The mean vector is particularly sensitive to outliers (as any other mean estimate) <span class="citation">(Rencher and Christensen <a href="#ref-rencher2012" role="doc-biblioref">2012</a>)</span>, which can be particularly problematic for small-sized clusters or clusters of drastically different sizes, which are to be expected from most standard sized morphological datasets. Those limitation from Euclidean distances and K-means thus limit the quality of the clustering analysis based on such approaches.</p>
-<p>Therefore, this package uses Gower distances to create the inter-character distance matrix “D”, following the original description of this approach in <span class="citation">(Simões and Pierce <a href="#ref-sim%C3%B5es2021" role="doc-biblioref">2021</a>)</span>. For the clustering analysis, we utilize here partitioning around medoids (PAM, or K-medoids), which can estimate clusters using Gower distances. PAM is analogous to K-means, but it has its clusters centered around medoids instead of centered around centroids, which are less prone to the impact from outliers and heterogeneous cluster sizes <span class="citation">(Rencher and Christensen <a href="#ref-rencher2012" role="doc-biblioref">2012</a>; Budiaji and Leisch <a href="#ref-budiaji2019" role="doc-biblioref">2019</a>)</span>.</p>
-<p>To define how many clusters the data could be partitioned into, various PAM partitioning schemes are tested and the quality of each clustering scheme using the silhouette index (Si) approach <span class="citation">(Rousseeuw <a href="#ref-rousseeuw1987" role="doc-biblioref">1987</a>)</span>, which determines how well an object falls within their cluster compared to other clusters. PAM partitioning schemes tested range from the minimum number of possible partitions (<span class="math inline">\(k=2\)</span>) to a large number of partitions (user-defined, default <span class="math inline">\(k = 10\)</span>).</p>
-<div class="figure" style="text-align: center">
-<img src="theory_files/figure-html/Si-plot-1.png" alt="Si plot indicating the higher quality of clustering when the number of partitions (k) = 3" width="700"><p class="caption">
-Si plot indicating the higher quality of clustering when the number of partitions (k) = 3
-</p>
-</div>
-</div>
-</div>
-<div class="section level3">
-<h3 id="t-snes">t-SNEs<a class="anchor" aria-label="anchor" href="#t-snes"></a>
-</h3>
-<p>As an additional and independent test of the quality of the chosen partitioning schemes, we also provide a graphic visualization approach based on t-Distributed Stochastic Neighbor Embedding (t-SNE) <span class="citation">(Maaten and Hinton <a href="#ref-vanDerMaaten2008" role="doc-biblioref">2008</a>)</span>. This has become a popular ordination and visualization tool in machine learning given its ability to reduce exceptionally large number of dimensions into only two or three dimensions. More traditional ordination procedures, such as principal components analysis (PCA, for continues data) or principal coordinate analysis (PCoA, for discrete data), can preserve the linear relationship between data points at a lower dimensionality. However, as those metrics try to preserve the local distances between data points they become less efficient on characterizing the overall structure of high dimensional data—it is more important to reduce the local linear distance between similar (neighboring) data points while maximizing the distance between distant data points <span class="citation">(Maaten and Hinton <a href="#ref-vanDerMaaten2008" role="doc-biblioref">2008</a>)</span>. For such cases, nonlinear ordination procedures are preferred to observe the overall data structure in a reduced number of dimensions. t-SNE has been demonstrated to be more efficient on preserving both local and global structures when reducing high dimensional data into only two or three dimensions compared to other nonlinear ordination procedures <span class="citation">(Maaten <a href="#ref-pmlr-v5-maaten09a" role="doc-biblioref">2009</a>)</span>, thus offering an important advantage over previously utilized graphic approaches to determine morphological clusters such as PCoA.</p>
-</div>
-<div class="section level3">
-<h3 id="the-best-candidate-clustering-scheme">The best candidate clustering scheme<a class="anchor" aria-label="anchor" href="#the-best-candidate-clustering-scheme"></a>
-</h3>
-<p>The resulting clustering scheme obtained from PAM+Si is directly mapped on top of the graphics produced by t-SNEs (Fig 2) in order to test the congruence of cluster size and composition between both approaches <span class="citation">(Simões and Pierce <a href="#ref-sim%C3%B5es2021" role="doc-biblioref">2021</a>)</span>. If major discrepancies occur, it is suggested that other values of <span class="math inline">\(k\)</span> considered suboptimal by Si may be attempted and compared against t-SNEs. As an additional alternative, the group limitation for t-SNEs can be based on anatomical subdivisions instead of the clustering scheme obtained by PAM+Si. If there is a closer correspondence between t-SNEs and anatomical partitioning as compared to PAM+Si and t-SNEs, it might be more reasonable to follow anatomical partitioning.</p>
-<div class="figure" style="text-align: center">
-<img src="theory_files/figure-html/cluster-plot-1.png" alt="tSNE plot of the first two dimensions with data points colored according to the partitioning scheme determined by PAM+Si" width="576"><p class="caption">
-tSNE plot of the first two dimensions with data points colored according to the partitioning scheme determined by PAM+Si
-</p>
-</div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="selection-strength-mode-using-morphological-clock-rates">Selection strength (mode) using morphological clock rates<a class="anchor" aria-label="anchor" href="#selection-strength-mode-using-morphological-clock-rates"></a>
-</h2>
-<p>The strength of natural selection operating upon particular regions of the phenotype (e.g., phenotypic partitions) across distinct clades in a phylogeny can be indirectly measured by comparing the variation of evolutionary rates relative to the background evolutionary rates. When rates are significantly accelerated, it provides support for positive phenotypic selection in analogy with the <span class="math inline">\(d_N/d_S\)</span> ratio in molecular evolution, whereas strongly decelerating rates represent an instance of stabilizing selection, stasis or constraint <span class="citation">(Yang <a href="#ref-yang2014" role="doc-biblioref">2014</a>; Baker et al. <a href="#ref-baker2016" role="doc-biblioref">2016</a>)</span>. This concept first applied to phenotypic traits using continuous data in phylogenetic comparative methods by <span class="citation">Baker et al. (<a href="#ref-baker2016" role="doc-biblioref">2016</a>)</span> was extended to discrete data and evolutionary rates estimated with Bayesian molecular or morphological clocks <span class="citation">(Simões and Pierce <a href="#ref-sim%C3%B5es2021" role="doc-biblioref">2021</a>)</span>.</p>
-<p>The clock rate on every tree branch (<span class="math inline">\(\Delta v\)</span>) is compared to the background rate of evolution (<span class="math inline">\(\Delta b\)</span>), forming the rate scalar ratio (<span class="math inline">\(r = \Delta v/\Delta b\)</span>), as defined by <span class="citation">Baker et al. (<a href="#ref-baker2016" role="doc-biblioref">2016</a>)</span>. This measure is equivalent to the interpretation of relative rates of character evolution produced by relaxed Bayesian clocks, in which estimates <span class="math inline">\(&gt; 1\)</span> indicate rates above background rate levels (the base of the clock rate) and are therefore accelerating. In contrast, relative branch rate values <span class="math inline">\(&lt; 1\)</span> indicate values below background rate levels, implying a decrease in the rates of evolution in that branch <span class="citation">(Ronquist et al. <a href="#ref-mrbayesmanual" role="doc-biblioref">2011</a>)</span>.</p>
-<p>In its original implementation, when evolutionary rates are at least twice as fast as the background rates (<span class="math inline">\(r &gt;2\)</span>) that would be interpreted as a positive phenotypic selection <span class="citation">(Baker et al. <a href="#ref-baker2016" role="doc-biblioref">2016</a>)</span>. In our implementation here we utilize a flexible threshold, taking into account the dispersion of the distribution for the background rates. We specifically test for branch rate values that are statistically significantly different from the mean background rate value, thus taking into account the standard deviation (sd) of the background rate value (obtained from the Bayesian posterior). <span class="citation">Simões and Pierce (<a href="#ref-sim%C3%B5es2021" role="doc-biblioref">2021</a>)</span> established 1sd from the background mean rate as the threshold: when the mean rate of evolution on a given branch is greater than the background rate plus one standard deviation (<span class="math inline">\(\Delta v &gt; \mu_{\Delta b} + \sigma\)</span>) it is interpreted as an instance of positive selection. When the mean rate of evolution on a branch is less than the main background rate minus one standard deviation (<span class="math inline">\(\Delta v &lt; \mu_{\Delta b} - \sigma\)</span>) it is interpreted as an instance of stabilizing selection or stasis.</p>
-<p>Here we expand on that by enabling users to compute multiple threshold levels across the tree: using the 95% confidence interval (CI), or 1, 2, or more standard deviations. Users can plot only one of those thresholds or all of those thresholds combined onto the evolutionary tree to assess the degree upon which particular clades are evolving faster or slower compared to background rates, with direct implications to the strength of selection operating upon the morphological traits used to calculate the respective rate values.</p>
-<div class="section level3">
-<h3 id="statistical-analysis-available">Statistical analysis available<a class="anchor" aria-label="anchor" href="#statistical-analysis-available"></a>
-</h3>
-<p>Users can assess the normality of the distribution for each time bin using the Shapiro-Wilk normality test and visual assessment of data distribution. Additionally, users can use the Bartlett test of homogeneity of variances to assess homoscedasticity in the data. For statistical hypothesis testing, we provide fast outputs of parametric (pairwise t-tests) and nonparametric (pairwise Wilcoxon rank sum (Mann-Whitney) tests) between phenotypic partitions, time bins, or specific kind of analyses.</p>
-</div>
-</div>
-<div class="section level2 unnumbered">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h2>
-<div id="refs" class="references">
-<div id="ref-baker2016">
-<p>Baker, Joanna, Andrew Meade, Mark Pagel, and Chris Venditti. 2016. “Positive Phenotypic Selection Inferred from Phylogenies.” <em>Biological Journal of the Linnean Society</em> 118 (1): 95–115.</p>
-</div>
-<div id="ref-budiaji2019">
-<p>Budiaji, Weksi, and Friedrich Leisch. 2019. “Simple K-Medoids Partitioning Algorithm for Mixed Variable Data.” <em>Algorithms</em> 12 (9): 177. <a href="https://doi.org/10.3390/a12090177" class="external-link">https://doi.org/10.3390/a12090177</a>.</p>
-</div>
-<div id="ref-lehmann2019">
-<p>Lehmann, Oscar E. R., Martín D. Ezcurra, Richard J. Butler, and Graeme T. Lloyd. 2019. “Biases with the Generalized Euclidean Distance Measure in Disparity Analyses with High Levels of Missing Data.” Edited by Kenneth Angielczyk. <em>Palaeontology</em> 62 (5): 837–49. <a href="https://doi.org/10.1111/pala.12430" class="external-link">https://doi.org/10.1111/pala.12430</a>.</p>
-</div>
-<div id="ref-lloyd2016">
-<p>Lloyd, Graeme T. 2016. “Estimating Morphological Diversity and Tempo with Discrete Character-Taxon Matrices: Implementation, Challenges, Progress, and Future Directions.” <em>Biological Journal of the Linnean Society</em> 118 (1): 131–51. <a href="https://doi.org/10.1111/bij.12746" class="external-link">https://doi.org/10.1111/bij.12746</a>.</p>
-</div>
-<div id="ref-pmlr-v5-maaten09a">
-<p>Maaten, Laurens van der. 2009. “Learning a Parametric Embedding by Preserving Local Structure.” In <em>Proceedings of the Twelth International Conference on Artificial Intelligence and Statistics</em>, edited by David van Dyk and Max Welling, 5:384–91. Proceedings of Machine Learning Research. Hilton Clearwater Beach Resort, Clearwater Beach, Florida USA: PMLR. <a href="https://proceedings.mlr.press/v5/maaten09a.html" class="external-link">https://proceedings.mlr.press/v5/maaten09a.html</a>.</p>
-</div>
-<div id="ref-vanDerMaaten2008">
-<p>Maaten, Laurens van der, and Geoffrey Hinton. 2008. “Visualizing Data Using t-SNE.” <em>Journal of Machine Learning Research</em> 9: 2579–2605. <a href="https://www.jmlr.org/papers/v9/vandermaaten08a.html" class="external-link">https://www.jmlr.org/papers/v9/vandermaaten08a.html</a>.</p>
-</div>
-<div id="ref-rencher2012">
-<p>Rencher, Alvin C., and William F. Christensen. 2012. <em>Methods of Multivariate Analysis</em>. John Wiley &amp; Sons, Inc. <a href="https://doi.org/10.1002/9781118391686" class="external-link">https://doi.org/10.1002/9781118391686</a>.</p>
-</div>
-<div id="ref-mrbayesmanual">
-<p>Ronquist, F, J Huelsenbeck, M Teslenko, and JAA Nylander. 2011. “MrBayes Version 3.2 Manual: Tutorials and Model Summaries.” <a href="https://nbisweden.github.io/MrBayes/manual.html" class="external-link">https://nbisweden.github.io/MrBayes/manual.html</a>.</p>
-</div>
-<div id="ref-rousseeuw1987">
-<p>Rousseeuw, Peter J. 1987. “Silhouettes: A Graphical Aid to the Interpretation and Validation of Cluster Analysis.” <em>Journal of Computational and Applied Mathematics</em> 20 (November): 53–65. <a href="https://doi.org/10.1016/0377-0427(87)90125-7" class="external-link">https://doi.org/10.1016/0377-0427(87)90125-7</a>.</p>
-</div>
-<div id="ref-simões2021">
-<p>Simões, Tiago R., and Stephanie E. Pierce. 2021. “Sustained High Rates of Morphological Evolution During the Rise of Tetrapods.” <em>Nature Ecology &amp; Evolution</em> 5 (10): 1403–14. <a href="https://doi.org/10.1038/s41559-021-01532-x" class="external-link">https://doi.org/10.1038/s41559-021-01532-x</a>.</p>
-</div>
-<div id="ref-yang2014">
-<p>Yang, Ziheng. 2014. “Molecular Evolution,” May. <a href="https://doi.org/10.1093/acprof:oso/9780199602605.001.0001" class="external-link">https://doi.org/10.1093/acprof:oso/9780199602605.001.0001</a>.</p>
-</div>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -1110,7 +1026,7 @@ tSNE plot of the first two dimensions with data points colored according to the 
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Tiago Simoes, Noah Greifer, Stephanie Pierce.</p>
+<p>Developed by Tiago Simoes, Noah Greifer, Joelle Barido-Sottani, Stephanie Pierce.</p>
 </div>
 
 <div class="pkgdown-footer-right">
