@@ -68,4 +68,3 @@ knitr::kables(list(k1))
 knitr::kables(list(k2))
 ```
 
-## References

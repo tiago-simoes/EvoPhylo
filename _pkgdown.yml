@@ -1,3 +1,5 @@
+url: https://tiago-simoes.github.io/EvoPhylo/
+
 template:
   bootstrap: 5
 
@@ -13,12 +15,12 @@ reference:
   - get_gower_dist
   - get_sil_widths
   - make_clusters
-- subtitle: Evolutionary rates and selection strength
+- subtitle: Evolutionary rates and selection mode
   desc: >
     See `vignette("rates-selection")` for a complete workflow that uses these functions
     to extract evolutionary rate parameters estimated from relaxed clock Bayesian
     inference analyses produced by the program Mr. Bayes and use evolutionary rate
-    based inference of selection strength adapted to clock-based rates.
+    based inference of selection mode (or strength) adapted to clock-based rates.
 - contents:
   - clock_reshape
   - clockrate_dens_plot
