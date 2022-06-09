@@ -69,22 +69,38 @@ combine_log <- function(path = ".", burnin = .25, downsample = 1e4) {
 }
 
 #Reshape AllRuns from wide to long with Time_bins as time and parameters as varying
-FBD_reshape <- function(posterior) {
-  if (!is.data.frame(posterior) ||
-      !any(startsWith(names(posterior), "net_speciation_")) ||
-      !any(startsWith(names(posterior), "relative_extinction_")) ||
-      !any(startsWith(names(posterior), "relative_fossilization_"))) {
-    stop("'posterior' must be a data frame with two or more columns for net_speciation, relative_extinction, and relative_fossilization.", call. = FALSE)
+FBD_reshape <- function(posterior, variables = NULL, log.type = c("MrBayes", "BEAST2")) {
+  if (!is.data.frame(posterior)) {
+    stop("'posterior' must be a data frame.", call. = FALSE)
   }
-
+  if(!is.null(variables)) {
+    exist = sapply(names, function(nm) {
+      any(startsWith(names(posterior), nm))
+    })
+    if(any(!exist)) stop("Specified variables not found in posterior")
+    
+    if(length(log.type) > 1 || !type %in% c("MrBayes", "BEAST2")) {
+      stop("Log type must be one of 'MrBayes' or 'BEAST2'")
+    }
+  }
+  else {
+    autodetect = detect_posterior(posterior)
+    variables = autodetect$variables
+    log.type = autodetect$log.type
+  }
+  
+  varying = lapply(variables, function(v) {
+    names(posterior)[startsWith(names(posterior), v)]
+  })
+  idname = if(log.type == "MrBayes") "Gen" else "Sample"
+  
   posterior_long <- reshape(posterior, direction = "long",
-                          varying = list(names(posterior)[startsWith(names(posterior), "net_speciation_")],
-                                         names(posterior)[startsWith(names(posterior), "relative_extinction_")],
-                                         names(posterior)[startsWith(names(posterior), "relative_fossilization_")]),
-                          v.names = c("net_speciation", "relative_extinction", "relative_fossilization"),
+                          varying = varying,
+                          v.names = variables,
                           timevar = "Time_bin",
-                          sep = "_",
-                          idvar = "Gen", ids = posterior[["Gen"]])
+                          sep = if(log.type == "MrBayes") "_" else ".",
+                          idvar = "Gen", ids = posterior[[idname]])
+  
   posterior_long[["Time_bin"]] <- factor(posterior_long[["Time_bin"]])
   rownames(posterior_long) <- NULL
   attr(posterior_long, "reshapeLong") <- NULL
