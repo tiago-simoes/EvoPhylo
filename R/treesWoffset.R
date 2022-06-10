@@ -14,13 +14,13 @@
 #'
 #' @examples
 #' # Convert trees with offset to trees with dummy tip
-#' trees_file = system.file("extdata", "example.trees", package = "EvoPhylo")
-#' log_file = system.file("extdata", "example.log", package = "EvoPhylo")
+#' trees_file = system.file("extdata", "ex_offset.trees", package = "EvoPhylo")
+#' log_file = system.file("extdata", "ex_offset.log", package = "EvoPhylo")
 #' converted.trees = offset.to.dummy.metadata(trees_file, log_file)
 #' 
 #' # Do something with the converted trees - for instance, calculate the MCC summary tree
 #' # Then remove the dummy tip from the MCC tree
-#' mcc.tree = drop.dummy(system.file("extdata", "example.MCC.tre", package = "EvoPhylo"))
+#' mcc.tree = drop.dummy(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
 #' 
 #' @export
 #' @importFrom stats median
@@ -78,13 +78,13 @@ offset.to.dummy.metadata = function(trees.file, log.file, output.file = NULL,
 #'
 #' @examples
 #' # Convert trees with offset to trees with dummy tip
-#' trees_file = system.file("extdata", "example.trees", package = "EvoPhylo")
-#' log_file = system.file("extdata", "example.log", package = "EvoPhylo")
+#' trees_file = system.file("extdata", "ex_offset.trees", package = "EvoPhylo")
+#' log_file = system.file("extdata", "ex_offset.log", package = "EvoPhylo")
 #' converted.trees = offset.to.dummy.metadata(trees_file, log_file)
 #' 
 #' # Do something with the converted trees - for instance, calculate the MCC summary tree
 #' # Then remove the dummy tip from the MCC tree
-#' mcc.tree = drop.dummy(system.file("extdata", "example.MCC.tre", package = "EvoPhylo"))
+#' mcc.tree = drop.dummy(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
 #' 
 #' @export
 #' @importFrom stats median
@@ -122,7 +122,7 @@ offset.to.dummy = function(trees.file, log.file, output.file = NULL,
 #' @examples
 #' # Analyze the trees with dummy tips - for instance, calculate the MCC summary tree
 #' # Then remove the dummy tip from the MCC tree
-#' mcc.tree = drop.dummy(system.file("extdata", "example.MCC.tre", package = "EvoPhylo"))
+#' mcc.tree = drop.dummy(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
 #' 
 #' @export
 drop.dummy = function(tree.file, output.file = NULL, dummy.name = "dummy", convert.heights = TRUE) {
