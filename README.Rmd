@@ -41,9 +41,12 @@ See `vignette("char-part")`, `vignette("fbd-params")`, `vignette("rates-selectio
 
 ## Authors
 
-* [**Tiago R. Simões**](https://tiago-simoes.com/): *Conceptualization and code development* - [Github Profile](https://github.com/tiago-simoes)
-* [**Noah Greifer**](https://github.com/ngreifer): *Code development* 
-* [**Stephanie E. Pierce**](https://projects.iq.harvard.edu/spierce/home): *Project supervision* 
+## Authors (including current developers)
+
+*   [**Tiago R. Simões**](https://tiago-simoes.com/): *Conceptualization and code development* - [Github Profile](https://github.com/tiago-simoes)
+*   [**Noah Greifer**](https://github.com/ngreifer): *Code development*
+*   [**Joëlle Barido-Sottani**](https://github.com/bjoelle): *Code development*
+*   [**Stephanie E.Pierce**](https://projects.iq.harvard.edu/spierce/home): *Project supervision*
 
 ## License
 

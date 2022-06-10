@@ -1,0 +1,13 @@
+citHeader("To cite package 'EvoPhylo' in a publication, please use:")
+
+citEntry(entry = "Article",
+	title = "EvoPhylo: an R package for pre- and postprocessing of morphological data from relaxed clock Bayesian phylogenetics",
+	author = "Tiago R. Simões, Noah Greifer, Joëlle Barido-Sottani, and Stephanie E. Pierce",
+	journal = "Preprint at EcoEvoRxiv",
+  year = "2022",
+	volume = "n/a",
+	pages = "n/a",
+	note = "Preprint at https://doi.org/10.32942/osf.io/3mkf9",
+	textVersion = "Simões, T. R., Greifer, N., Barido-Sottani, J., & Pierce, S. E. 2022. EvoPhylo: an R package for pre- and postprocessing of morphological data from relaxed clock Bayesian phylogenetics. EcoEvoRxiv. https://doi.org/10.32942/osf.io/3mkf9")
+
+citFooter("As EvoPhylo will be constantly updated, you may want to also cite its version number")
