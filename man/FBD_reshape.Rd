@@ -16,7 +16,7 @@ Single posterior parameter sample dataset with skyline FBD parameters produced w
   \item{variables}{
   Names of FBD rate variables in the log. If NULL (default), will attempt to auto-detect the names and log type.
   }
-  \item{log.type} {
+  \item{log.type}{
   Name of the software which produced the log (currently supported: MrBayes or BEAST2). Has to be set if \code{variables} is not NULL.
   }
 }

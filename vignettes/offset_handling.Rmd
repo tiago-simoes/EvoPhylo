@@ -1,0 +1,68 @@
+---
+title: "Analyzing Trees With Offsets"
+date: "`r Sys.Date()`"
+output:
+  html_vignette:
+    toc: yes
+vignette: |
+  %\VignetteIndexEntry{Analyzing Trees With Offsets} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+link-citations: true
+---
+
+The default tree format used by many phylogenetic inference tools such as BEAST2 assumes that at least one tip is at the present (i.e. age = 0). This presents issues when analyzing fully extinct clades, particularly when estimating the ages of fossil leaves as advised in @BaridoSottani2020. To address this issue, the SA package for BEAST2 includes an alternate tree with offset format, which can be set up as shown in the [FBD tutorial](https://taming-the-beast.org/tutorials/FBD-tutorial/). However, summarizing trees with offsets (e.g. using TreeAnnotator to produce an MCC tree) requires additional handling to keep the correct ages on all tips.
+
+This vignette explains how to summarize trees with offsets as produced by the SA package, using the EvoPhylo package.
+
+```{r, setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(EvoPhylo)
+```
+
+### 1. Import the posterior tree distribution.
+
+First we import the posterior tree distribution and log file produced by BEAST2. The log file is needed because it contains the offset for each sample. In order to store the correct age in the tree, we are going to add a "dummy" tip to each phylogeny. This dummy tip will have age 0 for each sample, and so the length of the age between this tip and the root of the tree will encode the age of the tree including the offset.
+
+```{r}
+## Find the example trees and log files from the package
+trees_file = system.file("extdata", "ex_offset.trees", package = "EvoPhylo")
+log_file = system.file("extdata", "ex_offset.log", package = "EvoPhylo")
+## Transform the trees to add a dummy tip
+converted.trees = offset.to.dummy.metadata(trees_file, log_file)
+```
+
+Here we output the transformed trees to a variable, but in practice it is often more useful to write them directly to a new trees file.
+
+```{r, eval=FALSE}
+## Transform the trees to add a dummy tip and save to file
+converted.trees = offset.to.dummy.metadata(trees_file, log_file, output.file = "transformed_offset.trees")
+```
+
+### 2. Summarize the modified tree distribution
+
+Using the transformed trees, we can then perform our post-processing as usual, for instance using TreeAnnotator to produce an MCC tree.
+
+### 3. Restore the final summary tree
+
+Our summary tree will include the dummy tip that we added earlier, so the last step of the process is to remove it, and get back the proper extinct tree with an offset.
+
+```{r}
+## Find the example MCC tree from the package
+mcc.file = system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo")
+## Then remove the dummy tip
+mcc.tree = drop.dummy(mcc.file)
+## The output contains the final tree and the offset
+mcc.tree$offset
+mcc.tree$tree
+```
+
+As before, we can also save the tree directly to a file.
+
+```{r, eval=FALSE}
+## Remove the dummy tip and save to file
+mcc.tree = drop.dummy(mcc.file, output.file = "final_mcc.tre")
+```
+
+## References
