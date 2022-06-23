@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EvoPhylo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,12 +67,16 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>cluster_df</dt>
 <dd><p>A <code>cluster_df</code> object; the output of a call to <code><a href="make_clusters.html">make_clusters</a></code>.</p></dd>
-<dt>file</dt>
+
+  <dt>file</dt>
 <dd><p>The path of the text file to be created containing the partitioning information in Nexus format. If <code>NULL</code> (the default), no file will be written and the output will be returned as a string. If <code>""</code>, the text will be printed to the console. Passed directly to the <code>file</code> argument of <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The text as a string, returned invisibly if <code>file</code> is not <code>NULL</code>. Use <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></code> on the resulting output to format it correctly (i.e., to turn <code>"\n"</code> into line breaks).</p>
+    
+
+<p>The text as a string, returned invisibly if <code>file</code> is not <code>NULL</code>. Use <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></code> on the resulting output to format it correctly (i.e., to turn <code>"\n"</code> into line breaks).</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -113,7 +117,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

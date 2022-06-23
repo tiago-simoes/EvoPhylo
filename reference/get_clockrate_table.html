@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EvoPhylo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,14 +68,19 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>tree</dt>
 <dd><p>An S4 class object of type <code>treedata</code>; a Bayesian clock tree imported using <code><a href="https://docs.ropensci.org/treeio/reference/beast-parser.html" class="external-link">treeio::read.mrbayes</a></code> for Mr. Bayes summary trees.</p></dd>
-<dt>summary</dt>
+
+  <dt>summary</dt>
 <dd><p>The name of the rate summary. Should be one of <code>"mean"</code> or <code>"median"</code>.</p></dd>
-<dt>drop_dummyextant</dt>
+
+  <dt>drop_dummyextant</dt>
 <dd><p><code>logical</code>; whether to drop a dummy extant tip labeled as "Dummyextant" from the Mr. Bayes summary tree prior to extracting the clock rates (when present). Default is <code>TRUE</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame with a column containing the node identifer (<code>node</code>) and one column for each relaxed clock partition in the tree object containing clock rates.</p>
+    
+
+<p>A data frame with a column containing the node identifer (<code>node</code>) and one column for each relaxed clock partition in the tree object containing clock rates.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -111,7 +116,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

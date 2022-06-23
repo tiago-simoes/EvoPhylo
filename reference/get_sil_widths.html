@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EvoPhylo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,12 +70,16 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>dist_mat</dt>
 <dd><p>A Gower distance matrix, the output of a call to <code><a href="get_gower_dist.html">get_gower_dist</a></code>.</p></dd>
-<dt>max.k</dt>
+
+  <dt>max.k</dt>
 <dd><p>The maximum number of clusters(partitions) to search across.</p></dd>
-<dt>x</dt>
+
+  <dt>x</dt>
 <dd><p>A <code>sil_width_df</code> object; the output of a call to <code>get_sil_widths()</code>.</p></dd>
-<dt>...</dt>
+
+  <dt>...</dt>
 <dd><p>Further arguments passed to <code><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">ggplot2::geom_line</a></code> to control the appearance of the plot.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -83,8 +87,12 @@
     </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>For <code>get_sil_widths()</code>, it produces a data frame, inheriting from class <code>"sil_width_df"</code>, with two columns: <code>k</code> is the number of clusters, and <code>sil_width</code> is the silhouette widths for each number of clusters. If <code>plot = TRUE</code>, the output is returned invisibly.
-For <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> on a <code>get_sil_widths()</code> object, it produces a <code>ggplot</code> object that can be manipulated using <span class="pkg">ggplot2</span> syntax (e.g., to change the <code>theme</code> or labels).</p>
+    
+
+<p>For <code>get_sil_widths()</code>, it produces a data frame, inheriting from class <code>"sil_width_df"</code>, with two columns: <code>k</code> is the number of clusters, and <code>sil_width</code> is the silhouette widths for each number of clusters. If <code>plot = TRUE</code>, the output is returned invisibly.</p>
+
+
+<p>For <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> on a <code>get_sil_widths()</code> object, it produces a <code>ggplot</code> object that can be manipulated using <span class="pkg">ggplot2</span> syntax (e.g., to change the <code>theme</code> or labels).</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -127,7 +135,7 @@ For <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

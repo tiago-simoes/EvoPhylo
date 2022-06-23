@@ -1,12 +1,12 @@
 pandoc: 2.7.3
-pkgdown: 2.0.3
+pkgdown: 2.0.5
 pkgdown_sha: ~
 articles:
   char-part: char-part.html
   fbd-params: fbd-params.html
   rates-selection: rates-selection.html
   theory: theory.html
-last_built: 2022-06-06T21:31Z
+last_built: 2022-06-23T21:21Z
 urls:
   reference: https://tiago-simoes.github.io/EvoPhylo/reference
   article: https://tiago-simoes.github.io/EvoPhylo/articles

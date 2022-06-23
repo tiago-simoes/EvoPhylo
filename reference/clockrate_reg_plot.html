@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EvoPhylo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,14 +69,20 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>rate_table</dt>
 <dd><p>A table of clock rates, such as from the output of <code><a href="get_clockrate_table.html">get_clockrate_table</a></code>.</p></dd>
-<dt>clock_x, clock_y</dt>
+
+  <dt>clock_x, clock_y</dt>
 <dd><p>The clock rates that should go on the x- and y-axes, respectively.</p></dd>
-<dt>method</dt>
+
+  <dt>method</dt>
 <dd><p>The method (function) used fit the regression of one clock on the other. Check the <code>method</code> argument in the to <code>geom_smooth</code> function of <span class="pkg">ggplot2</span> for all options. Default is <code>"lm"</code> for a linear regression model. <code>"glm"</code> and <code>"loess"</code> are alternative options.</p></dd>
-<dt>show_lm</dt>
+
+  <dt>show_lm</dt>
 <dd><p>Whether to display the Pearson correlation coefficient (r) and R-squared values (R^2) between two sets of clock rates.</p></dd>
-<dt>...</dt>
+
+  <dt>...</dt>
 <dd><p>Other arguments passed to <code>geom_smooth</code>.</p></dd>
+
+
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -84,7 +90,9 @@
     </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>ggplot</code> object, which can be modified using <span class="pkg">ggplot2</span> functions.</p>
+    
+
+<p>A <code>ggplot</code> object, which can be modified using <span class="pkg">ggplot2</span> functions.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -120,7 +128,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

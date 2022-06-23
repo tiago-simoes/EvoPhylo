@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EvoPhylo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,23 +73,32 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>dist_mat</dt>
 <dd><p>A Gower distance matrix, the output of a call to <code><a href="get_gower_dist.html">get_gower_dist</a></code>.</p></dd>
-<dt>k</dt>
+
+  <dt>k</dt>
 <dd><p>The desired number of clusters (or character partitions), the output from <code><a href="get_sil_widths.html">get_sil_widths</a></code>.</p></dd>
-<dt>tsne</dt>
+
+  <dt>tsne</dt>
 <dd><p>Whether to perform Barnes-Hut t-distributed stochastic neighbor embedding (tSNE) to produce a multi-dimensional representation of the distance matrix using <code><a href="https://rdrr.io/pkg/Rtsne/man/Rtsne.html" class="external-link">Rtsne::Rtsne</a></code>. The number of dimensions is controlled by the <code>tsne_dim</code> argument. See Details. Default is <code>FALSE</code>.</p></dd>
-<dt>tsne_dim</dt>
+
+  <dt>tsne_dim</dt>
 <dd><p>When <code>tsne = TRUE</code>, the number of dimensions for the tSNE multidimensional scaling plots. This is passed to the <code>dims</code> argument of <code><a href="https://rdrr.io/pkg/Rtsne/man/Rtsne.html" class="external-link">Rtsne::Rtsne</a></code>. Default is 2.</p></dd>
-<dt>tsne_theta</dt>
+
+  <dt>tsne_theta</dt>
 <dd><p>When <code>tsne = TRUE</code>, a parameter controlling the speed/accuracy trade-off (increase for faster but less accurate results). This is passed to the <code>theta</code> argument of <code><a href="https://rdrr.io/pkg/Rtsne/man/Rtsne.html" class="external-link">Rtsne::Rtsne</a></code>. Default is 0 for exact tSNE.</p></dd>
-<dt>...</dt>
+
+  <dt>...</dt>
 <dd><p>For <code>make_clusters()</code>, other arguments passed to <code><a href="https://rdrr.io/pkg/Rtsne/man/Rtsne.html" class="external-link">Rtsne::Rtsne</a></code> when <code>tsne = TRUE</code>.</p>
 <p>For <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, when plotting a <code>cluster_df</code> object, other arguments passed to <code><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html" class="external-link">ggrepel::geom_text_repel</a></code> to control display of the observation labels.</p></dd>
-<dt>x</dt>
+
+  <dt>x</dt>
 <dd><p>For <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, a <code>cluster_df</code> object; the output of a call to <code>make_clusters()</code>.</p></dd>
-<dt>seed</dt>
+
+  <dt>seed</dt>
 <dd><p>For <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, the seed used to control the placement of the labels and the jittering of the points. Jittering only occurs when <code>tsne = FALSE</code> in the call to <code>make_clusters()</code>. Using a non-<code>NA</code> seed ensure replicability across uses.</p></dd>
-<dt>nrow</dt>
+
+  <dt>nrow</dt>
 <dd><p>For <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, when <code>tsne = TRUE</code> in the call to <code>make_clusters()</code> and <code>tsne_dim</code> is greater than 2, the number of rows used to display the resulting 2-dimensional plots. Default is 1 for side-by-side plots.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -99,8 +108,12 @@
     </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame, inheriting from class <code>"cluster_df"</code>, with a row for each character with its number (<code>character_number</code>) and cluster membership (<code>cluster</code>). When <code>tsne = TRUE</code>, additional columns  will be included, one for each requested tSNE dimension, labeled <code>tSNE_Dim1</code>, <code>tSNE_Dim2</code>, etc., containing the values on the dimensions computed using <code>Rtsne()</code>.
-The <code>pam</code> fit resulting from <code><a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">cluster::pam</a></code> is returned in the <code>"pam.fit"</code> attribute of the outut object.</p>
+    
+
+<p>A data frame, inheriting from class <code>"cluster_df"</code>, with a row for each character with its number (<code>character_number</code>) and cluster membership (<code>cluster</code>). When <code>tsne = TRUE</code>, additional columns  will be included, one for each requested tSNE dimension, labeled <code>tSNE_Dim1</code>, <code>tSNE_Dim2</code>, etc., containing the values on the dimensions computed using <code>Rtsne()</code>.</p>
+
+
+<p>The <code>pam</code> fit resulting from <code><a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">cluster::pam</a></code> is returned in the <code>"pam.fit"</code> attribute of the outut object.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -164,7 +177,7 @@ The <code>pam</code> fit resulting from <code><a href="https://rdrr.io/pkg/clust
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>
