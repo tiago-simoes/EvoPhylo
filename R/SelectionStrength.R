@@ -65,6 +65,11 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
                                xlim = NULL, nbreaks = 10, geo_size = list(2, 3),
                                geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")) {
 
+    #Drop extant "dummy" tip
+  if (drop.dummyextant) {
+    tree <- treeio::drop.tip(tree, "Dummyextant")
+  }
+
   #Process threshold
   if (length(threshold) > 0) {
     if (missing(posterior) || !is.data.frame(posterior)) {
@@ -77,7 +82,8 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
       stop("A 'clockrate' column must be present in 'posterior'.", call. = FALSE)
     }
 
-    if (!is.character(threshold)) stop("'threshold' must be a character vector.", call. = FALSE)
+    if (!is.character(threshold))
+      stop("'threshold' must be a character vector.", call. = FALSE)
     thresh_conf <- endsWith(threshold, "%")
     thresh_sd <- endsWith(tolower(threshold), "sd")
 
@@ -124,12 +130,11 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
     labels <- character(0)
   }
 
-  #Drop extant "dummy" tip
-  if (drop.dummyextant) {
-    tree <- treeio::drop.tip(tree, "Dummyextant")
-  }
+  print(labels)
+  print(breaks)
 
-  p <- unglue::unglue_data(names(tree@data), "rate<model>rlens<clock>_<summary>",
+ #Getting multiple clock rates
+  p <- unglue::unglue_data(names(tree@data), "rate<model>Brlens<clock>_<summary>",
                            open = "<", close = ">")
   rownames(p) <- names(tree@data)
 
@@ -172,6 +177,7 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
   #Create integer version of variable split up by breaks
   tree@data$clockfac <- as.numeric(cut(tree@data[[rate_var]], breaks = c(-Inf, breaks, Inf)))
 
+  #Make tree plot
   selection_plot <- ggtree::ggtree(tree, layout = "rectangular", ladderize = TRUE, right = TRUE,
                                    position = position_nudge(x = -offset),
                                    size = branch_size,
