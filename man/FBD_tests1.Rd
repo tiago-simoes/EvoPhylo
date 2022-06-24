@@ -5,7 +5,7 @@
 Test assumptions of normality and homoscedasticity for FBD posterior parameters
 }
 \description{
-Produces tests of normality (within time bin, ignoring time bin, and pooling within-time bin values) and homoscedasticity (homogeneity of variances) for each fossilized birth–death process (FBD) parameter in the combined posterior parameter (.p) log file.
+Produces tests of normality (within time bin, ignoring time bin, and pooling within-time bin values) and homoscedasticity (homogeneity of variances) for each fossilized birth–death process (FBD) parameter in the posterior parameter log file.
 }
 \usage{
 FBD_tests1(posterior, downsample = TRUE)
@@ -13,7 +13,7 @@ FBD_tests1(posterior, downsample = TRUE)
 
 \arguments{
   \item{posterior}{
-A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"). Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}}.
+A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value. Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}}.
 }
   \item{downsample}{
 Whether to downsample the observations to ensure Shapiro-Wilk normality tests can be run. If \code{TRUE}, observations will be dropped so that no more than 5000 observations are used for the tests on the full dataset, as required by \code{\link{shapiro.test}}. They will be dropped in evenly spaced intervals. If \code{FALSE} and there are more than 5000 observations for any test, that test will not be run.

@@ -1,5 +1,5 @@
 Package: EvoPhylo
-Version: 0.1.1
+Version: 0.2.0
 Title: Pre- And Postprocessing of Morphological Data from Relaxed Clock Bayesian Phylogenetics
 Description: Performs automated morphological character partitioning for 
              phylogenetic analyses and analyze macroevolutionary parameter 
@@ -43,3 +43,4 @@ URL: https://github.com/tiago-simoes/EvoPhylo,
     https://tiago-simoes.github.io/EvoPhylo/
 BugReports: https://github.com/tiago-simoes/EvoPhylo/issues
 VignetteBuilder: knitr
+RoxygenNote: 7.2.0

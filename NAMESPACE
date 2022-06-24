@@ -5,7 +5,7 @@ importFrom("stats",
            "aggregate", "ave", "bartlett.test", "cor",
            "dnorm", "fligner.test", "p.adjust", "pairwise.t.test",
            "pairwise.wilcox.test", "pt", "qt", "quantile", "reshape",
-           "sd", "setNames", "shapiro.test")
+           "sd", "setNames", "shapiro.test", "median")
 importFrom("utils",
            "combn", "hasName", "read.table", "write.csv")
 importFrom("grid",
@@ -16,6 +16,10 @@ export("get_gower_dist", "get_sil_widths", "make_clusters", "cluster_to_nexus",
        "combine_log", "FBD_summary", "FBD_dens_plot", "FBD_tests1", "FBD_tests2", "FBD_normality_plot",
        "get_clockrate_table", "clockrate_summary", "clockrate_dens_plot", "clockrate_reg_plot",
 	     "clock_reshape", "FBD_reshape")
+
+export("offset.to.dummy")
+export("offset.to.dummy.metadata")
+export("drop.dummy")
 
 S3method("plot", "sil_width_df")
 S3method("plot", "cluster_df")

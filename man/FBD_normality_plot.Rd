@@ -13,7 +13,7 @@ FBD_normality_plot(posterior)
 
 \arguments{
   \item{posterior}{
-A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"). Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}}.
+A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value. Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}}.
 }
 }
 \details{

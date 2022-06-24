@@ -12,7 +12,7 @@ FBD_tests2(posterior, p.adjust.method = "fdr")
 }
 \arguments{
   \item{posterior}{
-A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value (e.g.,  "net_speciation", "relative extinction", and "relative fossilization"). Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}}.
+A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value. Such data frame can be imported using \code{\link{combine_log}} followed by \code{\link{FBD_reshape}}.
 }
   \item{p.adjust.method}{
 The method use to adjust the p-values for multiple testing. See \code{\link{p.adjust}} for details and options. Default if \code{"fdr"} for the Benjamini-Hochberg false discovery rate correction.
