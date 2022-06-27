@@ -26,8 +26,9 @@ library(EvoPhylo)
 First we import the posterior tree distribution and log file produced by BEAST2. The log file is needed because it contains the offset for each sample. In order to store the correct age in the tree, we are going to add a "dummy" tip to each phylogeny. This dummy tip will have age 0 for each sample, and so the length of the age between this tip and the root of the tree will encode the age of the tree including the offset.
 
 ```{r}
-trees_file = system.file("_dev/extdata/BEAST2/OffsetTrees", "ex_offset.trees", package = "EvoPhylo")
-log_file = system.file("_dev/extdata/BEAST2/OffsetTrees", "ex_offset.log", package = "EvoPhylo")
+
+trees_file = system.file("extdata", "ex_offset.trees", package = "EvoPhylo")
+log_file = system.file("extdata", "ex_offset.log", package = "EvoPhylo")
 
 ## Transform the trees to add a dummy tip
 converted_trees = offset.to.dummy.metadata(trees_file, log_file)
@@ -51,7 +52,7 @@ Our summary tree will include the dummy tip that we added earlier, so the last s
 
 ```{r}
 ## Find the example MCC tree from the package
-mcc_file = system.file("_dev/extdata/BEAST2/OffsetTrees", "ex_offset.MCC.tre", package = "EvoPhylo")
+mcc_file = system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo")
 ## Then remove the dummy tip
 mcc_tree = drop.dummy(mcc_file)
 ## The output contains the final tree and the offset
