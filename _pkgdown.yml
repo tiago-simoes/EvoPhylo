@@ -33,8 +33,8 @@ reference:
 - subtitle: Analyzing FBD parameters
   desc: >
     See `vignette("fbd-params")` for a complete workflow that uses these functions
-    to extract FBD (fossilized birth-death) parameters estimated from relaxed
-    clock Bayesian inference analyses produced by Mr. Bayes.
+    to extract FBD parameters estimated from relaxed
+    clock Bayesian inference analyses produced by Mr. Bayes and BEAST2.
 - contents:
   - combine_log
   - FBD_dens_plot
@@ -43,6 +43,15 @@ reference:
   - FBD_summary
   - FBD_tests1
   - FBD_tests2
+  - subtitle: Analyzing Trees With Offsets
+  desc: >
+    See `vignette("offset_handling")` for a complete workflow that uses these functions
+    to summarize trees with offsets (with fossil species only) as produced by the SA package in BEAST2
+- contents:
+  - drop.dummy
+  - offset.to.dummy
+  - offset.to.dummy.metadata
+  - write.beast.treedata
 - title: Datasets
 - contents:
   - has_keyword("datasets")
@@ -51,7 +60,8 @@ articles:
 - title: ~
   navbar: ~
   contents:
-  - theory
+  - data_treatment
   - char-part
   - rates-selection
   - fbd-params
+  - offset_handling
