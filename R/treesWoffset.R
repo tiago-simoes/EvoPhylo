@@ -56,7 +56,7 @@ offset.to.dummy.metadata = function(trees.file, log.file, output.file = NULL,
     return(tmp)
   })
 
-  if(!is.null(output.file)) write.beast.treedatas(presenttrees, file = output.file)
+  if(!is.null(output.file)) write.beast.treedata(presenttrees, file = output.file)
   presenttrees
 }
 
@@ -149,7 +149,7 @@ drop.dummy = function(tree.file, output.file = NULL, dummy.name = "dummy", conve
     }
   }
 
-  if(!is.null(output.file)) write.beast.treedatas(list(tmp), file = output.file)
+  if(!is.null(output.file)) write.beast.treedata(list(tmp), file = output.file)
 
   list(tree = tmp, offset = offset)
 }
@@ -179,13 +179,13 @@ offset.to.dummy.phylo = function(t, dummy.name = "dummy") {
 }
 
 # adapted from treeio to handle list of trees instead of single trees
-write.beast.treedatas = function(treedatas, file = "", translate = TRUE, tree.name = "STATE"){
+write.beast.treedata = function(treedata, file = "", translate = TRUE, tree.name = "STATE"){
   cat("#NEXUS\n", file = file)
   cat(paste("[R-package treeio, ", date(), "]\n\n", sep = ""),
       file = file, append = TRUE)
-  N <- treeio::Ntip(treedatas[[1]])
+  N <- treeio::Ntip(treedata[[1]])
 
-  obj <- lapply(treedatas, treeio::as.phylo)
+  obj <- lapply(treedata, treeio::as.phylo)
   ntree <- length(obj)
   cat("BEGIN TAXA;\n", file = file, append = TRUE)
   cat(paste("\tDIMENSIONS NTAX = ", N, ";\n", sep = ""), file = file,
@@ -219,11 +219,11 @@ write.beast.treedatas = function(treedatas, file = "", translate = TRUE, tree.na
   }
 
   for(i in 1:ntree) {
-    treedatas[[i]]@phylo <- obj[[i]]
-    root.tag <- if (treeio::is.rooted(treedatas[[i]])) "= [&R] " else "= [&U] "
+    treedata[[i]]@phylo <- obj[[i]]
+    root.tag <- if (treeio::is.rooted(treedata[[i]])) "= [&R] " else "= [&U] "
 
     cat("\tTREE *", paste0(tree.name,"_",i-1), root.tag, file = file, append = TRUE)
-    cat(treeio:::write_beast_newick(treedatas[[i]], file = ""), "\n", sep = "",
+    cat(treeio:::write_beast_newick(treedata[[i]], file = ""), "\n", sep = "",
         file = file, append = TRUE)
   }
 
