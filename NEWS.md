@@ -7,6 +7,7 @@
 
  * Added functions to handle trees with offsets as produced by the BEAST2 SA package for fully extinct clades
  * FBD functions can now handle BEAST2 log files produced by several packages (SA, BDSKY)
+ * Added BEAST2 support for clock rate table import - function exists now in two versions, `get_clockrate_table_MrBayes` and `get_clockrate_table_BEAST2`
  * `plot_treerates_sgn()` function update: prints chosen thresholds and estimated rate values for each threshold. 
 
 ## EvoPhylo 0.1.0
