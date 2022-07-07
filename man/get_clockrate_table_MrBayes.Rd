@@ -1,15 +1,15 @@
-\name{get_clockrate_table}
-\alias{get_clockrate_table}
+\name{get_clockrate_table_MrBayes}
+\alias{get_clockrate_table_MrBayes}
 
 \title{
-Extract evolutionary rates from a Bayesian clock tree
+Extract evolutionary rates from a Bayesian clock tree produced by Mr. Bayes
 }
 \description{
 Extract evolutionary rate summary statistics for each node from a Bayesian clock summary tree produced by Mr. Bayes and stores them in a data frame.
 }
 \usage{
-get_clockrate_table(tree, summary = "median",
-                    drop_dummyextant = TRUE)
+get_clockrate_table_MrBayes(tree, summary = "median",
+                    drop_dummy = NULL)
 }
 \arguments{
   \item{tree}{
@@ -18,18 +18,18 @@ An S4 class object of type \code{treedata}; a Bayesian clock tree imported using
   \item{summary}{
 The name of the rate summary. Should be one of \code{"mean"} or \code{"median"}.
 }
-  \item{drop_dummyextant}{
-\code{logical}; whether to drop a dummy extant tip labeled as "Dummyextant" from the Mr. Bayes summary tree prior to extracting the clock rates (when present). Default is \code{TRUE}.
+  \item{drop_dummy}{
+if not \code{NULL}, will drop the dummy extant tip with the given label from the Mr. Bayes summary tree prior to extracting the clock rates (when present). Default is \code{NULL}.
 }
 }
 
 \value{
-A data frame with a column containing the node identifer (\code{node}) and one column for each relaxed clock partition in the tree object containing clock rates.
+A data frame with a column containing the node identifier (\code{node}) and one column for each relaxed clock partition in the tree object containing clock rates.
 }
 
 \seealso{
 \code{vignette("rates-selection")} for the use of this function as part of an analysis pipeline.
-
+\code{\link{get_clockrate_table_BEAST2}} for the equivalent function for BEAST2 output files.
 \code{\link{clockrate_summary}} for summarizing and examining properties of the resulting rate table. Note that clade membership for each node must be customized (manually added) before these functions can be used, since this is tree and dataset dependent.
 }
 \examples{
@@ -38,7 +38,7 @@ A data frame with a column containing the node identifer (\code{node}) and one c
 
 data("tree3p")
 
-rate_table <- get_clockrate_table(tree3p)
+rate_table <- get_clockrate_table_MrBayes(tree3p)
 
 head(rate_table)
 }

@@ -18,7 +18,7 @@ This example tree file was produced by analyzing the data set with a single morp
 \seealso{
 \code{\link{tree3p}} for another tree object with 3 clock partitions.
 
-\code{\link{get_clockrate_table}} for extratcing the poserior clockrates from a tree object.
+\code{\link{get_clockrate_table_MrBayes}} for extratcing the poserior clockrates from a tree object.
 }
 \keyword{datasets}
 

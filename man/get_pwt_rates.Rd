@@ -13,7 +13,7 @@ get_pwt_rates(rate_table, posterior)
 
 \arguments{
   \item{rate_table}{
-A data frame containing a single "value" column (for all rate values) and one column for the "clock" variable (indicating to which clock partition each rate values refers to), such as from the output of \code{\link{get_clockrate_table}} with an extra \code{clade} column added, and followed by \code{\link{clock_reshape}}.
+A data frame containing a single "value" column (for all rate values) and one column for the "clock" variable (indicating to which clock partition each rate values refers to), such as from the output of \code{\link{get_clockrate_table_MrBayes}} with an extra \code{clade} column added, and followed by \code{\link{clock_reshape}}.
 }
   \item{posterior}{
 A data frame of posterior parameter estimates including a "clockrate" column indicating the base of the clock rate estimate for each generation that will be used for pairwise t-tests. Such data frame can be imported using \code{\link{combine_log}} (no need to reshape from wide to long). See the \code{\link{posterior1p}} or \code{\link{posterior3p}} datasets for an examples of how the input file should look.
