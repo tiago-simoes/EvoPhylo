@@ -81,7 +81,7 @@ FBD_reshape <- function(posterior, variables = NULL, log.type = c("MrBayes", "BE
     })
     if(any(!exist)) stop("Specified variables not found in posterior")
     
-    if(length(log.type) > 1 || !type %in% c("MrBayes", "BEAST2")) {
+    if(length(log.type) > 1 || !log.type %in% c("MrBayes", "BEAST2")) {
       stop("Log type must be one of 'MrBayes' or 'BEAST2'")
     }
   }

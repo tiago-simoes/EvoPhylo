@@ -30,6 +30,6 @@ complete (for instance once the summary tree has been built using TreeAnnotator)
 \examples{
 # Analyze the trees with dummy tips - for instance, calculate the MCC summary tree
 # Then remove the dummy tip from the MCC tree
-mcc.tree = drop.dummy(system.file("extdata", "example.MCC.tre", package = "EvoPhylo"))
+mcc_tree = drop.dummy(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
 
 }
