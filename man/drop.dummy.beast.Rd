@@ -34,5 +34,5 @@ final_tree = drop.dummy.beast(system.file("extdata", "ex_offset.MCC.tre", packag
 
 }
 \seealso{
-[drop.dummy.mb()] (for the same function using summary trees with a "dummy" extant from Mr. Bayes)
+\code{\link[=drop.dummy.mb]{drop.dummy.mb()}} for the same function using summary trees with a "dummy" extant from Mr. Bayes
 }

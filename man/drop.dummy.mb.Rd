@@ -32,5 +32,5 @@ final_tree = drop.dummy.mb(system.file("extdata", "tree_mb_dummy.tre", package =
 
 }
 \seealso{
-[drop.dummy.beast()] (for the same function using summary trees with a "dummy" extant from BEAST2)
+\code{\link[=drop.dummy.beast]{drop.dummy.beast()}} for the same function using summary trees with a "dummy" extant from BEAST2
 }

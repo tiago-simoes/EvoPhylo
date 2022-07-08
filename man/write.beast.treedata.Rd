@@ -1,5 +1,5 @@
-\name{write.beast.treedata }
-\alias{write.beast.treedata }
+\name{write.beast.treedata}
+\alias{write.beast.treedata}
 
 \title{
 Export multiple treedata objects (S4 class tree files) to BEAST NEXUS file
@@ -22,7 +22,7 @@ Output file. If file = "", print the output content on screen
 Whether translate taxa labels
 }
   \item{tree.name}{
-Name of the tree
+Name for trees
 }
 }
 
@@ -32,9 +32,9 @@ Writes object type \code{treedata} containing multiple trees to a file or file c
 
 \examples{
 #Load file with multiple trees
-trees_file = system.file("_dev/extdata/BEAST2/OffsetTrees", "ex_offset.trees", package = "EvoPhylo")
+data("post_trees")
 
 #Write multiple trees to a file
-write.beast.treedata(posterior_trees_offset, file = "posterior_trees_offset.t")
+write.beast.treedata(post_trees, file = "post_trees.t")
 }
 

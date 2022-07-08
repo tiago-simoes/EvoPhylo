@@ -8,7 +8,7 @@ Convert an FBD posterior parameter table from wide to long format
 Converts FBD posterior parameter table, such as those imported using \code{\link{combine_log}}, from wide to long format.
 }
 \usage{
-FBD_reshape(posterior)
+FBD_reshape(posterior, variables = NULL, log.type = c("MrBayes", "BEAST2"))
 }
 \arguments{
   \item{posterior}{

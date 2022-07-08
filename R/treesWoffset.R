@@ -235,7 +235,8 @@ offset.to.dummy.phylo = function(t, dummy.name = "dummy") {
 }
 
 # adapted from treeio to handle list of trees instead of single trees
-write.beast.treedata = function(treedata, file = "", translate = TRUE, tree.name = "STATE"){
+write.beast.treedata = function(treedata, file = "",
+                                translate = TRUE, tree.name = "STATE"){
   cat("#NEXUS\n", file = file)
   cat(paste("[R-package treeio, ", date(), "]\n\n", sep = ""),
       file = file, append = TRUE)

@@ -36,6 +36,12 @@ save(rate_table_clades_means1, file = "data/rate_table_clades_means1.rda")
 
 ######### BEAST2 example files
 
+#multiple post trees file
+post_trees_path = system.file("extdata", "ex_offset.trees", package = "EvoPhylo")
+post_trees <- treeio::read.beast(post_trees_path)
+save(post_trees, file = "data/post_trees.rda")
+
+
 #Handling BEAST2 trees with offsets
 posterior_trees_offset <- treeio::read.beast("_dev/extdata/BEAST2/OffsetTrees/ex_offset.trees")
 save(posterior_trees_offset, file = "data/posterior_trees_offset.rda")
