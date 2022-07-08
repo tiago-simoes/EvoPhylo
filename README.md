@@ -5,18 +5,17 @@
 
 A package to perform automated morphological character partitioning for
 phylogenetic analyses and analyze macroevolutionary parameter outputs
-from clock (time-calibrated) Bayesian inference analyses. `EvoPhylo` is
-currently designed to pre- and postprocess morphological data for
-relaxed clock Bayesian phylogenetic analyses using the software
-[Mr. Bayes](https://nbisweden.github.io/MrBayes/). Subsequent releases
-will also implement functions to postprocess output data produced by the
-software package [BEAST2](http://www.beast2.org/).
+from clock (time-calibrated) Bayesian inference analyses. `EvoPhylo` was
+initially released for pre- and postprocess data using the software
+[Mr. Bayes](https://nbisweden.github.io/MrBayes/). Current developments
+(since v. 0.2.0) are implementing functions to also postprocess output
+data produced by the software package [BEAST2](http://www.beast2.org/).
 
-The ideas and rationale behind the functionality and objectives of the
-analyses available in this package were first presented and can be
-referenced to [Simões, T. R. & Pierce, S. E. 2021. Sustained High Rates
-of Morphological Evolution During the Rise of Tetrapods. *Nature Ecology
-& Evolution*](https://doi.org/10.1038/s41559-021-01532-x).
+The ideas and rationale behind the original functionality and objectives
+of the analyses available in this package were first presented by
+[Simões & Pierce (2021)](https://doi.org/10.1038/s41559-021-01532-x).
+It’s current functionality is described in detail by [Simões, Grifer,
+Barido-Sottani & Pierce (2022)](https://doi.org/10.32942/osf.io/3mkf9).
 
 ## Installing package **EvoPhylo**
 
@@ -35,17 +34,25 @@ devtools::install_github("tiago-simoes/EvoPhylo")
 
 ## Tutorials
 
-See `vignette("char-part")`, `vignette("fbd-params")`,
-`vignette("rates-selection")`, and `vignette("theory")` for step-by-step
-guides on using `EvoPhylo` to perform these analyses, also available on
-the [EvoPhylo website](https://tiago-simoes.github.io/EvoPhylo/).
+See `vignette("char-part")`,`vignette("data_treatment")`,
+`vignette("rates-selection")`, `vignette("fbd-params")`, and
+`vignette("offset_handling")`, for step-by-step guides on using
+`EvoPhylo` to perform these analyses, also available on the [EvoPhylo
+website](https://tiago-simoes.github.io/EvoPhylo/).
+
+## Authors
 
 ## Authors (including current developers)
 
--   [**Tiago R. Simões**](https://tiago-simoes.com/): *Conceptualization and code development* - [Github Profile](https://github.com/tiago-simoes)
+-   [**Tiago R. Simões**](https://tiago-simoes.com/): *Conceptualization
+    and code development* - [Github
+    Profile](https://github.com/tiago-simoes)
 -   [**Noah Greifer**](https://github.com/ngreifer): *Code development*
--   [**Joëlle Barido-Sottani**](https://github.com/bjoelle): *Code development*
--   [**Stephanie E.Pierce**](https://projects.iq.harvard.edu/spierce/home): *Project supervision*
+-   [**Joëlle Barido-Sottani**](https://github.com/bjoelle): *Code
+    development*
+-   [**Stephanie
+    E.Pierce**](https://projects.iq.harvard.edu/spierce/home): *Project
+    supervision*
 
 ## License
 

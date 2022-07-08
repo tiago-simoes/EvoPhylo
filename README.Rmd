@@ -36,7 +36,7 @@ devtools::install_github("tiago-simoes/EvoPhylo")
 
 ## Tutorials
 
-See `vignette("char-part")`, `vignette("fbd-params")`, `vignette("rates-selection")`, and `vignette("theory")` for step-by-step guides on using `EvoPhylo` to perform these analyses, also available on the [EvoPhylo website](https://tiago-simoes.github.io/EvoPhylo/).
+See `vignette("char-part")`,`vignette("data_treatment")`, `vignette("rates-selection")`, `vignette("fbd-params")`, and `vignette("offset_handling")`, for step-by-step guides on using `EvoPhylo` to perform these analyses, also available on the [EvoPhylo website](https://tiago-simoes.github.io/EvoPhylo/).
 
 
 ## Authors
