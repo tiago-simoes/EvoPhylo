@@ -1,5 +1,6 @@
 \name{FBD_reshape}
 \alias{FBD_reshape}
+
 \title{
 Convert an FBD posterior parameter table from wide to long format
 }

@@ -43,10 +43,10 @@ reference:
   - FBD_summary
   - FBD_tests1
   - FBD_tests2
-  - subtitle: Analyzing Trees With Offsets
+- subtitle: Analyzing Trees With Offsets
   desc: >
     See `vignette("offset_handling")` for a complete workflow that uses these functions
-    to summarize trees with offsets (with fossil species only) as produced by the SA package in BEAST2
+    to summarize trees with offsets (with fossil species only) as produced by the SA package in BEAST2.
 - contents:
   - drop.dummy
   - offset.to.dummy

@@ -12,9 +12,14 @@ bibliography: references.bib
 link-citations: true
 ---
 
-The default tree format used by many phylogenetic inference tools such as BEAST2 assumes that at least one tip is at the present (i.e. age = 0). This presents issues when analyzing fully extinct clades, particularly when estimating the ages of fossil leaves as advised in @BaridoSottani2020. To address this issue, the SA package for BEAST2 includes an alternate tree with offset format, which can be set up as shown in the [FBD tutorial](https://taming-the-beast.org/tutorials/FBD-tutorial/). However, summarizing trees with offsets (e.g. using TreeAnnotator to produce an MCC tree) requires additional handling to keep the correct ages on all tips.
+One of the major reasons for the utilization of point age estimates instead of accounting for fossil age uncertainty in tip-dating analyses of entirely extinct lineages has been the limitation by most Bayesian inference software on handling paleontological datasets in clock analyses. All tree models available for clock analyses assume a diversification process that start at some point in the past (either the time of origin or the time of the most recent common ancestor of all sampled taxa) and stop at the present time (*t* = 0 yr). In such cases, the birth-death process stops at *t* = 0 before the present, and the height of the youngest nodes in the tree are also = 0. In the special case where only fossils are included, the birth-death process will stop at some time *t* > 0yr before the present, at the age of the youngest fossil (e.g., *age* = 3 Ma). However, the *height* of the youngest node will still be treated as = 0, which is the default tree format by most phylogenetic inference software. This difference creates the necessity of rescaling the resulting posterior fossil trees with an offset equal to the difference between the age youngest node and the present time (in the example above, offset = 3 myr). 
 
-This vignette explains how to summarize trees with offsets as produced by the SA package, using the `EvoPhylo` package.
+This latter process is relatively simple if we attribute a fixed point age value to all fossils in the tree (so the age of the youngest fossil tip will be known a priori). However, using fixed point age value to all fossils creates important estimate biases, and age uncertainty at the tips should be accounted by allowing them to be estimated within a time range, as discuss in @BaridoSottani2020. This presents issues when analyzing fully extinct clades, because all tip ages are variable and are allowed to be estimated within a time range, and each posterior tree will likely have a distinct age for the youngest taxon and thus no common fixed point in the past to establish the rescaling among all posterior trees. To address this issue, a few strategies are available:
+
+## Analyzing Trees With Offset ages (BEAST2)
+
+The SA package for [BEAST2](http://www.beast2.org/) includes an alternate tree with offset format, which can be set up as shown in the [FBD tutorial](https://taming-the-beast.org/tutorials/FBD-tutorial/). This uses a a “treeWoffset” operator that will sample the offset of every tree from the posterior as an additional parameter during clock analysis. However, posterior trees produced by [BEAST2](http://www.beast2.org/) with offset ages cannot be directly used by TreeAnnotator to calculate the maximum clade credibility tree (MCC), as the latter still assumes that the youngest tips in the dataset represent extant tips. To correct for this, a “dummy” extant taxon must be added to the posterior trees to be interpreted by TreeAnnotator, and the “dummy” extant must be pruned from the resulting MCC tree to produce the final MCC tree. These can be done by performing by following steps and functions from `EvoPhylo`:
+
 
 ```{r, setup, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -23,7 +28,7 @@ library(EvoPhylo)
 
 ### 1. Import the posterior tree distribution.
 
-First we import the posterior tree distribution and log file produced by BEAST2. The log file is needed because it contains the offset for each sample. In order to store the correct age in the tree, we are going to add a "dummy" tip to each phylogeny. This dummy tip will have age 0 for each sample, and so the length of the age between this tip and the root of the tree will encode the age of the tree including the offset.
+First we import the posterior tree distribution and log file produced by [BEAST2](http://www.beast2.org/). The log file is needed because it contains the offset for each sample. In order to store the correct age in the tree, we are going to add a "dummy" tip to each phylogeny. This dummy tip will have age 0 for each sample, and so the length of the age between this tip and the root of the tree will encode the age of the tree including the offset.
 
 ```{r}
 
@@ -52,19 +57,32 @@ Our summary tree will include the dummy tip that we added earlier, so the last s
 
 ```{r}
 ## Find the example MCC tree from the package
-mcc_file = system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo")
+tree_file = system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo")
 ## Then remove the dummy tip
-mcc_tree = drop.dummy(mcc_file)
+final_tree = drop.dummy.beast(tree_file)
 ## The output contains the final tree and the offset
-mcc_tree$offset
-mcc_tree$tree
+final_tree$offset
+final_tree$tree
 ```
 
 As before, we can also save the tree directly to a file.
 
 ```{r, eval=FALSE}
 ## Remove the dummy tip and save to file
-mcc_tree = drop.dummy(mcc_file, output.file = "final_mcc.tre")
+final_tree = drop.dummy.beast(tree_file, output.file = "ex_final_mcc.tre")
+```
+
+## Analyzing Trees With Offset ages (Mr.Bayes)
+
+[Mr.Bayes](https://nbisweden.github.io/MrBayes/). does not have an equivalent procedure to treeWoffset from [[BEAST2](http://www.beast2.org/)](http://www.[BEAST2](http://www.beast2.org/).org/) for handling tip-dating analyses of entirely extinct lineages . In this case, it is necessary to manually add a “dummy” extant taxon to the dataset from the beginning of the analyses (as done in @simões2021). This "dummy" tip must be scored only with missing data (“?”) and constrained as the sister taxon to one other taxon in the data, so it does not fluctuate around the tree as a wildcard. As with the MCC trees from [BEAST2](http://www.beast2.org/), the final summary trees from Mr.Bayes [50% majority rule consensus tree (MRC) and the maximum compatible tree (MCT)] will have the extant “dummy’ taxon in then. It can be pruned using `drop.dummy.mb`:
+
+
+```{r}
+## Find the example MCC tree from the package
+tree_file2 = system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo")
+
+## Remove the dummy tip and save to file
+final_tree = drop.dummy.mb(tree_file2, output.file = "tree_mb_dummy.tre")
 ```
 
 ## References
