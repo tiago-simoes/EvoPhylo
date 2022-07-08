@@ -125,7 +125,8 @@ offset.to.dummy = function(trees.file, log.file, output.file = NULL,
 #' final_tree = drop.dummy.beast(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
 #'
 #' @export
-#' @seealso [drop.dummy.mb()] (for the same function using summary trees with a "dummy" extant from Mr. Bayes)
+#' @seealso [drop.dummy.mb()] for the same function using summary trees with a "dummy" extant from Mr. Bayes
+#' @md
 drop.dummy.beast = function(tree.file, output.file = NULL, dummy.name = "dummy", convert.heights = TRUE) {
   tmp = treeio::read.beast(tree.file)
 
@@ -173,13 +174,14 @@ drop.dummy.beast = function(tree.file, output.file = NULL, dummy.name = "dummy",
 #' final_tree = drop.dummy.mb(system.file("extdata", "tree_mb_dummy.tre", package = "EvoPhylo"))
 #'
 #' @export
-#' @seealso [drop.dummy.beast()] (for the same function using summary trees with a "dummy" extant from BEAST2)
+#' @seealso [drop.dummy.beast()] for the same function using summary trees with a "dummy" extant from BEAST2
+#' @md
 drop.dummy.mb = function(tree.file, output.file = NULL, dummy.name = "dummy", convert.ages = TRUE) {
 
   tmp = treeio::read.mrbayes(tree.file)
 
   tmp@data$`prob+-sd` <- as.factor(tmp@data$`prob+-sd`)
-  tmp@data <- tmp@data %>% dplyr::mutate_if(is.character,as.numeric)
+  tmp@data <- dplyr::mutate_if(tmp@data, is.character,as.numeric)
 
   tip = which(tmp@phylo$tip.label == dummy.name)
   tipn = which(tmp@data$node == as.character(tip))

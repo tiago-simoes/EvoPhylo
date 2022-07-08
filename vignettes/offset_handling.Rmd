@@ -79,10 +79,10 @@ final_tree = drop.dummy.beast(tree_file, output.file = "ex_final_mcc.tre")
 
 ```{r}
 ## Find the example MCC tree from the package
-tree_file2 = system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo")
+tree_file_mb = system.file("extdata", "tree_mb_dummy.tre", package = "EvoPhylo")
 
 ## Remove the dummy tip and save to file
-final_tree = drop.dummy.mb(tree_file2, output.file = "tree_mb_dummy.tre")
+final_tree_mb = drop.dummy.mb(tree_file_mb, output.file = "tree_mb_final.tre")
 ```
 
 ## References
