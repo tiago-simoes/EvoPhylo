@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EvoPhylo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,10 +24,11 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/theory.html">Theoretical background</a>
+    <a class="dropdown-item" href="../articles/data_treatment.html">Theoretical background</a>
     <a class="dropdown-item" href="../articles/char-part.html">Character Partitioning</a>
     <a class="dropdown-item" href="../articles/rates-selection.html">Evolutionary Rates &amp; Selection Mode</a>
     <a class="dropdown-item" href="../articles/fbd-params.html">Analyzing FBD Parameters</a>
+    <a class="dropdown-item" href="../articles/offset_handling.html">Analyzing Trees With Offsets</a>
   </div>
 </li>
 <li class="nav-item">
@@ -143,7 +144,7 @@
       </dl></div><div class="section level2">
       
       <h3 id="analyzing-fbd-parameters">Analyzing FBD parameters<a class="anchor" aria-label="anchor" href="#analyzing-fbd-parameters"></a></h3>
-      <p class="section-desc"></p><p>See <code><a href="../articles/fbd-params.html">vignette("fbd-params")</a></code> for a complete workflow that uses these functions to extract FBD (fossilized birth-death) parameters estimated from relaxed clock Bayesian inference analyses produced by Mr. Bayes.</p>
+      <p class="section-desc"></p><p>See <code><a href="../articles/fbd-params.html">vignette("fbd-params")</a></code> for a complete workflow that uses these functions to extract FBD parameters estimated from relaxed clock Bayesian inference analyses produced by Mr. Bayes and BEAST2.</p>
 
       
     </div><div id="" class="section level2">
@@ -187,6 +188,43 @@
         </dt>
         <dd>Test for differences in FBD parameter values</dd>
       </dl></div><div class="section level2">
+      
+      <h3 id="analyzing-trees-with-offsets">Analyzing Trees With Offsets<a class="anchor" aria-label="anchor" href="#analyzing-trees-with-offsets"></a></h3>
+      <p class="section-desc"></p><p>See <code><a href="../articles/offset_handling.html">vignette("offset_handling")</a></code> for a complete workflow that uses these functions to summarize trees with offsets (with fossil species only) as produced by the SA package in BEAST2.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="drop.dummy.beast.html">drop.dummy.beast()</a></code> 
+        </dt>
+        <dd>Remove dummy tip from beast summary trees, accounting for metadata on the tips</dd>
+      </dl><dl><dt>
+          
+          <code><a href="drop.dummy.mb.html">drop.dummy.mb()</a></code> 
+        </dt>
+        <dd>Remove dummy tip from Mr. Bayes summary trees, accounting for metadata on the tips</dd>
+      </dl><dl><dt>
+          
+          <code><a href="offset.to.dummy.html">offset.to.dummy()</a></code> 
+        </dt>
+        <dd>Convert trees produced by a BEAST2 FBD analysis with offset to trees with correct ages.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="offset.to.dummy.metadata.html">offset.to.dummy.metadata()</a></code> 
+        </dt>
+        <dd>Convert trees produced by a BEAST2 FBD analysis with offset to trees with correct ages,
+accounting for possible metadata on the tips.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="write.beast.treedata.html">write.beast.treedata</a></code> 
+        </dt>
+        <dd>Export multiple treedata objects (S4 class tree files) to BEAST NEXUS file</dd>
+      </dl></div><div class="section level2">
       <h2 id="datasets">Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a></h2>
       
       
@@ -202,6 +240,11 @@
           <code><a href="characters.html">characters</a></code> 
         </dt>
         <dd>A morphological phylogenetic data matrix</dd>
+      </dl><dl><dt>
+          
+          <code><a href="post_trees.html">post_trees</a></code> 
+        </dt>
+        <dd>Multiple phylogenetic clock trees</dd>
       </dl><dl><dt>
           
           <code><a href="posterior1p.html">posterior1p</a></code> 

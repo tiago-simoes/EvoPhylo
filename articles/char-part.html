@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EvoPhylo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,10 +41,11 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/theory.html">Theoretical background</a>
+    <a class="dropdown-item" href="../articles/data_treatment.html">Theoretical background</a>
     <a class="dropdown-item" href="../articles/char-part.html">Character Partitioning</a>
     <a class="dropdown-item" href="../articles/rates-selection.html">Evolutionary Rates &amp; Selection Mode</a>
     <a class="dropdown-item" href="../articles/fbd-params.html">Analyzing FBD Parameters</a>
+    <a class="dropdown-item" href="../articles/offset_handling.html">Analyzing Trees With Offsets</a>
   </div>
 </li>
 <li class="nav-item">
@@ -75,7 +76,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Character Partitioning</h1>
             
-            <h4 data-toc-skip class="date">2022-06-23</h4>
+            <h4 data-toc-skip class="date">2022-07-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/tiago-simoes/EvoPhylo/blob/HEAD/vignettes/char-part.Rmd" class="external-link"><code>vignettes/char-part.Rmd</code></a></small>
       <div class="d-none name"><code>char-part.Rmd</code></div>
@@ -89,28 +90,28 @@
 </h2>
 <p>Load the <strong>EvoPhylo</strong> package</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tiago-simoes/EvoPhylo" class="external-link">EvoPhylo</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tiago-simoes/EvoPhylo" class="external-link">EvoPhylo</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="generate-distance-matrix">1. Generate distance matrix<a class="anchor" aria-label="anchor" href="#generate-distance-matrix"></a>
 </h3>
 <p>Generate a Gower distance matrix with <code><a href="../reference/get_gower_dist.html">get_gower_dist()</a></code> by supplying the file path of a .nex file containing a character data matrix:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#Load a character data matrix and produce a Gower distance matrix</span>
-<span class="va">dist_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_gower_dist.html">get_gower_dist</a></span><span class="op">(</span><span class="st">"DataMatrix.nex"</span>, numeric <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#Load a character data matrix and produce a Gower distance matrix</span></span>
+<span><span class="va">dist_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_gower_dist.html">get_gower_dist</a></span><span class="op">(</span><span class="st">"DataMatrix.nex"</span>, numeric <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>Below, we use the example data matrix <code>characters</code> that accompanies <code>EvoPhylo</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">characters</span><span class="op">)</span>
-
-<span class="va">dist_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_gower_dist.html">get_gower_dist</a></span><span class="op">(</span><span class="va">characters</span>, numeric <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">characters</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dist_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_gower_dist.html">get_gower_dist</a></span><span class="op">(</span><span class="va">characters</span>, numeric <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="estimate-the-optimal-number-of-partitions">2. Estimate the optimal number of partitions<a class="anchor" aria-label="anchor" href="#estimate-the-optimal-number-of-partitions"></a>
 </h3>
 <p>The optimal number of partitions (clusters) will be first determined using partitioning around medoids (PAM) with Silhouette widths index (Si) using <code><a href="../reference/get_sil_widths.html">get_sil_widths()</a></code>. The latter will estimate the quality of each PAM cluster proposal relative to other potential clusters.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Estimate and plot number of cluster against silhouette width</span>
-<span class="va">sw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_sil_widths.html">get_sil_widths</a></span><span class="op">(</span><span class="va">dist_matrix</span>, max.k <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sw</span>, color <span class="op">=</span> <span class="st">"blue"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Estimate and plot number of cluster against silhouette width</span></span>
+<span><span class="va">sw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_sil_widths.html">get_sil_widths</a></span><span class="op">(</span><span class="va">dist_matrix</span>, max.k <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sw</span>, color <span class="op">=</span> <span class="st">"blue"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="char-part_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;"></p>
 <p>Decide on number of clusters based on plot; here, <span class="math inline">\(k = 3\)</span> partitions appears optimal.</p>
 </div>
@@ -121,14 +122,14 @@
 <p>3.2. Produce simple cluster graph</p>
 <p>3.3. Export clusters/partitions to Nexus file with <code><a href="../reference/cluster_to_nexus.html">cluster_to_nexus()</a></code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Generate and vizualize clusters with PAM under chosen k value. </span>
-<span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_clusters.html">make_clusters</a></span><span class="op">(</span><span class="va">dist_matrix</span>, k <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Generate and vizualize clusters with PAM under chosen k value. </span></span>
+<span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_clusters.html">make_clusters</a></span><span class="op">(</span><span class="va">dist_matrix</span>, k <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span></span></code></pre></div>
 <p><img src="char-part_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Write clusters to Nexus file</span>
-<span class="fu"><a href="../reference/cluster_to_nexus.html">cluster_to_nexus</a></span><span class="op">(</span><span class="va">clusters</span>, file <span class="op">=</span> <span class="st">"Clusters_Nexus.txt"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Write clusters to Nexus file</span></span>
+<span><span class="fu"><a href="../reference/cluster_to_nexus.html">cluster_to_nexus</a></span><span class="op">(</span><span class="va">clusters</span>, file <span class="op">=</span> <span class="st">"Clusters_Nexus.txt"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="complete-workflow">4. Complete Workflow:<a class="anchor" aria-label="anchor" href="#complete-workflow"></a>
@@ -137,14 +138,14 @@
 <p>4.2. Produce a graphic clustering (tSNEs), coloring data points according to PAM clusters, to independently verify PAM clustering. This is set with the <code>tsne</code> argument within <code><a href="../reference/make_clusters.html">make_clusters()</a></code>.</p>
 <p>4.3. Export clusters/partitions to Nexus file with <code><a href="../reference/cluster_to_nexus.html">cluster_to_nexus()</a></code>. This can be copied and pasted into the <a href="https://nbisweden.github.io/MrBayes/" class="external-link">Mr. Bayes</a> command block.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#User may also generate clusters with PAM and produce a graphic clustering (tSNEs)</span>
-<span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_clusters.html">make_clusters</a></span><span class="op">(</span><span class="va">dist_matrix</span>, k <span class="op">=</span> <span class="fl">3</span>, tsne <span class="op">=</span> <span class="cn">TRUE</span>, tsne_dim <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">clusters</span>, nrow <span class="op">=</span> <span class="fl">2</span>, max.overlaps <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#User may also generate clusters with PAM and produce a graphic clustering (tSNEs)</span></span>
+<span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_clusters.html">make_clusters</a></span><span class="op">(</span><span class="va">dist_matrix</span>, k <span class="op">=</span> <span class="fl">3</span>, tsne <span class="op">=</span> <span class="cn">TRUE</span>, tsne_dim <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">clusters</span>, nrow <span class="op">=</span> <span class="fl">2</span>, max.overlaps <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <p><img src="char-part_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#Write clusters/partitions in Nexus file format </span>
-<span class="fu"><a href="../reference/cluster_to_nexus.html">cluster_to_nexus</a></span><span class="op">(</span><span class="va">clusters</span>, file <span class="op">=</span> <span class="st">"Clusters_Nexus.txt"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#Write clusters/partitions in Nexus file format </span></span>
+<span><span class="fu"><a href="../reference/cluster_to_nexus.html">cluster_to_nexus</a></span><span class="op">(</span><span class="va">clusters</span>, file <span class="op">=</span> <span class="st">"Clusters_Nexus.txt"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2 unnumbered">

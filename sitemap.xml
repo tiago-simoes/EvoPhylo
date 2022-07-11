@@ -7,16 +7,19 @@
     <loc>https://tiago-simoes.github.io/EvoPhylo/articles/char-part.html</loc>
   </url>
   <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/articles/data_treatment.html</loc>
+  </url>
+  <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/articles/fbd-params.html</loc>
   </url>
   <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://tiago-simoes.github.io/EvoPhylo/articles/rates-selection.html</loc>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/articles/offset_handling.html</loc>
   </url>
   <url>
-    <loc>https://tiago-simoes.github.io/EvoPhylo/articles/theory.html</loc>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/articles/rates-selection.html</loc>
   </url>
   <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/authors.html</loc>
@@ -67,6 +70,12 @@
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/combine_log.html</loc>
   </url>
   <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/drop.dummy.beast.html</loc>
+  </url>
+  <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/drop.dummy.mb.html</loc>
+  </url>
+  <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/get_clockrate_table.html</loc>
   </url>
   <url>
@@ -85,7 +94,16 @@
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/make_clusters.html</loc>
   </url>
   <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/offset.to.dummy.html</loc>
+  </url>
+  <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/offset.to.dummy.metadata.html</loc>
+  </url>
+  <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/plot_treerates_sgn.html</loc>
+  </url>
+  <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/post_trees.html</loc>
   </url>
   <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/posterior1p.html</loc>
@@ -104,5 +122,8 @@
   </url>
   <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/tree3p.html</loc>
+  </url>
+  <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/write.beast.treedata.html</loc>
   </url>
 </urlset>

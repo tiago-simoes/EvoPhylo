@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EvoPhylo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,10 +41,11 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/theory.html">Theoretical background</a>
+    <a class="dropdown-item" href="../articles/data_treatment.html">Theoretical background</a>
     <a class="dropdown-item" href="../articles/char-part.html">Character Partitioning</a>
     <a class="dropdown-item" href="../articles/rates-selection.html">Evolutionary Rates &amp; Selection Mode</a>
     <a class="dropdown-item" href="../articles/fbd-params.html">Analyzing FBD Parameters</a>
+    <a class="dropdown-item" href="../articles/offset_handling.html">Analyzing Trees With Offsets</a>
   </div>
 </li>
 <li class="nav-item">
@@ -76,7 +77,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Analyzing FBD Parameters</h1>
             
-            <h4 data-toc-skip class="date">2022-06-23</h4>
+            <h4 data-toc-skip class="date">2022-07-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/tiago-simoes/EvoPhylo/blob/HEAD/vignettes/fbd-params.Rmd" class="external-link"><code>vignettes/fbd-params.Rmd</code></a></small>
       <div class="d-none name"><code>fbd-params.Rmd</code></div>
@@ -91,58 +92,58 @@
 <p>Below we demonstrate how to extract evolutionary rate summary statistics from each node from a Bayesian clock (time-calibrate) summary tree produced by Mr. Bayes, store them in a data frame, produce summary tables, and plots.</p>
 <p>Load the <strong>EvoPhylo</strong> package</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tiago-simoes/EvoPhylo" class="external-link">EvoPhylo</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tiago-simoes/EvoPhylo" class="external-link">EvoPhylo</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="import-combined-log-file-from-all-runs-">1. Import combined log file from all runs.<a class="anchor" aria-label="anchor" href="#import-combined-log-file-from-all-runs-"></a>
 </h3>
 <p>This is produced by using <code><a href="../reference/combine_log.html">combine_log()</a></code>. Alternatively, users can also use <strong>LogCombiner</strong> from the <a href="https://www.beast2.org/beagle-beast-2-in-cluster/index.html" class="external-link">BEAST2</a> software package. The first argument passed to <code><a href="../reference/combine_log.html">combine_log()</a></code> should be a path to the folder containing the log files to be imported and combined.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Import all log (.p) files from all runs and combine them, with burn-in = 25% </span>
-<span class="co">## and downsampling to 2.5k trees in each log file</span>
-<span class="va">posterior3p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine_log.html">combine_log</a></span><span class="op">(</span><span class="st">"LogFiles3p"</span>, burnin <span class="op">=</span> <span class="fl">0.25</span>, downsample <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Import all log (.p) files from all runs and combine them, with burn-in = 25% </span></span>
+<span><span class="co">## and downsampling to 2.5k trees in each log file</span></span>
+<span><span class="va">posterior3p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine_log.html">combine_log</a></span><span class="op">(</span><span class="st">"LogFiles3p"</span>, burnin <span class="op">=</span> <span class="fl">0.25</span>, downsample <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
 <p>Below, we use the posterior dataset <code>posterior3p</code> that accompanies <code>EvoPhylo</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">posterior3p</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">posterior3p</span><span class="op">)</span></span></code></pre></div>
 <p>The posterior data must first be transformed from wide to long to be used with the functions described below; <code><a href="../reference/FBD_reshape.html">FBD_reshape()</a></code> accomplishes this.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Reshape imported combined log file from wide to long with FBD_reshape</span>
-<span class="va">posterior3p_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_reshape.html">FBD_reshape</a></span><span class="op">(</span><span class="va">posterior3p</span><span class="op">)</span>
-
-<span class="co">## Show first 5 lines of combined log file</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">posterior3p_long</span>, <span class="fl">5</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##       Gen       LnL      LnPr  TH.all.   TL.all. prop_ancfossil.all.   sigma.1.</span>
-<span class="co">## 1 8750000 -1449.425 -143.1907 5.271118 11.969460                   0 0.07660715</span>
-<span class="co">## 2 8761000 -1458.367 -174.9627 4.775064 11.070210                   0 0.05850396</span>
-<span class="co">## 3 8771000 -1449.445 -163.9216 5.927716 12.628460                   0 0.05182430</span>
-<span class="co">## 4 8782000 -1453.218 -153.2030 4.451376  9.931809                   0 0.14644520</span>
-<span class="co">## 5 8792000 -1461.906 -132.1172 5.095504 11.083810                   0 0.14143120</span>
-<span class="co">##     sigma.2.  sigma.3.      m.1.     m.2.     m.3. tk02var.1. tk02var.2.</span>
-<span class="co">## 1 1.33351500 0.8523453 0.3695799 1.544579 1.362332  0.3197728  0.3848931</span>
-<span class="co">## 2 0.06463618 0.1380557 0.5083868 1.495777 1.108471  0.2710006  0.3609312</span>
-<span class="co">## 3 0.67980130 0.7776142 0.4275609 1.569911 1.144364  0.2853423  0.1831945</span>
-<span class="co">## 4 0.65005980 0.2999867 0.6445027 1.329942 1.148377  0.4670378  0.3483061</span>
-<span class="co">## 5 0.52745340 1.3928490 0.4993570 1.368074 1.445410  0.2115789  0.2723863</span>
-<span class="co">##   tk02var.3. clockrate.all. Time_bin net_speciation relative_extinction</span>
-<span class="co">## 1  0.2075079     0.01192715        1     0.04987983           0.6785586</span>
-<span class="co">## 2  0.3622265     0.01086355        1     0.04675159           0.9174022</span>
-<span class="co">## 3  0.6146289     0.01349259        1     0.01064803           0.9677827</span>
-<span class="co">## 4  0.4949015     0.01016002        1     0.07373453           0.8976315</span>
-<span class="co">## 5  0.3463915     0.01160514        1     0.04990040           0.7887825</span>
-<span class="co">##   relative_fossilization</span>
-<span class="co">## 1            0.055629950</span>
-<span class="co">## 2            0.006523517</span>
-<span class="co">## 3            0.010535440</span>
-<span class="co">## 4            0.001264865</span>
-<span class="co">## 5            0.036796000</span></code></pre>
+<code class="sourceCode R"><span><span class="co">## Reshape imported combined log file from wide to long with FBD_reshape</span></span>
+<span><span class="va">posterior3p_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_reshape.html">FBD_reshape</a></span><span class="op">(</span><span class="va">posterior3p</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Show first 5 lines of combined log file</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">posterior3p_long</span>, <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##       Gen       LnL      LnPr  TH.all.   TL.all. prop_ancfossil.all.   sigma.1.</span></span>
+<span><span class="co">## 1 8750000 -1449.425 -143.1907 5.271118 11.969460                   0 0.07660715</span></span>
+<span><span class="co">## 2 8761000 -1458.367 -174.9627 4.775064 11.070210                   0 0.05850396</span></span>
+<span><span class="co">## 3 8771000 -1449.445 -163.9216 5.927716 12.628460                   0 0.05182430</span></span>
+<span><span class="co">## 4 8782000 -1453.218 -153.2030 4.451376  9.931809                   0 0.14644520</span></span>
+<span><span class="co">## 5 8792000 -1461.906 -132.1172 5.095504 11.083810                   0 0.14143120</span></span>
+<span><span class="co">##     sigma.2.  sigma.3.      m.1.     m.2.     m.3. tk02var.1. tk02var.2.</span></span>
+<span><span class="co">## 1 1.33351500 0.8523453 0.3695799 1.544579 1.362332  0.3197728  0.3848931</span></span>
+<span><span class="co">## 2 0.06463618 0.1380557 0.5083868 1.495777 1.108471  0.2710006  0.3609312</span></span>
+<span><span class="co">## 3 0.67980130 0.7776142 0.4275609 1.569911 1.144364  0.2853423  0.1831945</span></span>
+<span><span class="co">## 4 0.65005980 0.2999867 0.6445027 1.329942 1.148377  0.4670378  0.3483061</span></span>
+<span><span class="co">## 5 0.52745340 1.3928490 0.4993570 1.368074 1.445410  0.2115789  0.2723863</span></span>
+<span><span class="co">##   tk02var.3. clockrate.all. Time_bin net_speciation relative_extinction</span></span>
+<span><span class="co">## 1  0.2075079     0.01192715        1     0.04987983           0.6785586</span></span>
+<span><span class="co">## 2  0.3622265     0.01086355        1     0.04675159           0.9174022</span></span>
+<span><span class="co">## 3  0.6146289     0.01349259        1     0.01064803           0.9677827</span></span>
+<span><span class="co">## 4  0.4949015     0.01016002        1     0.07373453           0.8976315</span></span>
+<span><span class="co">## 5  0.3463915     0.01160514        1     0.04990040           0.7887825</span></span>
+<span><span class="co">##   relative_fossilization</span></span>
+<span><span class="co">## 1            0.055629950</span></span>
+<span><span class="co">## 2            0.006523517</span></span>
+<span><span class="co">## 3            0.010535440</span></span>
+<span><span class="co">## 4            0.001264865</span></span>
+<span><span class="co">## 5            0.036796000</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="summarize-fbd-parameters-by-time-bin">2. Summarize FBD parameters by time bin<a class="anchor" aria-label="anchor" href="#summarize-fbd-parameters-by-time-bin"></a>
 </h3>
 <p>Summary statistics for each FBD parameter by time bin can be quickly summarized using <code><a href="../reference/FBD_summary.html">FBD_summary()</a></code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Summarize parameters by time bin and analysis</span>
-<span class="va">t3.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_summary.html">FBD_summary</a></span><span class="op">(</span><span class="va">posterior3p_long</span><span class="op">)</span>
-<span class="va">t3.1</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Summarize parameters by time bin and analysis</span></span>
+<span><span class="va">t3.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_summary.html">FBD_summary</a></span><span class="op">(</span><span class="va">posterior3p_long</span><span class="op">)</span></span>
+<span><span class="va">t3.1</span></span></code></pre></div>
 <table class="table table table-striped" style="font-size: 15px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
 FBD parameters by time bin
@@ -567,61 +568,61 @@ relative_fossilization
 </tbody>
 </table>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Export the table</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">t3.1</span>, file <span class="op">=</span> <span class="st">"FBD_summary.csv"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Export the table</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">t3.1</span>, file <span class="op">=</span> <span class="st">"FBD_summary.csv"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plot-the-distribution-of-each-fbd-parameter">3. Plot the distribution of each FBD parameter<a class="anchor" aria-label="anchor" href="#plot-the-distribution-of-each-fbd-parameter"></a>
 </h3>
 <p>Each of (or all) the FBD parameter distributions can be plotted by time bin using various plotting alternatives with <code><a href="../reference/FBD_dens_plot.html">FBD_dens_plot()</a></code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Plot distribution of the desired FBD parameter by time bin with </span>
-<span class="co">## kernel density plot</span>
-<span class="fu"><a href="../reference/FBD_dens_plot.html">FBD_dens_plot</a></span><span class="op">(</span><span class="va">posterior3p_long</span>, parameter <span class="op">=</span> <span class="st">"net_speciation"</span>,
-              type <span class="op">=</span> <span class="st">"density"</span>, stack <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Plot distribution of the desired FBD parameter by time bin with </span></span>
+<span><span class="co">## kernel density plot</span></span>
+<span><span class="fu"><a href="../reference/FBD_dens_plot.html">FBD_dens_plot</a></span><span class="op">(</span><span class="va">posterior3p_long</span>, parameter <span class="op">=</span> <span class="st">"net_speciation"</span>,</span>
+<span>              type <span class="op">=</span> <span class="st">"density"</span>, stack <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fbd-params_files/figure-html/unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Plot distribution of the desired FBD parameter by time bin with </span>
-<span class="co">## stacked kernel density plot</span>
-<span class="fu"><a href="../reference/FBD_dens_plot.html">FBD_dens_plot</a></span><span class="op">(</span><span class="va">posterior3p_long</span>, parameter <span class="op">=</span> <span class="st">"net_speciation"</span>,
-              type <span class="op">=</span> <span class="st">"density"</span>, stack <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Plot distribution of the desired FBD parameter by time bin with </span></span>
+<span><span class="co">## stacked kernel density plot</span></span>
+<span><span class="fu"><a href="../reference/FBD_dens_plot.html">FBD_dens_plot</a></span><span class="op">(</span><span class="va">posterior3p_long</span>, parameter <span class="op">=</span> <span class="st">"net_speciation"</span>,</span>
+<span>              type <span class="op">=</span> <span class="st">"density"</span>, stack <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fbd-params_files/figure-html/unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Plot distribution of the desired FBD parameter by time bin with </span>
-<span class="co">## a violin plot</span>
-<span class="fu"><a href="../reference/FBD_dens_plot.html">FBD_dens_plot</a></span><span class="op">(</span><span class="va">posterior3p_long</span>, parameter <span class="op">=</span> <span class="st">"net_speciation"</span>,
-              type <span class="op">=</span> <span class="st">"violin"</span>, stack <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Plot distribution of the desired FBD parameter by time bin with </span></span>
+<span><span class="co">## a violin plot</span></span>
+<span><span class="fu"><a href="../reference/FBD_dens_plot.html">FBD_dens_plot</a></span><span class="op">(</span><span class="va">posterior3p_long</span>, parameter <span class="op">=</span> <span class="st">"net_speciation"</span>,</span>
+<span>              type <span class="op">=</span> <span class="st">"violin"</span>, stack <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fbd-params_files/figure-html/unnamed-chunk-10-1.png" width="50%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Plot distribution of all FBD parameter by time bin with a violin plot</span>
-<span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_dens_plot.html">FBD_dens_plot</a></span><span class="op">(</span><span class="va">posterior3p_long</span>, parameter <span class="op">=</span> <span class="st">"net_speciation"</span>,
-                    type <span class="op">=</span> <span class="st">"violin"</span>, stack <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span>
-<span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_dens_plot.html">FBD_dens_plot</a></span><span class="op">(</span><span class="va">posterior3p_long</span>, parameter <span class="op">=</span> <span class="st">"relative_extinction"</span>,
-                    type <span class="op">=</span> <span class="st">"violin"</span>, stack <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"cyan3"</span><span class="op">)</span>
-<span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_dens_plot.html">FBD_dens_plot</a></span><span class="op">(</span><span class="va">posterior3p_long</span>, parameter <span class="op">=</span> <span class="st">"relative_fossilization"</span>,
-                    type <span class="op">=</span> <span class="st">"violin"</span>, stack <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"green3"</span><span class="op">)</span>
-
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span>
-<span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Plot distribution of all FBD parameter by time bin with a violin plot</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_dens_plot.html">FBD_dens_plot</a></span><span class="op">(</span><span class="va">posterior3p_long</span>, parameter <span class="op">=</span> <span class="st">"net_speciation"</span>,</span>
+<span>                    type <span class="op">=</span> <span class="st">"violin"</span>, stack <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_dens_plot.html">FBD_dens_plot</a></span><span class="op">(</span><span class="va">posterior3p_long</span>, parameter <span class="op">=</span> <span class="st">"relative_extinction"</span>,</span>
+<span>                    type <span class="op">=</span> <span class="st">"violin"</span>, stack <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"cyan3"</span><span class="op">)</span></span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_dens_plot.html">FBD_dens_plot</a></span><span class="op">(</span><span class="va">posterior3p_long</span>, parameter <span class="op">=</span> <span class="st">"relative_fossilization"</span>,</span>
+<span>                    type <span class="op">=</span> <span class="st">"violin"</span>, stack <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"green3"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fbd-params_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Save your plot to your working directory as a PDF</span>
-<span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"Plot_regs.pdf"</span>, width <span class="op">=</span> <span class="fl">12</span>, height <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Save your plot to your working directory as a PDF</span></span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"Plot_regs.pdf"</span>, width <span class="op">=</span> <span class="fl">12</span>, height <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="test-for-assumptions">4. Test for assumptions<a class="anchor" aria-label="anchor" href="#test-for-assumptions"></a>
 </h3>
 <p>In this step, users can perform tests for normality and homoscedasticity in data distribution for each of the FBD parameters under consideration. The output will determine whether parametric or nonparametric tests will be performed subsequently.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">##### Tests for normality and homoscedasticity for each FBD parameter for all time bins</span>
-<span class="va">t3.2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_tests1.html">FBD_tests1</a></span><span class="op">(</span><span class="va">posterior3p_long</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">##### Tests for normality and homoscedasticity for each FBD parameter for all time bins</span></span>
+<span><span class="va">t3.2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_tests1.html">FBD_tests1</a></span><span class="op">(</span><span class="va">posterior3p_long</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">### Export the output table for all tests</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">t3.2</span>, file <span class="op">=</span> <span class="st">"FBD_Tests1_Assum.csv"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">### Export the output table for all tests</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">t3.2</span>, file <span class="op">=</span> <span class="st">"FBD_Tests1_Assum.csv"</span><span class="op">)</span></span></code></pre></div>
 <p>The results of the Shapiro-Wilk normality test for each parameter can be output as seperate tables or as a single combined table.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Output as separate tables </span>
-<span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Output as separate tables </span></span>
+<span><span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span></span></code></pre></div>
 <table class="table kable_wrapper table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
 Shapiro-Wilk normality test
@@ -939,17 +940,17 @@ relative_fossilization
 </tr></tbody>
 </table>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># OR as single merged table</span>
-<span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">net_speciation</span><span class="op">$</span><span class="va">bin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">net_speciation</span><span class="op">)</span>  
-<span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">relative_extinction</span><span class="op">$</span><span class="va">bin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">relative_extinction</span><span class="op">)</span>  
-<span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">relative_fossilization</span><span class="op">$</span><span class="va">bin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">relative_fossilization</span><span class="op">)</span>  
-
-<span class="va">k1all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">net_speciation</span>,
-               <span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">relative_extinction</span>,
-               <span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">relative_fossilization</span>,
-               make.row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># OR as single merged table</span></span>
+<span><span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">net_speciation</span><span class="op">$</span><span class="va">bin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">net_speciation</span><span class="op">)</span>  </span>
+<span><span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">relative_extinction</span><span class="op">$</span><span class="va">bin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">relative_extinction</span><span class="op">)</span>  </span>
+<span><span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">relative_fossilization</span><span class="op">$</span><span class="va">bin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">relative_fossilization</span><span class="op">)</span>  </span>
+<span></span>
+<span><span class="va">k1all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">net_speciation</span>,</span>
+<span>               <span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">relative_extinction</span>,</span>
+<span>               <span class="va">t3.2</span><span class="op">$</span><span class="va">shapiro</span><span class="op">$</span><span class="va">relative_fossilization</span>,</span>
+<span>               make.row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">k1all</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">k1all</span></span></code></pre></div>
 <table class="table table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
 Shapiro-Wilk normality test
@@ -1224,8 +1225,8 @@ Residuals
 </tbody>
 </table>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Bartlett's test for homogeneity of variance </span>
-<span class="va">t3.2</span><span class="op">$</span><span class="va">bartlett</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Bartlett's test for homogeneity of variance </span></span>
+<span><span class="va">t3.2</span><span class="op">$</span><span class="va">bartlett</span></span></code></pre></div>
 <table class="table table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
 Bartlett’s test
@@ -1278,8 +1279,8 @@ relative_fossilization
 </tbody>
 </table>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Fligner-Killeen test for homogeneity of variance </span>
-<span class="va">t3.2</span><span class="op">$</span><span class="va">fligner</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Fligner-Killeen test for homogeneity of variance </span></span>
+<span><span class="va">t3.2</span><span class="op">$</span><span class="va">fligner</span></span></code></pre></div>
 <table class="table table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
 Fligner-Killeen test
@@ -1333,27 +1334,27 @@ relative_fossilization
 </table>
 <p>Deviations from normality can be displayed graphically using <code><a href="../reference/FBD_normality_plot.html">FBD_normality_plot()</a></code>:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Visualize deviations from normality and similarity of variances</span>
-<span class="fu"><a href="../reference/FBD_normality_plot.html">FBD_normality_plot</a></span><span class="op">(</span><span class="va">posterior3p_long</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Visualize deviations from normality and similarity of variances</span></span>
+<span><span class="fu"><a href="../reference/FBD_normality_plot.html">FBD_normality_plot</a></span><span class="op">(</span><span class="va">posterior3p_long</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fbd-params_files/figure-html/unnamed-chunk-24-1.png" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Save your plot to your working directory as a PDF</span>
-<span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"Plot_normTests.pdf"</span>, width <span class="op">=</span> <span class="fl">8</span>, height <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Save your plot to your working directory as a PDF</span></span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"Plot_normTests.pdf"</span>, width <span class="op">=</span> <span class="fl">8</span>, height <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="test-for-significant-fbd-shifts-between-time-bins">5. Test for significant FBD shifts between time bins<a class="anchor" aria-label="anchor" href="#test-for-significant-fbd-shifts-between-time-bins"></a>
 </h3>
 <p>Significant shifts in FBD parameters across time bins can be easily tested using parametric (Student’s t-test) and nonparametric (Mann-Whitney test) pairwise comparisons with <code><a href="../reference/FBD_tests2.html">FBD_tests2()</a></code>. Both are automatically calculated and the preferred pairwise comparison will be chosen by the user depending on the results of the assumption tests <strong>step #4</strong> (above).</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">##### Test for significant differences between each time bin for each FBD parameter</span>
-<span class="va">t3.3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_tests2.html">FBD_tests2</a></span><span class="op">(</span><span class="va">posterior3p_long</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">##### Test for significant differences between each time bin for each FBD parameter</span></span>
+<span><span class="va">t3.3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_tests2.html">FBD_tests2</a></span><span class="op">(</span><span class="va">posterior3p_long</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">### Export the output table for all tests</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">t3.3</span>, file <span class="op">=</span> <span class="st">"FBD_Tests2_Sign.csv"</span><span class="op">)</span>
-
-<span class="co">## Pairwise t-tests</span>
-<span class="co"># Output as separate tables </span>
-<span class="va">t3.3</span><span class="op">$</span><span class="va">t_tests</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">### Export the output table for all tests</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">t3.3</span>, file <span class="op">=</span> <span class="st">"FBD_Tests2_Sign.csv"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Pairwise t-tests</span></span>
+<span><span class="co"># Output as separate tables </span></span>
+<span><span class="va">t3.3</span><span class="op">$</span><span class="va">t_tests</span></span></code></pre></div>
 <table class="table kable_wrapper table table-striped" style="font-size: 10px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
 Significant tests
@@ -1863,13 +1864,13 @@ relative_fossilization
 </tr></tbody>
 </table>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># OR as single merged table</span>
-<span class="va">k3.3a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">t3.3</span><span class="op">$</span><span class="va">t_tests</span><span class="op">$</span><span class="va">net_speciation</span>,
-               <span class="va">t3.3</span><span class="op">$</span><span class="va">t_tests</span><span class="op">$</span><span class="va">relative_extinction</span>,
-               <span class="va">t3.3</span><span class="op">$</span><span class="va">t_tests</span><span class="op">$</span><span class="va">relative_fossilization</span>,
-               make.row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># OR as single merged table</span></span>
+<span><span class="va">k3.3a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">t3.3</span><span class="op">$</span><span class="va">t_tests</span><span class="op">$</span><span class="va">net_speciation</span>,</span>
+<span>               <span class="va">t3.3</span><span class="op">$</span><span class="va">t_tests</span><span class="op">$</span><span class="va">relative_extinction</span>,</span>
+<span>               <span class="va">t3.3</span><span class="op">$</span><span class="va">t_tests</span><span class="op">$</span><span class="va">relative_fossilization</span>,</span>
+<span>               make.row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">k3.3a</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">k3.3a</span></span></code></pre></div>
 <table class="table table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
 Pairwise t-tests
@@ -2315,9 +2316,9 @@ relative_fossilization
 </tbody>
 </table>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Mann-Whitney tests (use if Tests in step #4 fail assumptions)</span>
-<span class="co"># Output as separate tables </span>
-<span class="va">t3.3</span><span class="op">$</span><span class="va">mwu_tests</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Mann-Whitney tests (use if Tests in step #4 fail assumptions)</span></span>
+<span><span class="co"># Output as separate tables </span></span>
+<span><span class="va">t3.3</span><span class="op">$</span><span class="va">mwu_tests</span></span></code></pre></div>
 <table class="table kable_wrapper table table-striped" style="font-size: 10px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
 Mann-Whitney tests
@@ -2827,13 +2828,13 @@ relative_fossilization
 </tr></tbody>
 </table>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># OR as single merged table</span>
-<span class="va">k3.3b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">t3.3</span><span class="op">$</span><span class="va">mwu_tests</span><span class="op">$</span><span class="va">net_speciation</span>,
-               <span class="va">t3.3</span><span class="op">$</span><span class="va">mwu_tests</span><span class="op">$</span><span class="va">relative_extinction</span>,
-               <span class="va">t3.3</span><span class="op">$</span><span class="va">mwu_tests</span><span class="op">$</span><span class="va">relative_fossilization</span>,
-               make.row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># OR as single merged table</span></span>
+<span><span class="va">k3.3b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">t3.3</span><span class="op">$</span><span class="va">mwu_tests</span><span class="op">$</span><span class="va">net_speciation</span>,</span>
+<span>               <span class="va">t3.3</span><span class="op">$</span><span class="va">mwu_tests</span><span class="op">$</span><span class="va">relative_extinction</span>,</span>
+<span>               <span class="va">t3.3</span><span class="op">$</span><span class="va">mwu_tests</span><span class="op">$</span><span class="va">relative_fossilization</span>,</span>
+<span>               make.row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">k3.3b</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">k3.3b</span></span></code></pre></div>
 <table class="table table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
 Mann-Whitney tests

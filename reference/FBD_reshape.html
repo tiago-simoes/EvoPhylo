@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EvoPhylo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,10 +24,11 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/theory.html">Theoretical background</a>
+    <a class="dropdown-item" href="../articles/data_treatment.html">Theoretical background</a>
     <a class="dropdown-item" href="../articles/char-part.html">Character Partitioning</a>
     <a class="dropdown-item" href="../articles/rates-selection.html">Evolutionary Rates &amp; Selection Mode</a>
     <a class="dropdown-item" href="../articles/fbd-params.html">Analyzing FBD Parameters</a>
+    <a class="dropdown-item" href="../articles/offset_handling.html">Analyzing Trees With Offsets</a>
   </div>
 </li>
 <li class="nav-item">
@@ -60,7 +61,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">FBD_reshape</span><span class="op">(</span><span class="va">posterior</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">FBD_reshape</span><span class="op">(</span><span class="va">posterior</span>, variables <span class="op">=</span> <span class="cn">NULL</span>, log.type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MrBayes"</span>, <span class="st">"BEAST2"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -68,17 +69,24 @@
     <dl><dt>posterior</dt>
 <dd><p>Single posterior parameter sample dataset with skyline FBD parameters produced with <code><a href="combine_log.html">combine_log</a></code>.</p></dd>
 
+  <dt>variables</dt>
+<dd><p>Names of FBD rate variables in the log. If NULL (default), will attempt to auto-detect the names and log type.</p></dd>
+
+  <dt>log.type</dt>
+<dd><p>Name of the software which produced the log (currently supported: MrBayes or BEAST2). Has to be set if <code>variables</code> is not NULL.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The posterior parameters log files produced by Bayesian evolutionary analyses using skyline birth-death tree models, including the skyline FBD model, result into two or more estimates for each FBD parameter (e.g., "net diversification", "relative extinction", and "relative fossilization"), one for each time bin. This function will convert parameters (.p) log files with skyline FBD parameters from wide to long format, with one row per generation per time bin and a new column "Time_bin" containing the respective time bins as a factor. The long format is necessary for downstream analyses using <code><a href="FBD_summary.html">FBD_summary</a></code>, <code><a href="FBD_dens_plot.html">FBD_dens_plot</a></code>, <code><a href="FBD_normality_plot.html">FBD_normality_plot</a></code>, <code><a href="FBD_tests1.html">FBD_tests1</a></code>, or <code><a href="FBD_tests2.html">FBD_tests2</a></code>, as similarly done by <code><a href="clock_reshape.html">clock_reshape</a></code> for clock rate tables.</p>
-<p>The "posterior" data frame can be obtained by combining several output log files (.p files) from Mr. Bayes using <code><a href="combine_log.html">combine_log</a></code>.</p>
+    <p>The posterior parameters log files produced by Bayesian evolutionary analyses using skyline birth-death tree models, including the skyline FBD model, result into two or more estimates for each FBD parameter, one for each time bin. This function will convert a table of parameters with skyline FBD parameters from wide to long format, with one row per generation per time bin and a new column "Time_bin" containing the respective time bins as a factor. The long format is necessary for downstream analyses using <code><a href="FBD_summary.html">FBD_summary</a></code>, <code><a href="FBD_dens_plot.html">FBD_dens_plot</a></code>, <code><a href="FBD_normality_plot.html">FBD_normality_plot</a></code>, <code><a href="FBD_tests1.html">FBD_tests1</a></code>, or <code><a href="FBD_tests2.html">FBD_tests2</a></code>, as similarly done by <code><a href="clock_reshape.html">clock_reshape</a></code> for clock rate tables.</p>
+<p>The format of the log files can either be specified using the <code>variables</code> and <code>log.type</code> or auto-detected by the function.
+The "posterior" data frame can be obtained by reading in a log file directly (e.g. using the <code>read.table</code> function) or by combining several output log files from Mr. Bayes using <code><a href="combine_log.html">combine_log</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value (e.g., "net_speciation", "relative extinction", and "relative fossilization").</p>
+<p>A data frame of posterior parameter estimates containing a single "Time_bin" column and one column for each FBD parameter value.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -88,12 +96,12 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># See vignette("fbd-params") for how to use this</span></span>
-<span class="r-in"><span class="co"># function as part of an analysis pipeline</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"posterior3p"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">posterior3p</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># See vignette("fbd-params") for how to use this</span></span></span>
+<span class="r-in"><span><span class="co"># function as part of an analysis pipeline</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"posterior3p"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">posterior3p</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       Gen       LnL      LnPr  TH.all.   TL.all. prop_ancfossil.all.   sigma.1.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 8750000 -1449.425 -143.1907 5.271118 11.969460                   0 0.07660715</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 8761000 -1458.367 -174.9627 4.775064 11.070210                   0 0.05850396</span>
@@ -150,11 +158,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.3483061  0.4949015     0.01016002</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.2723863  0.3463915     0.01160514</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6  0.2846277  0.4073166     0.01075419</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## Reshape FBD table to long format</span></span>
-<span class="r-in"><span class="va">posterior3p_long</span> <span class="op">&lt;-</span> <span class="fu">FBD_reshape</span><span class="op">(</span><span class="va">posterior3p</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">posterior3p_long</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Reshape FBD table to long format</span></span></span>
+<span class="r-in"><span><span class="va">posterior3p_long</span> <span class="op">&lt;-</span> <span class="fu">FBD_reshape</span><span class="op">(</span><span class="va">posterior3p</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">posterior3p_long</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       Gen       LnL      LnPr  TH.all.   TL.all. prop_ancfossil.all.   sigma.1.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 8750000 -1449.425 -143.1907 5.271118 11.969460                   0 0.07660715</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 8761000 -1458.367 -174.9627 4.775064 11.070210                   0 0.05850396</span>
