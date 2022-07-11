@@ -48,7 +48,8 @@ reference:
     See `vignette("offset_handling")` for a complete workflow that uses these functions
     to summarize trees with offsets (with fossil species only) as produced by the SA package in BEAST2.
 - contents:
-  - drop.dummy
+  - drop.dummy.beast
+  - drop.dummy.mb
   - offset.to.dummy
   - offset.to.dummy.metadata
   - write.beast.treedata
