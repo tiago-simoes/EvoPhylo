@@ -77,7 +77,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Analyzing FBD Parameters</h1>
             
-            <h4 data-toc-skip class="date">2022-07-11</h4>
+            <h4 data-toc-skip class="date">2022-07-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/tiago-simoes/EvoPhylo/blob/HEAD/vignettes/fbd-params.Rmd" class="external-link"><code>vignettes/fbd-params.Rmd</code></a></small>
       <div class="d-none name"><code>fbd-params.Rmd</code></div>
@@ -85,7 +85,7 @@
 
     
     
-<p>This vignette explains how to extract FBD (fossilized birth-death) parameters (<em>net diversification</em>, <em>relative extinction (turnover)</em>, and <em>relative fossilization</em>) estimated from relaxed clock Bayesian inference analyses produced by the program <a href="https://nbisweden.github.io/MrBayes/" class="external-link">Mr. Bayes</a>, as used in <span class="citation">Simões and Pierce (<a href="#ref-sim%C3%B5es2021" role="doc-biblioref">2021</a>)</span>.</p>
+<p>This vignette explains how to extract, plot, and statistically test for differences among BD (Birth-Death) or FBD (fossilized birth-death) parameters (e.g., <em>net diversification</em>, <em>relative extinction (turnover)</em>, and <em>relative fossilization</em>) across the tree when using the Skyline BD or Skyline FBD tree models produced by the program <a href="https://nbisweden.github.io/MrBayes/" class="external-link">Mr. Bayes</a> or <a href="http://www.beast2.org/" class="external-link">BEAST2</a> (SA or BDSKY packages) since <strong>EvoPhylo</strong> v. 0.2.0.</p>
 <div class="section level2">
 <h2 id="fbd-parameters-statistics-and-plots">FBD Parameters Statistics and Plots<a class="anchor" aria-label="anchor" href="#fbd-parameters-statistics-and-plots"></a>
 </h2>
@@ -107,7 +107,7 @@
 <p>The posterior data must first be transformed from wide to long to be used with the functions described below; <code><a href="../reference/FBD_reshape.html">FBD_reshape()</a></code> accomplishes this.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Reshape imported combined log file from wide to long with FBD_reshape</span></span>
-<span><span class="va">posterior3p_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_reshape.html">FBD_reshape</a></span><span class="op">(</span><span class="va">posterior3p</span><span class="op">)</span></span>
+<span><span class="va">posterior3p_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_reshape.html">FBD_reshape</a></span><span class="op">(</span><span class="va">posterior3p</span>, variables <span class="op">=</span> <span class="cn">NULL</span>, log.type <span class="op">=</span> <span class="st">"MrBayes"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Show first 5 lines of combined log file</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">posterior3p_long</span>, <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
@@ -3281,14 +3281,9 @@ relative_fossilization
 </table>
 </div>
 </div>
-<div class="section level2 unnumbered">
+<div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references">
-<div id="ref-simões2021">
-<p>Simões, Tiago R., and Stephanie E. Pierce. 2021. “Sustained High Rates of Morphological Evolution During the Rise of Tetrapods.” <em>Nature Ecology &amp; Evolution</em> 5 (10): 1403–14. <a href="https://doi.org/10.1038/s41559-021-01532-x" class="external-link">https://doi.org/10.1038/s41559-021-01532-x</a>.</p>
-</div>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
