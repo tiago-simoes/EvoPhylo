@@ -8,7 +8,7 @@ Export multiple treedata objects (S4 class tree files) to BEAST NEXUS file
 This function was adopted and modified from treeio::write.beast to export a list of trees instead of a single tree.
 }
 \usage{
-write.beast.treedata = function(treedata, file = "", translate = TRUE, tree.name = "STATE")
+write.beast.treedata (treedata, file = "", translate = TRUE, tree.name = "STATE")
 
 }
 \arguments{
@@ -34,7 +34,9 @@ Writes object type \code{treedata} containing multiple trees to a file or file c
 #Load file with multiple trees
 data("post_trees")
 
+\dontrun{
 #Write multiple trees to a file
 write.beast.treedata(post_trees, file = "post_trees.t")
+}
 }
 
