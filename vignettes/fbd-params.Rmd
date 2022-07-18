@@ -12,7 +12,7 @@ bibliography: references.bib
 link-citations: true
 ---
 
-This vignette explains how to extract FBD (fossilized birth-death) parameters (*net diversification*, *relative extinction (turnover)*, and *relative fossilization*) estimated from relaxed clock Bayesian inference analyses produced by the program [Mr. Bayes](https://nbisweden.github.io/MrBayes/), as used in @simões2021.
+This vignette explains how to extract, plot, and statistically test for differences among BD (Birth-Death) or FBD (fossilized birth-death) parameters (e.g., *net diversification*, *relative extinction (turnover)*, and *relative fossilization*) across the tree when using the Skyline BD or Skyline FBD tree models produced by the program [Mr. Bayes](https://nbisweden.github.io/MrBayes/) or [BEAST2](http://www.beast2.org/) (SA or BDSKY packages) since **EvoPhylo** v. 0.2.0.
 
 ```{r, setup, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -48,7 +48,7 @@ The posterior data must first be transformed from wide to long to be used with t
 
 ```{r}
 ## Reshape imported combined log file from wide to long with FBD_reshape
-posterior3p_long <- FBD_reshape(posterior3p)
+posterior3p_long <- FBD_reshape(posterior3p, variables = NULL, log.type = "MrBayes")
 
 ## Show first 5 lines of combined log file
 head(posterior3p_long, 5)

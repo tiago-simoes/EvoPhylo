@@ -35,7 +35,7 @@ converted_trees = offset.to.dummy.metadata(trees_file, log_file)
 
 # Do something with the converted trees - for instance, calculate the MCC summary tree
 # Then remove the dummy tip from the MCC tree
-mcc_tree = drop.dummy(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
+final_tree = drop.dummy.beast(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
 
 }
 \seealso{
