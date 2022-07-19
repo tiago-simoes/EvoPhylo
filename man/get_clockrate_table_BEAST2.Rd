@@ -22,15 +22,15 @@ BEAST2 stores the rates for each clock in a separate file. All trees need to be 
 \examples{
 # find example MCC tree files provided in the package, 
 # using two different clocks for different partitions
-trees_file_clock1 = system.file("extdata", "ex_multiclock.clock1.MCC.tre", package = "EvoPhylo")
-trees_file_clock2 = system.file("extdata", "ex_multiclock.clock2.MCC.tre", package = "EvoPhylo")
+tree_file_clock1 = system.file("extdata", "ex_multiclock.clock1.MCC.tre", package = "EvoPhylo")
+tree_file_clock2 = system.file("extdata", "ex_multiclock.clock2.MCC.tre", package = "EvoPhylo")
 
 # load MCC trees for the two different clocks
-trees_clock1 = treeio::read.beast(trees_file_clock1)
-trees_clock2 = treeio::read.beast(trees_file_clock2)
+tree_clock1 = treeio::read.beast(tree_file_clock1)
+tree_clock2 = treeio::read.beast(tree_file_clock2)
 
 # obtain the rate table
-rate_table = get_clockrate_table_BEAST2(trees_clock1, trees_clock2, summary = "mean")
+rate_table = get_clockrate_table_BEAST2(tree_clock1, tree_clock2, summary = "mean")
 
 }
 \seealso{
