@@ -13,7 +13,7 @@ Authors@R: c(
          email = "ngreifer@iq.harvard.edu",
 	       comment = c(ORCID="0000-0003-3067-7154")),
   person("Joelle", "Barido-Sottani", role = c("aut"), 
-         email = "joelle.barido-sottani@wanadoo.fr",
+         email = "joelle.barido-sottani@m4x.org",
 	       comment = c(ORCID="0000-0002-5220-5468")),
   person("Stephanie", "Pierce", role = c("aut"),
          email = "spierce@oeb.harvard.edu", 
@@ -23,6 +23,7 @@ Depends:
     R (>= 4.0.0)
 Imports:
     ape (>= 1.16.2),
+    dplyr (>= 1.0.8),
     cluster (>= 2.1.2),
 	  deeptime (>= 0.2.0),
     ggplot2 (>= 3.3.5),
@@ -43,4 +44,4 @@ URL: https://github.com/tiago-simoes/EvoPhylo,
     https://tiago-simoes.github.io/EvoPhylo/
 BugReports: https://github.com/tiago-simoes/EvoPhylo/issues
 VignetteBuilder: knitr
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
