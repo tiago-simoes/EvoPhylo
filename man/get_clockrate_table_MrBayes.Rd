@@ -36,8 +36,16 @@ A data frame with a column containing the node identifier (\code{node}) and one 
 # See vignette("rates-selection") for how to use this
 # function as part of an analysis pipeline
 
+## Import summary tree with three clock partitions produced by
+## Mr. Bayes (.t or .tre files) from your local directory
+\dontrun{
+tree3p <- treeio::read.mrbayes("Tree3p.t")
+}
+
+#Or use the example Mr.Bayes multi-clock tree file (\code{tree3p})
 data("tree3p")
 
+# obtain the rate table from MrBayes tree
 rate_table <- get_clockrate_table_MrBayes(tree3p)
 
 head(rate_table)

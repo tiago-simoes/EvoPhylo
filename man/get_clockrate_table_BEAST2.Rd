@@ -20,16 +20,17 @@ A data frame with a column containing the node identifier (\code{node}) and one 
 BEAST2 stores the rates for each clock in a separate file. All trees need to be loaded using \code{treeio::read.beast}.
 }
 \examples{
-# find example MCC tree files provided in the package, 
-# using two different clocks for different partitions
-tree_file_clock1 = system.file("extdata", "ex_multiclock.clock1.MCC.tre", package = "EvoPhylo")
-tree_file_clock2 = system.file("extdata", "ex_multiclock.clock2.MCC.tre", package = "EvoPhylo")
+#Import all clock summary trees produced by BEAST2 from your local directory
+\dontrun{
+tree_clock1 = treeio::read.beast("tree_file_clock1.tre")
+tree_clock2 = treeio::read.beast("tree_file_clock2.tre")
+}
 
-# load MCC trees for the two different clocks
-tree_clock1 = treeio::read.beast(tree_file_clock1)
-tree_clock2 = treeio::read.beast(tree_file_clock2)
+#Or use the example BEAST2 multiple clock trees that accompany EvoPhylo.
+data(tree_clock1)
+data(tree_clock2)
 
-# obtain the rate table
+# obtain the rate table from BEAST2 trees
 rate_table = get_clockrate_table_BEAST2(tree_clock1, tree_clock2, summary = "mean")
 
 }

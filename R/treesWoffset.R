@@ -76,6 +76,8 @@ offset.to.dummy.metadata = function(trees.file, log.file, output.file = NULL,
 #'
 #' @return list of converted trees (as treedata)
 #'
+#' @seealso [offset.to.dummy.metadata()] (slower version, keeping metadata)
+#'
 #' @examples
 #' # Convert trees with offset to trees with dummy tip
 #' trees_file = system.file("extdata", "ex_offset.trees", package = "EvoPhylo")
@@ -88,7 +90,6 @@ offset.to.dummy.metadata = function(trees.file, log.file, output.file = NULL,
 #'
 #' @export
 #' @importFrom stats median
-#' @seealso [offset.to.dummy.metadata()] (slower version, keeping metadata)
 #' @md
 offset.to.dummy = function(trees.file, log.file, output.file = NULL,
                            dummy.name = "dummy") {
@@ -119,13 +120,15 @@ offset.to.dummy = function(trees.file, log.file, output.file = NULL,
 #'
 #' @return list of \code{tree} converted tree (as treedata) ; and \code{offset} age of the youngest tip in the final tree
 #'
+#' @seealso [drop.dummy.mb()] for the same function using summary trees with a "dummy" extant from Mr. Bayes
+#'
 #' @examples
 #' # Analyze the trees with dummy tips - for instance, calculate the MCC summary tree
 #' # Then remove the dummy tip from the MCC tree
 #' final_tree = drop.dummy.beast(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
 #'
 #' @export
-#' @seealso [drop.dummy.mb()] for the same function using summary trees with a "dummy" extant from Mr. Bayes
+#'
 #' @md
 drop.dummy.beast = function(tree.file, output.file = NULL, dummy.name = "dummy", convert.heights = TRUE) {
   tmp = treeio::read.beast(tree.file)
@@ -169,12 +172,14 @@ drop.dummy.beast = function(tree.file, output.file = NULL, dummy.name = "dummy",
 #'
 #' @return list of \code{tree} converted tree (as treedata) ; and \code{offset} age of the youngest tip in the final tree
 #'
+#' @seealso [drop.dummy.beast()] for the same function using summary trees with a "dummy" extant from BEAST2
+#'
 #' @examples
 #' # Remove the dummy tip from the summary tree
 #' final_tree = drop.dummy.mb(system.file("extdata", "tree_mb_dummy.tre", package = "EvoPhylo"))
 #'
 #' @export
-#' @seealso [drop.dummy.beast()] for the same function using summary trees with a "dummy" extant from BEAST2
+#'
 #' @md
 drop.dummy.mb = function(tree.file, output.file = NULL, dummy.name = "dummy", convert.ages = TRUE) {
 

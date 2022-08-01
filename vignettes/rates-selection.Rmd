@@ -256,17 +256,6 @@ Then, get table of clock rates with summary stats for each node in the tree for 
 rate_table_means_no_clades1 <- get_clockrate_table_MrBayes(tree1p, summary = "mean")
 ```
 
-This can be done in a similar way for a [BEAST2](https://www.beast2.org/) analysis.
-
-```{r}
-## get example file from package
-tree_file_clock = system.file("extdata", "ex_multiclock.clock1.MCC.tre", package = "EvoPhylo")
-## import the summary tree with clock rates
-tree_clock = treeio::read.beast(tree_file_clock)
-## calculate the rate table
-rate_table_means_beast2_one_clock <- get_clockrate_table_BEAST2(tree_clock, summary = "mean")
-```
-
 Then proceed with the analysis, as in the case with multiple clocks.
 
 ```{r, eval = FALSE}
@@ -299,6 +288,9 @@ clockrate_dens_plot(rate_table_clades_means1, stack = TRUE,
   ggplot2::scale_color_viridis_d() +
   ggplot2::scale_fill_viridis_d()
 ```
+
+
+This can be done in a similar way for a [BEAST2](https://www.beast2.org/) analysis. Since [BEAST2](https://www.beast2.org/) outputs only one clock rate for each summary tree file, then procedures follow exactly the same as above for multiple clocks, except only one clock tree file will be imported.
 
 ---
 

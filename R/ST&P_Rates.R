@@ -2,43 +2,46 @@
 
 #Rate Table - BEAST2 version
 #' Extract evolutionary rates from Bayesian clock trees produced by BEAST2
-#' 
-#' BEAST2 stores the rates for each clock in a separate file. All trees need to be loaded using \code{treeio::read.beast}. 
+#'
+#' BEAST2 stores the rates for each clock in a separate file. All trees need to be loaded using \code{treeio::read.beast}.
 #'
 #' @param ... \code{treedata} objects containing the summary trees with associated data on the rates for each separate clock.
 #' @param summary summary metric used for the rates. Currently supported: \code{"mean"} or \code{"median"}, default \code{"median"}.
 #' @param drop_dummy if not \code{NULL}, will drop the dummy extant tip with the given label from the BEAST2 summary trees prior to extracting the clock rates (when present). Default is \code{NULL}.
 #'
 #' @return A data frame with a column containing the node identifier (\code{node}) and one column containing the clock rates for each tree provided, in the same order as the trees.
+#'
+#' @seealso [get_clockrate_table_MrBayes()] for the equivalent function for MrBayes output files.
+#' @seealso [clockrate_summary()] for summarizing and examining properties of the resulting rate table. Note that clade membership for each node must be customized (manually added) before these functions can be used, since this is tree and dataset dependent.
+#'
 #' @export
 #'
 #' @examples
-#' # find example MCC tree files provided in the package, 
-#' # using two different clocks for different partitions
-#' tree_file_clock1 = system.file("extdata", "ex_multiclock.clock1.MCC.tre", package = "EvoPhylo")
-#' tree_file_clock2 = system.file("extdata", "ex_multiclock.clock2.MCC.tre", package = "EvoPhylo")
-#' 
-#' # load MCC trees for the two different clocks
-#' tree_clock1 = treeio::read.beast(tree_file_clock1)
-#' tree_clock2 = treeio::read.beast(tree_file_clock2)
-#' 
-#' # obtain the rate table
+#' #Import all clock summary trees produced by BEAST2 from your local directory
+#' \dontrun{
+#' tree_clock1 = treeio::read.beast("tree_file_clock1.tre")
+#' tree_clock2 = treeio::read.beast("tree_file_clock2.tre")
+#' }
+#'
+#' #Or use the example BEAST2 multiple clock trees that accompany EvoPhylo.
+#' data(tree_clock1)
+#' data(tree_clock2)
+#'
+#' # obtain the rate table from BEAST2 trees
 #' rate_table = get_clockrate_table_BEAST2(tree_clock1, tree_clock2, summary = "mean")
-#' 
-#' @seealso [get_clockrate_table_MrBayes()] for the equivalent function for MrBayes output files.
-#' @seealso [clockrate_summary()] for summarizing and examining properties of the resulting rate table. Note that clade membership for each node must be customized (manually added) before these functions can be used, since this is tree and dataset dependent.
+#'
 #' @md
 get_clockrate_table_BEAST2 <- function(..., summary = "median", drop_dummy = NULL) {
   trees = list(...)
   if(length(trees) == 0) stop("No trees provided")
-  
+
   summary <- match.arg(summary, c("mean", "median"))
   name = if(summary == "mean") "rate" else "rate_median"
-  
+
   if (!is.null(drop_dummy)) {
     trees <- lapply(trees, function(tr) treeio::drop.tip(tr, drop_dummy))
   }
-  
+
   rate_table = data.frame(nodes = as.integer(trees[[1]]@data$node))
   for(tr in trees) {
     data = tr@data[match(rate_table$nodes, as.integer(tr@data$node)), ] #get rates in same order as 1st column
@@ -46,7 +49,7 @@ get_clockrate_table_BEAST2 <- function(..., summary = "median", drop_dummy = NUL
   }
   colnames(rate_table)[2:ncol(rate_table)] = paste0("rates", 1:(ncol(rate_table) - 1))
   row.names(rate_table) = NULL
-  
+
   rate_table
 }
 
