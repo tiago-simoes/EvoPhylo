@@ -11,7 +11,7 @@ clock_reshape(rate_table)
 }
 \arguments{
   \item{rate_table}{
-A data frame of clock rates, such as from the output of \code{\link{get_clockrate_table}} with an extra "clade" column.
+A data frame of clock rates, such as from the output of \code{\link{get_clockrate_table_MrBayes}} with an extra "clade" column.
 }
 }
 \details{
@@ -24,7 +24,7 @@ A data frame containing a single "value" column (for all rate values) and one co
 \seealso{
 \code{vignette("rates-selection")} for the use of this function as part of an analysis pipeline.
 
-\code{\link{get_clockrate_table}}, \code{\link{summary}}, \code{\link{clockrate_summary}}, \code{\link{FBD_reshape}}
+\code{\link{get_clockrate_table_MrBayes}}, \code{\link{summary}}, \code{\link{clockrate_summary}}, \code{\link{FBD_reshape}}
 }
 \examples{
 # See vignette("rates-selection") for how to use this

@@ -13,7 +13,7 @@ clockrate_reg_plot(rate_table, clock_x, clock_y,
 }
 \arguments{
   \item{rate_table}{
-A table of clock rates, such as from the output of \code{\link{get_clockrate_table}}.
+A table of clock rates, such as from the output of \code{\link{get_clockrate_table_MrBayes}}.
 }
   \item{clock_x, clock_y}{
 The clock rates that should go on the x- and y-axes, respectively.

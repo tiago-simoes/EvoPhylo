@@ -62,7 +62,7 @@ Decide on number of clusters based on plot; here, $k = 3$ partitions appears opt
 
 3.2. Produce simple cluster graph
 
-3.3. Export clusters/partitions to Nexus file with `cluster_to_nexus()`.
+3.3. Export clusters/partitions to Nexus file with `cluster_to_nexus()` or `write_partitioned_alignments()`.
 
 ```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "70%"}
 ## Generate and vizualize clusters with PAM under chosen k value. 
@@ -73,6 +73,9 @@ plot(clusters)
 ```{r, eval = FALSE}
 ## Write clusters to Nexus file
 cluster_to_nexus(clusters, file = "Clusters_Nexus.txt")
+
+## Write partitioned alignments to separate Nexus files
+write_partitioned_alignments(characters, clusters, file = "alignment.nex")
 ```
 
 ### 4. Complete Workflow: 
@@ -81,7 +84,7 @@ cluster_to_nexus(clusters, file = "Clusters_Nexus.txt")
 
 4.2. Produce a graphic clustering (tSNEs), coloring data points according to PAM clusters, to independently verify PAM clustering. This is set with the `tsne` argument within `make_clusters()`.
 
-4.3. Export clusters/partitions to Nexus file with `cluster_to_nexus()`. This can be copied and pasted into the [Mr. Bayes](https://nbisweden.github.io/MrBayes/) command block.
+4.3. Export clusters/partitions to Nexus file with `cluster_to_nexus()`. This can be copied and pasted into the [Mr. Bayes](https://nbisweden.github.io/MrBayes/) command block. Alternatively, write the partitioned alignments as separate Nexus files using `write_partitioned_alignments()`. This will allow you to import the partitions separately into BEAUti.
 
 ```{r, fig.width=10, fig.height=7, fig.align = "center", out.width = "100%"}
 #User may also generate clusters with PAM and produce a graphic clustering (tSNEs)
@@ -92,6 +95,9 @@ plot(clusters, nrow = 2, max.overlaps = 5)
 ```{r, eval = FALSE}
 #Write clusters/partitions in Nexus file format 
 cluster_to_nexus(clusters, file = "Clusters_Nexus.txt")
+
+## Write partitioned alignments to separate Nexus files
+write_partitioned_alignments(characters, clusters, file = "alignment.nex")
 ```
 
 ## References

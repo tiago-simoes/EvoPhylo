@@ -124,3 +124,38 @@ cluster_to_nexus <- function(cluster_df, file = NULL) {
     return(invisible(out))
   }
 }
+
+
+#' Write character partitions as separate Nexus files (for use in BEAUti)
+#'
+#' @param characters character data matrix as matrix or data frame (with taxa as columns and characters as rows)
+#' @param cluster_df cluster partitions as outputted by \code{make.clusters}
+#' @param file path to save the alignments. If \code{file = "example.nex"}, alignments will be saved to files \code{"example_part1.nex"}, \code{"example_part2.nex"}, etc.
+#'
+#' @return no return value
+#' @export
+#'
+#' @examples
+#' # Load example phylogenetic data matrix
+#' data("characters")
+#' 
+#' # Create distance matrix
+#' Dmatrix <- get_gower_dist(characters)
+#' 
+#' # Find optimal partitioning scheme using PAM under k=3 partitions
+#' cluster_df <- make_clusters(Dmatrix, k = 3)
+#' 
+#' # Write to Nexus files
+#' \dontrun{write_partitioned_alignments(characters, cluster_df, "example.nex")}
+write_partitioned_alignments = function(characters, cluster_df, file) {
+  nk = length(levels(cluster_df$cluster))
+  file = tools::file_path_sans_ext(file)
+  
+  for(ii in 1:nk) {
+    charset = cluster_df$character_number[cluster_df$cluster==ii]
+    aln = lapply(as.data.frame(characters), function(char) char[charset])
+    
+    fn = paste0(file, "_part", ii, ".nex")
+    ape::write.nexus.data(aln, file = fn, format = "standard", interleaved = F)
+  }
+}

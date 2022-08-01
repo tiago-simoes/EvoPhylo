@@ -17,7 +17,7 @@ This example tree file was produced by analyzing the data set with 3 morphologic
 \seealso{
 \code{\link{tree1p}} for another tree object with a single clock partition.
 
-\code{\link{get_clockrate_table}} for extratcing the poserior clockrates from a tree object.
+\code{\link{get_clockrate_table_MrBayes}} for extratcing the poserior clockrates from a tree object.
 }
 \keyword{datasets}
 

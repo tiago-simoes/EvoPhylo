@@ -13,7 +13,7 @@ clockrate_dens_plot(rate_table, clock = NULL,
 }
 \arguments{
   \item{rate_table}{
-A data frame of clock rates, such as from the output of \code{\link{get_clockrate_table}} with an extra "clade" column.
+A data frame of clock rates, such as from the output of \code{\link{get_clockrate_table_MrBayes}} with an extra "clade" column.
 }
   \item{clock}{
 Which clock rates will be plotted. If unspecified, all clocks are plotted.
@@ -29,7 +29,7 @@ When plotting rates for more than one clock, whether the axis scales should be "
 }
 }
 \details{
-The user must manually add clades to the rate table produced by \code{\link{get_clockrate_table}} before it can be used with this function. This can be doen manually with in R, such as by using a graphical user interface for editing data like the \pkg{DataEditR} package, or by writing the rate table to a spreadsheet and reading it back in after adding the clades. The example below uses a table that has had the clades added.
+The user must manually add clades to the rate table produced by \code{\link{get_clockrate_table_MrBayes}} before it can be used with this function. This can be doen manually with in R, such as by using a graphical user interface for editing data like the \pkg{DataEditR} package, or by writing the rate table to a spreadsheet and reading it back in after adding the clades. The example below uses a table that has had the clades added.
 }
 \value{
 A \code{ggplot} object, which can be modified using \pkg{ggplot2} functions.
@@ -38,7 +38,7 @@ A \code{ggplot} object, which can be modified using \pkg{ggplot2} functions.
 \seealso{
 \code{vignette("rates-selection")} for the use of this function as part of an analysis pipeline.
 
-\code{\link{get_clockrate_table}}, \code{\link{geom_density}}
+\code{\link{get_clockrate_table_MrBayes}}, \code{\link{geom_density}}
 }
 \examples{
 # See vignette("rates-selection") for how to use this

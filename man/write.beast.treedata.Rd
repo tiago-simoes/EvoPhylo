@@ -1,5 +1,5 @@
-\name{write.beast.treedata}
-\alias{write.beast.treedata}
+\name{write.beast.treedata }
+\alias{write.beast.treedata }
 
 \title{
 Export multiple treedata objects (S4 class tree files) to BEAST NEXUS file
@@ -8,21 +8,21 @@ Export multiple treedata objects (S4 class tree files) to BEAST NEXUS file
 This function was adopted and modified from treeio::write.beast to export a list of trees instead of a single tree.
 }
 \usage{
-write.beast.treedata (treedata, file = "", translate = TRUE, tree.name = "STATE")
+write.beast.treedata(treedata, file = "", translate = TRUE, tree.name = "STATE")
 
 }
 \arguments{
   \item{treedata}{
-An S4 class object of type \code{treedata} containing multiple trees; a Bayesian clock tree imported using \code{\link[treeio:read.beast]{treeio::read.beast}} or \code{\link[treeio:read.mrbayes]{treeio::read.mrbayes}}.
+An S4 class object of type \code{treedata} containing multiple trees; e.g. a Bayesian clock tree distribution imported using \code{\link[treeio:read.beast]{treeio::read.beast}} or \code{\link[treeio:read.mrbayes]{treeio::read.mrbayes}}.
 }
   \item{file}{
-Output file. If file = "", print the output content on screen
+Output file. If \code{file = ""}, prints the output content on screen.
 }
   \item{translate}{
-Whether translate taxa labels
+Whether to translate taxa labels.
 }
   \item{tree.name}{
-Name for trees
+Name of the trees, default \code{"STATE"}.
 }
 }
 
@@ -32,11 +32,10 @@ Writes object type \code{treedata} containing multiple trees to a file or file c
 
 \examples{
 #Load file with multiple trees
-data("post_trees")
+trees_file = system.file("extdata", "ex_offset.trees", package = "EvoPhylo")
+posterior_trees_offset = treeio::read.beast(trees_file)
 
-\dontrun{
-#Write multiple trees to a file
-write.beast.treedata(post_trees, file = "post_trees.t")
-}
+#Write multiple trees to screen
+write.beast.treedata(posterior_trees_offset)
 }
 
