@@ -6,6 +6,7 @@
 (July 8th, 2022)
 
  * Added function (`drop.dummy.mb`) to remove "dummy" tip from Mr. Bayes summary trees and export tree accounting for metadata on the tips (for fully extinct clades).
+ * Added function (`write_partitioned_alignments`) to write partitioned alignments based on the inferred clusters.
 
 ## Development: EvoPhylo 0.2.0
 
