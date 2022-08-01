@@ -56,7 +56,7 @@ plot(sw, color = "blue", size = 1)
 
 Decide on number of clusters based on plot; here, $k = 3$ partitions appears optimal.
 
-### 3. Simple Workflow: 
+### 3. Simple Workflow
 
 3.1. Analyze clusters with PAM under chosen $k$ value (from Si) with `make_clusters()`.
 
@@ -71,20 +71,20 @@ clusters <- make_clusters(dist_matrix, k = 3)
 plot(clusters)
 ```
 ```{r, eval = FALSE}
-## Write clusters to Nexus file
-cluster_to_nexus(clusters, file = "Clusters_Nexus.txt")
+## Write clusters to Nexus file for Mr. Bayes
+cluster_to_nexus(clusters, file = "Clusters_MB.txt")
 
-## Write partitioned alignments to separate Nexus files
-write_partitioned_alignments(characters, clusters, file = "alignment.nex")
+## Write partitioned alignments to separate Nexus files for BEAUTi
+write_partitioned_alignments(characters, clusters, file = "Clusters_BEAUTi.nex")
 ```
 
-### 4. Complete Workflow: 
+### 4. Complete Workflow
 
 4.1. Analyze clusters with PAM under chosen $k$ value (from Si) with `make_clusters()`.
 
 4.2. Produce a graphic clustering (tSNEs), coloring data points according to PAM clusters, to independently verify PAM clustering. This is set with the `tsne` argument within `make_clusters()`.
 
-4.3. Export clusters/partitions to Nexus file with `cluster_to_nexus()`. This can be copied and pasted into the [Mr. Bayes](https://nbisweden.github.io/MrBayes/) command block. Alternatively, write the partitioned alignments as separate Nexus files using `write_partitioned_alignments()`. This will allow you to import the partitions separately into BEAUti.
+4.3. Export clusters/partitions to Nexus file with `cluster_to_nexus()`. This can be copied and pasted into the [Mr. Bayes](https://nbisweden.github.io/MrBayes/) command block. Alternatively, write the partitioned alignments as separate Nexus files using `write_partitioned_alignments()`. This will allow you to import the partitions separately into BEAUti for analyses with [BEAST2](https://www.beast2.org/).
 
 ```{r, fig.width=10, fig.height=7, fig.align = "center", out.width = "100%"}
 #User may also generate clusters with PAM and produce a graphic clustering (tSNEs)
@@ -93,11 +93,11 @@ clusters <- make_clusters(dist_matrix, k = 3, tsne = TRUE, tsne_dim = 3)
 plot(clusters, nrow = 2, max.overlaps = 5)
 ```
 ```{r, eval = FALSE}
-#Write clusters/partitions in Nexus file format 
-cluster_to_nexus(clusters, file = "Clusters_Nexus.txt")
+## Write clusters to Nexus file for Mr. Bayes
+cluster_to_nexus(clusters, file = "Clusters_MB.txt")
 
-## Write partitioned alignments to separate Nexus files
-write_partitioned_alignments(characters, clusters, file = "alignment.nex")
+## Write partitioned alignments to separate Nexus files for BEAUTi
+write_partitioned_alignments(characters, clusters, file = "Clusters_BEAUTi.nex")
 ```
 
 ## References

@@ -41,6 +41,15 @@ post_trees_path = system.file("extdata", "ex_offset.trees", package = "EvoPhylo"
 post_trees <- treeio::read.beast(post_trees_path)
 save(post_trees, file = "data/post_trees.rda")
 
+#multiple clocks tree files
+tree_file_clock1 = system.file("extdata", "ex_multiclock.clock1.MCC.tre", package = "EvoPhylo")
+tree_clock1 = treeio::read.beast(tree_file_clock1)
+save(tree_clock1, file = "data/tree_clock1.rda")
+
+tree_file_clock2 = system.file("extdata", "ex_multiclock.clock2.MCC.tre", package = "EvoPhylo")
+tree_clock2 = treeio::read.beast(tree_file_clock2)
+save(tree_clock2, file = "data/tree_clock2.rda")
+
 
 #Handling BEAST2 trees with offsets
 posterior_trees_offset <- treeio::read.beast("_dev/extdata/BEAST2/OffsetTrees/ex_offset.trees")

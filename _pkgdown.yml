@@ -11,10 +11,11 @@ reference:
     conduct automated morphological character partitioning as a pre-processing step
     for clock (time-calibrated) Bayesian phylogenetic analysis of morphological data.
 - contents:
-  - cluster_to_nexus
   - get_gower_dist
   - get_sil_widths
   - make_clusters
+  - cluster_to_nexus
+  - write_partitioned_alignments
 - subtitle: Evolutionary rates and selection mode
   desc: >
     See `vignette("rates-selection")` for a complete workflow that uses these functions
@@ -27,7 +28,8 @@ reference:
   - clockrate_reg_plot
   - clockrate_summary
   - combine_log
-  - get_clockrate_table
+  - get_clockrate_table_MrBayes
+  - get_clockrate_table_BEAST2
   - get_pwt_rates
   - plot_treerates_sgn
 - subtitle: Analyzing FBD parameters
