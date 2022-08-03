@@ -1,5 +1,5 @@
-\name{write.beast.treedata }
-\alias{write.beast.treedata }
+\name{write.beast.treedata}
+\alias{write.beast.treedata}
 
 \title{
 Export multiple treedata objects (S4 class tree files) to BEAST NEXUS file
@@ -8,7 +8,8 @@ Export multiple treedata objects (S4 class tree files) to BEAST NEXUS file
 This function was adopted and modified from treeio::write.beast to export a list of trees instead of a single tree.
 }
 \usage{
-write.beast.treedata(treedata, file = "", translate = TRUE, tree.name = "STATE")
+write.beast.treedata(treedata, file = "",
+                    translate = TRUE, tree.name = "STATE")
 
 }
 \arguments{
@@ -32,10 +33,13 @@ Writes object type \code{treedata} containing multiple trees to a file or file c
 
 \examples{
 #Load file with multiple trees
+\dontrun{
 trees_file = system.file("extdata", "ex_offset.trees", package = "EvoPhylo")
 posterior_trees_offset = treeio::read.beast(trees_file)
+}
 
 #Write multiple trees to screen
 write.beast.treedata(posterior_trees_offset)
+
 }
 
