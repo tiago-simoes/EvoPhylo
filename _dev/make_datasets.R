@@ -1,8 +1,10 @@
-# setwd ("E:/Git/EvoPhylo/")
+setwd ("E:/Git/EvoPhylo/")
 
 ######### Morphologicl data matrix example file
-characters <- as.data.frame(ape::read.nexus.data("_dev/extdata/MrBayes/DataMatrix.nex"))
+
+characters <- as.matrix(characters)
 save(characters, file = "data/characters.rda")
+
 
 ######### MrBayes example files
 

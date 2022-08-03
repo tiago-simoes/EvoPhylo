@@ -36,10 +36,9 @@ Writes object type \code{treedata} containing multiple trees to a file or file c
 \dontrun{
 trees_file = system.file("extdata", "ex_offset.trees", package = "EvoPhylo")
 posterior_trees_offset = treeio::read.beast(trees_file)
-}
 
 #Write multiple trees to screen
 write.beast.treedata(posterior_trees_offset)
-
+}
 }
 
