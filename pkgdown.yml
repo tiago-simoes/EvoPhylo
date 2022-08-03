@@ -1,5 +1,5 @@
 pandoc: 2.7.3
-pkgdown: 2.0.5
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   char-part: char-part.html
@@ -7,7 +7,7 @@ articles:
   fbd-params: fbd-params.html
   offset_handling: offset_handling.html
   rates-selection: rates-selection.html
-last_built: 2022-07-13T17:56Z
+last_built: 2022-08-03T14:28Z
 urls:
   reference: https://tiago-simoes.github.io/EvoPhylo/reference
   article: https://tiago-simoes.github.io/EvoPhylo/articles

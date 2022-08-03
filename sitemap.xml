@@ -76,7 +76,10 @@
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/drop.dummy.mb.html</loc>
   </url>
   <url>
-    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/get_clockrate_table.html</loc>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/get_clockrate_table_BEAST2.html</loc>
+  </url>
+  <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/get_clockrate_table_MrBayes.html</loc>
   </url>
   <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/get_gower_dist.html</loc>
@@ -124,6 +127,15 @@
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/tree3p.html</loc>
   </url>
   <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/tree_clock1.html</loc>
+  </url>
+  <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/tree_clock2.html</loc>
+  </url>
+  <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/write.beast.treedata.html</loc>
+  </url>
+  <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/write_partitioned_alignments.html</loc>
   </url>
 </urlset>
