@@ -285,7 +285,7 @@ write.beast.treedata = function(treedata, file = "",
     root.tag <- if (treeio::is.rooted(treedata[[i]])) "= [&R] " else "= [&U] "
 
     cat("\tTREE *", paste0(tree.name,"_",i-1), root.tag, file = file, append = TRUE)
-    cat(treeio:::write_beast_newick(treedata[[i]], file = ""), "\n", sep = "",
+    cat(treeio::write.beast.newick(treedata[[i]], file = ""), "\n", sep = "",
         file = file, append = TRUE)
   }
 
