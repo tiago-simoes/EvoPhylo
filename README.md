@@ -7,9 +7,9 @@ A package to perform automated morphological character partitioning for
 phylogenetic analyses and analyze macroevolutionary parameter outputs
 from clock (time-calibrated) Bayesian inference analyses. `EvoPhylo` was
 initially released for pre- and postprocess data using the software
-[Mr. Bayes](https://nbisweden.github.io/MrBayes/). Current developments
-(since v. 0.2.0) are implementing functions to also postprocess output
-data produced by the software package [BEAST2](http://www.beast2.org/).
+[Mr. Bayes](https://nbisweden.github.io/MrBayes/), but since version 0.3
+it also handles data pre- and post-processing for the software package
+[BEAST2](http://www.beast2.org/).
 
 The ideas and rationale behind the original functionality and objectives
 of the analyses available in this package were first presented by
@@ -19,13 +19,13 @@ Barido-Sottani & Pierce (2022)](https://doi.org/10.32942/osf.io/3mkf9).
 
 ## Installing package **EvoPhylo**
 
-Install the release version directly from CRAN:
+Install the latest release version (v. 0.3) directly from CRAN:
 
 ``` r
 install.packages("EvoPhylo")
 ```
 
-or from Github (check this for the latest updates):
+or development version from Github:
 
 ``` r
 # install.packages("devtools")
