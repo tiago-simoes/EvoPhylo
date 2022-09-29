@@ -22,8 +22,8 @@ BEAST2 stores the rates for each clock in a separate file. All trees need to be 
 \examples{
 #Import all clock summary trees produced by BEAST2 from your local directory
 \dontrun{
-tree_clock1 = treeio::read.beast("tree_file_clock1.tre")
-tree_clock2 = treeio::read.beast("tree_file_clock2.tre")
+tree_clock1 <- treeio::read.beast("tree_file_clock1.tre")
+tree_clock2 <- treeio::read.beast("tree_file_clock2.tre")
 }
 
 #Or use the example BEAST2 multiple clock trees that accompany EvoPhylo.
@@ -31,7 +31,7 @@ data(tree_clock1)
 data(tree_clock2)
 
 # obtain the rate table from BEAST2 trees
-rate_table = get_clockrate_table_BEAST2(tree_clock1, tree_clock2, summary = "mean")
+rate_table <- get_clockrate_table_BEAST2(tree_clock1, tree_clock2, summary = "mean")
 
 }
 \seealso{

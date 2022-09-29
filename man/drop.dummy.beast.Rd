@@ -30,7 +30,7 @@ complete (for instance once the summary tree has been built using TreeAnnotator)
 \examples{
 # Analyze the trees with dummy tips - for instance, calculate the MCC summary tree
 # Then remove the dummy tip from the MCC tree
-final_tree = drop.dummy.beast(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
+final_tree <- drop.dummy.beast(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
 
 }
 \seealso{

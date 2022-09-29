@@ -29,13 +29,13 @@ use \code{offset.to.dummy.metadata} instead.
 }
 \examples{
 # Convert trees with offset to trees with dummy tip
-trees_file = system.file("extdata", "ex_offset.trees", package = "EvoPhylo")
-log_file = system.file("extdata", "ex_offset.log", package = "EvoPhylo")
-converted_trees = offset.to.dummy.metadata(trees_file, log_file)
+trees_file <- system.file("extdata", "ex_offset.trees", package = "EvoPhylo")
+log_file <- system.file("extdata", "ex_offset.log", package = "EvoPhylo")
+converted_trees <- offset.to.dummy.metadata(trees_file, log_file)
 
 # Do something with the converted trees - for instance, calculate the MCC summary tree
 # Then remove the dummy tip from the MCC tree
-final_tree = drop.dummy.beast(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
+final_tree <- drop.dummy.beast(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
 
 }
 \seealso{
