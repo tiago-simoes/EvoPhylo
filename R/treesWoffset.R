@@ -14,45 +14,45 @@
 #'
 #' @examples
 #' # Convert trees with offset to trees with dummy tip
-#' trees_file = system.file("extdata", "ex_offset.trees", package = "EvoPhylo")
-#' log_file = system.file("extdata", "ex_offset.log", package = "EvoPhylo")
-#' converted_trees = offset.to.dummy.metadata(trees_file, log_file)
+#' trees_file <- system.file("extdata", "ex_offset.trees", package = "EvoPhylo")
+#' log_file <- system.file("extdata", "ex_offset.log", package = "EvoPhylo")
+#' converted_trees <- offset.to.dummy.metadata(trees_file, log_file)
 #'
 #' # Do something with the converted trees - for instance, calculate the MCC summary tree
 #' # Then remove the dummy tip from the MCC tree
-#' final_tree = drop.dummy.beast(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
+#' final_tree <- drop.dummy.beast(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
 #'
 #' @export
 #' @importFrom stats median
 #' @seealso [offset.to.dummy()] (faster version discarding metadata)
 #' @md
-offset.to.dummy.metadata = function(trees.file, log.file, output.file = NULL,
+offset.to.dummy.metadata <- function(trees.file, log.file, output.file = NULL,
                                     dummy.name = "dummy") {
-  trees = treeio::read.beast(trees.file)
-  log = read.table(log.file, header = T)
-  log = log$offset
+  trees <- treeio::read.beast(trees.file)
+  log <- read.table(log.file, header = T)
+  log <- log$offset
   print(median(log))
 
   for(i in 1:length(trees)) trees[[i]]@phylo$offset = log[i]
 
-  presenttrees = lapply(trees, function(tmp) {
-    ntips = length(tmp@phylo$tip.label)
-    root = ntips + 2
+  presenttrees <- lapply(trees, function(tmp) {
+    ntips <- length(tmp@phylo$tip.label)
+    root <- ntips + 2
 
-    t = offset.to.dummy.phylo(tmp@phylo, dummy.name = dummy.name)
+    t <- offset.to.dummy.phylo(tmp@phylo, dummy.name = dummy.name)
 
-    tmp@data$node = as.numeric(tmp@data$node)
-    tmp@data$node[which(tmp@data$node > ntips)] = tmp@data$node[which(tmp@data$node > ntips)]+1
-    tmp@data$node[which(tmp@data$node >= root)] = tmp@data$node[which(tmp@data$node >= root)]+1
-    tmp@data$node = as.character(tmp@data$node)
+    tmp@data$node <- as.numeric(tmp@data$node)
+    tmp@data$node[which(tmp@data$node > ntips)] <- tmp@data$node[which(tmp@data$node > ntips)]+1
+    tmp@data$node[which(tmp@data$node >= root)] <- tmp@data$node[which(tmp@data$node >= root)]+1
+    tmp@data$node <- as.character(tmp@data$node)
 
-    metas = colnames(tmp@data)
-    metas = metas[metas != "node"]
-    new.data = list(node = as.character(ntips + 1))
+    metas <- colnames(tmp@data)
+    metas <- metas[metas != "node"]
+    new.data <- list(node = as.character(ntips + 1))
     for(m in metas) new.data[[m]] = 0
-    tmp@data = rbind(tmp@data, new.data)
+    tmp@data <- rbind(tmp@data, new.data)
 
-    tmp@phylo = t
+    tmp@phylo <- t
     return(tmp)
   })
 
@@ -80,26 +80,26 @@ offset.to.dummy.metadata = function(trees.file, log.file, output.file = NULL,
 #'
 #' @examples
 #' # Convert trees with offset to trees with dummy tip
-#' trees_file = system.file("extdata", "ex_offset.trees", package = "EvoPhylo")
-#' log_file = system.file("extdata", "ex_offset.log", package = "EvoPhylo")
-#' converted_trees = offset.to.dummy.metadata(trees_file, log_file)
+#' trees_file <- system.file("extdata", "ex_offset.trees", package = "EvoPhylo")
+#' log_file <- system.file("extdata", "ex_offset.log", package = "EvoPhylo")
+#' converted_trees <- offset.to.dummy.metadata(trees_file, log_file)
 #'
 #' # Do something with the converted trees - for instance, calculate the MCC summary tree
 #' # Then remove the dummy tip from the MCC tree
-#' final_tree = drop.dummy.beast(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
+#' final_tree <- drop.dummy.beast(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
 #'
 #' @export
 #' @importFrom stats median
 #' @md
-offset.to.dummy = function(trees.file, log.file, output.file = NULL,
+offset.to.dummy <- function(trees.file, log.file, output.file = NULL,
                            dummy.name = "dummy") {
-  trees = ape::read.nexus(trees.file)
-  log = read.table(log.file ,header = T)
-  log = log$offset
+  trees <- ape::read.nexus(trees.file)
+  log <- read.table(log.file ,header = T)
+  log <- log$offset
 
   for(i in 1:length(trees)) trees[[i]]$offset = log[i]
 
-  presenttrees = lapply(trees, function(t) {
+  presenttrees <- lapply(trees, function(t) {
     offset.to.dummy.phylo(t, dummy.name = dummy.name)
   })
 
@@ -125,32 +125,32 @@ offset.to.dummy = function(trees.file, log.file, output.file = NULL,
 #' @examples
 #' # Analyze the trees with dummy tips - for instance, calculate the MCC summary tree
 #' # Then remove the dummy tip from the MCC tree
-#' final_tree = drop.dummy.beast(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
+#' final_tree <- drop.dummy.beast(system.file("extdata", "ex_offset.MCC.tre", package = "EvoPhylo"))
 #'
 #' @export
 #'
 #' @md
-drop.dummy.beast = function(tree.file, output.file = NULL, dummy.name = "dummy", convert.heights = TRUE) {
-  tmp = treeio::read.beast(tree.file)
+drop.dummy.beast <- function(tree.file, output.file = NULL, dummy.name = "dummy", convert.heights = TRUE) {
+  tmp <- treeio::read.beast(tree.file)
 
-  tip = which(tmp@phylo$tip.label == dummy.name)
-  tipn = which(tmp@data$node == as.character(tip))
-  node = tmp@phylo$edge[which(tmp@phylo$edge[,2] == tip),1]
-  noden = which(tmp@data$node == as.character(node))
+  tip <- which(tmp@phylo$tip.label == dummy.name)
+  tipn <- which(tmp@data$node == as.character(tip))
+  node <- tmp@phylo$edge[which(tmp@phylo$edge[,2] == tip),1]
+  noden <- which(tmp@data$node == as.character(node))
 
-  offset = min(tmp@data$height_median[which(as.numeric(tmp@data$node) <= length(tmp@phylo$tip.label) &
+  offset <- min(tmp@data$height_median[which(as.numeric(tmp@data$node) <= length(tmp@phylo$tip.label) &
                                               as.numeric(tmp@data$node) != tip)])
 
-  tmp@phylo = ape::drop.tip(tmp@phylo, tip)
-  tmp@data = tmp@data[-c(tipn,noden),]
-  tmp@data$node = as.numeric(tmp@data$node)
-  tmp@data$node[(tmp@data$node) > tip] = tmp@data$node[(tmp@data$node) > tip] - 1
-  tmp@data$node[(tmp@data$node) > node] = tmp@data$node[(tmp@data$node) > node] - 1
-  tmp@data$node = as.character(tmp@data$node)
+  tmp@phylo <- ape::drop.tip(tmp@phylo, tip)
+  tmp@data <- tmp@data[-c(tipn,noden),]
+  tmp@data$node <- as.numeric(tmp@data$node)
+  tmp@data$node[(tmp@data$node) > tip] <- tmp@data$node[(tmp@data$node) > tip] - 1
+  tmp@data$node[(tmp@data$node) > node] <- tmp@data$node[(tmp@data$node) > node] - 1
+  tmp@data$node <- as.character(tmp@data$node)
 
   if(convert.heights) {
     for(m in c("height_0.95_HPD", "height_range", "height_median", "height")) {
-      tmp@data[[m]] = lapply(tmp@data[[m]], function(x) x - offset)
+      tmp@data[[m]] <- lapply(tmp@data[[m]], function(x) x - offset)
     }
   }
 
@@ -176,36 +176,36 @@ drop.dummy.beast = function(tree.file, output.file = NULL, dummy.name = "dummy",
 #'
 #' @examples
 #' # Remove the dummy tip from the summary tree
-#' final_tree = drop.dummy.mb(system.file("extdata", "tree_mb_dummy.tre", package = "EvoPhylo"))
+#' final_tree <- drop.dummy.mb(system.file("extdata", "tree_mb_dummy.tre", package = "EvoPhylo"))
 #'
 #' @export
 #'
 #' @md
-drop.dummy.mb = function(tree.file, output.file = NULL, dummy.name = "dummy", convert.ages = TRUE) {
+drop.dummy.mb <- function(tree.file, output.file = NULL, dummy.name = "dummy", convert.ages = TRUE) {
 
-  tmp = treeio::read.mrbayes(tree.file)
+  tmp <- treeio::read.mrbayes(tree.file)
 
   tmp@data$`prob+-sd` <- as.factor(tmp@data$`prob+-sd`)
   tmp@data <- dplyr::mutate_if(tmp@data, is.character,as.numeric)
 
-  tip = which(tmp@phylo$tip.label == dummy.name)
-  tipn = which(tmp@data$node == as.character(tip))
-  node = tmp@phylo$edge[which(tmp@phylo$edge[,2] == tip),1]
-  noden = which(tmp@data$node == as.character(node))
+  tip <- which(tmp@phylo$tip.label == dummy.name)
+  tipn <- which(tmp@data$node == as.character(tip))
+  node <- tmp@phylo$edge[which(tmp@phylo$edge[,2] == tip),1]
+  noden <- which(tmp@data$node == as.character(node))
 
-  offset = min(tmp@data$age_median[which(as.numeric(tmp@data$node) <= length(tmp@phylo$tip.label) &
+  offset <- min(tmp@data$age_median[which(as.numeric(tmp@data$node) <= length(tmp@phylo$tip.label) &
                                               as.numeric(tmp@data$node) != tip)])
 
-  tmp@phylo = ape::drop.tip(tmp@phylo, tip)
-  tmp@data = tmp@data[-c(tipn,noden),]
-  tmp@data$node = as.numeric(tmp@data$node)
-  tmp@data$node[(tmp@data$node) > tip] = tmp@data$node[(tmp@data$node) > tip] - 1
-  tmp@data$node[(tmp@data$node) > node] = tmp@data$node[(tmp@data$node) > node] - 1
-  tmp@data$node = as.character(tmp@data$node)
+  tmp@phylo <- ape::drop.tip(tmp@phylo, tip)
+  tmp@data <- tmp@data[-c(tipn,noden),]
+  tmp@data$node <- as.numeric(tmp@data$node)
+  tmp@data$node[(tmp@data$node) > tip] <- tmp@data$node[(tmp@data$node) > tip] - 1
+  tmp@data$node[(tmp@data$node) > node] <- tmp@data$node[(tmp@data$node) > node] - 1
+  tmp@data$node <- as.character(tmp@data$node)
 
   if(convert.ages) {
     for(m in c("age_median", "age_mean")) {
-      tmp@data[[m]] = lapply(tmp@data[[m]], "-", offset)
+      tmp@data[[m]] <- lapply(tmp@data[[m]], "-", offset)
     }
     tmp@data$age_0.95HPD <- lapply(tmp@data$age_0.95HPD,"-", offset)
   }
@@ -217,30 +217,30 @@ drop.dummy.mb = function(tree.file, output.file = NULL, dummy.name = "dummy", co
 
 # helper function for offset.to.dummy and offset.to.dummy.metadata
 # adds dummy tip to a phylo object
-offset.to.dummy.phylo = function(t, dummy.name = "dummy") {
-  ntips = length(t$tip.label)
-  totn = ntips + t$Nnode
+offset.to.dummy.phylo <- function(t, dummy.name = "dummy") {
+  ntips <- length(t$tip.label)
+  totn <- ntips + t$Nnode
 
-  times = ape::node.depth.edgelength(t)
-  root_time = max(times) + t$offset
+  times <- ape::node.depth.edgelength(t)
+  root_time <- max(times) + t$offset
 
-  root = ntips+2
-  t$edge[which(t$edge > ntips)] = t$edge[which(t$edge > ntips)]+1
-  t$edge[which(t$edge >= root)] = t$edge[which(t$edge >= root)]+1
+  root <- ntips+2
+  t$edge[which(t$edge > ntips)] <- t$edge[which(t$edge > ntips)]+1
+  t$edge[which(t$edge >= root)] <- t$edge[which(t$edge >= root)]+1
 
-  t$edge = rbind(c(root, root+1), c(root, ntips+1),t$edge)
-  t$edge.length = c(0.1 , root_time, t$edge.length)
-  t$tip.label = c(t$tip.label, dummy.name)
-  t$Nnode = t$Nnode + 1
+  t$edge <- rbind(c(root, root+1), c(root, ntips+1),t$edge)
+  t$edge.length <- c(0.1 , root_time, t$edge.length)
+  t$tip.label <- c(t$tip.label, dummy.name)
+  t$Nnode <- t$Nnode + 1
 
-  ntips = length(t$tip.label)
-  totn = ntips + t$Nnode
+  ntips <- length(t$tip.label)
+  totn <- ntips + t$Nnode
 
   return(t)
 }
 
 # adapted from treeio to handle list of trees instead of single trees
-write.beast.treedata = function(treedata, file = "",
+write.beast.treedata <- function(treedata, file = "",
                                 translate = TRUE, tree.name = "STATE"){
   cat("#NEXUS\n", file = file)
   cat(paste("[R-package treeio, ", date(), "]\n\n", sep = ""),
