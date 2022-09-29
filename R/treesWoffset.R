@@ -45,13 +45,11 @@ offset.to.dummy.metadata <- function(trees.file, log.file, output.file = NULL,
     tmp@data$node[which(tmp@data$node > ntips)] <- tmp@data$node[which(tmp@data$node > ntips)]+1
     tmp@data$node[which(tmp@data$node >= root)] <- tmp@data$node[which(tmp@data$node >= root)]+1
     tmp@data$node <- as.character(tmp@data$node)
-    
     metas <- colnames(tmp@data)
     metas <- metas[metas != "node"]
     new.data <- list(node = as.character(ntips + 1))
     for(m in metas) new.data[[m]] <- 0
     tmp@data <- rbind(tmp@data, new.data)
-    
     tmp@phylo <- t
     return(tmp)
   })
@@ -102,7 +100,6 @@ offset.to.dummy <- function(trees.file, log.file, output.file = NULL,
   presenttrees <- lapply(trees, function(t) {
     offset.to.dummy.phylo(t, dummy.name = dummy.name)
   })
-  
   if(!is.null(output.file)) ape::write.nexus(presenttrees, file = output.file)
   presenttrees
 }
@@ -132,12 +129,10 @@ offset.to.dummy <- function(trees.file, log.file, output.file = NULL,
 #' @md
 drop.dummy.beast <- function(tree.file, output.file = NULL, dummy.name = "dummy", convert.heights = TRUE) {
   tmp <- treeio::read.beast(tree.file)
-  
   tip <- which(tmp@phylo$tip.label == dummy.name)
   tipn <- which(tmp@data$node == as.character(tip))
   node <- tmp@phylo$edge[which(tmp@phylo$edge[,2] == tip),1]
   noden <- which(tmp@data$node == as.character(node))
-  
   offset <- min(tmp@data$height_median[which(as.numeric(tmp@data$node) <= length(tmp@phylo$tip.label) &
                                                as.numeric(tmp@data$node) != tip)])
   
@@ -147,7 +142,7 @@ drop.dummy.beast <- function(tree.file, output.file = NULL, dummy.name = "dummy"
   tmp@data$node[(tmp@data$node) > tip] <- tmp@data$node[(tmp@data$node) > tip] - 1
   tmp@data$node[(tmp@data$node) > node] <- tmp@data$node[(tmp@data$node) > node] - 1
   tmp@data$node <- as.character(tmp@data$node)
-  
+
   if(convert.heights) {
     for(m in c("height_0.95_HPD", "height_range", "height_median", "height")) {
       tmp@data[[m]] <- lapply(tmp@data[[m]], function(x) x - offset)
@@ -182,7 +177,6 @@ drop.dummy.beast <- function(tree.file, output.file = NULL, dummy.name = "dummy"
 #'
 #' @md
 drop.dummy.mb <- function(tree.file, output.file = NULL, dummy.name = "dummy", convert.ages = TRUE) {
-  
   tmp <- treeio::read.mrbayes(tree.file)
   
   tmp@data$`prob+-sd` <- as.factor(tmp@data$`prob+-sd`)
@@ -192,7 +186,6 @@ drop.dummy.mb <- function(tree.file, output.file = NULL, dummy.name = "dummy", c
   tipn <- which(tmp@data$node == as.character(tip))
   node <- tmp@phylo$edge[which(tmp@phylo$edge[,2] == tip),1]
   noden <- which(tmp@data$node == as.character(node))
-  
   offset <- min(tmp@data$age_median[which(as.numeric(tmp@data$node) <= length(tmp@phylo$tip.label) &
                                             as.numeric(tmp@data$node) != tip)])
   
@@ -202,7 +195,7 @@ drop.dummy.mb <- function(tree.file, output.file = NULL, dummy.name = "dummy", c
   tmp@data$node[(tmp@data$node) > tip] <- tmp@data$node[(tmp@data$node) > tip] - 1
   tmp@data$node[(tmp@data$node) > node] <- tmp@data$node[(tmp@data$node) > node] - 1
   tmp@data$node <- as.character(tmp@data$node)
-  
+
   if(convert.ages) {
     for(m in c("age_median", "age_mean")) {
       tmp@data[[m]] <- lapply(tmp@data[[m]], "-", offset)
@@ -219,15 +212,13 @@ drop.dummy.mb <- function(tree.file, output.file = NULL, dummy.name = "dummy", c
 # adds dummy tip to a phylo object
 offset.to.dummy.phylo <- function(t, dummy.name = "dummy") {
   ntips <- length(t$tip.label)
-  totn <- ntips + t$Nnode
-  
+  totn <- ntips + t$Nnode 
   times <- ape::node.depth.edgelength(t)
   root_time <- max(times) + t$offset
-  
   root <- ntips+2
+  
   t$edge[which(t$edge > ntips)] <- t$edge[which(t$edge > ntips)]+1
   t$edge[which(t$edge >= root)] <- t$edge[which(t$edge >= root)]+1
-  
   t$edge <- rbind(c(root, root+1), c(root, ntips+1),t$edge)
   t$edge.length <- c(0.1 , root_time, t$edge.length)
   t$tip.label <- c(t$tip.label, dummy.name)
@@ -242,6 +233,7 @@ offset.to.dummy.phylo <- function(t, dummy.name = "dummy") {
 # adapted from treeio to handle list of trees instead of single trees
 write.beast.treedata <- function(treedata, file = "",
                                  translate = TRUE, tree.name = "STATE"){
+
   cat("#NEXUS\n", file = file)
   cat(paste("[R-package treeio, ", date(), "]\n\n", sep = ""),
       file = file, append = TRUE)
