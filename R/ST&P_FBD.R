@@ -76,7 +76,7 @@ FBD_reshape <- function(posterior, variables = NULL, log.type = c("MrBayes", "BE
     stop("'posterior' must be a data frame.", call. = FALSE)
   }
   if(!is.null(variables)) {
-    exist <- sapply(names, function(nm) {
+    exist <- sapply(variables, function(nm) {
       any(startsWith(names(posterior), nm))
     })
     if(any(!exist)) stop("Specified variables not found in posterior")

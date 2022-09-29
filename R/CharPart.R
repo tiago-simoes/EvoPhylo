@@ -86,7 +86,7 @@ plot.cluster_df <- function(x, seed = NA, nrow = 1, ...) {
         theme_bw() + labs(color = "Cluster")
     })
 
-    p <- Reduce("+", plots) + patchwork::plot_layout(nrow = nrow, guides = "collect")
+    p <- patchwork::wrap_plots(plots, nrow = nrow, guides = "collect")
   }
   else {
     pos <- position_jitter(seed = seed, width = .3)

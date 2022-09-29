@@ -33,7 +33,7 @@ offset.to.dummy.metadata <- function(trees.file, log.file, output.file = NULL,
   log <- log$offset
   print(median(log))
   
-  for(i in 1:length(trees)) trees[[i]]@phylo$offset <- log[i]
+  for(i in seq_len(length(trees))) trees[[i]]@phylo$offset <- log[i]
   
   presenttrees <- lapply(trees, function(tmp) {
     ntips <- length(tmp@phylo$tip.label)
@@ -97,7 +97,7 @@ offset.to.dummy <- function(trees.file, log.file, output.file = NULL,
   log <- read.table(log.file, header = TRUE)
   log <- log$offset
   
-  for(i in 1:length(trees)) trees[[i]]$offset <- log[i]
+  for(i in seq_len(length(trees))) trees[[i]]$offset <- log[i]
   
   presenttrees <- lapply(trees, function(t) {
     offset.to.dummy.phylo(t, dummy.name = dummy.name)
