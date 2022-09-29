@@ -62,8 +62,8 @@ Here we assume that a consensus or summary tree has been generated for each of t
 ```{r, eval = FALSE}
 ## Import all clock summary trees produced by BEAST2 from your local directory
 
-tree_clock1 = treeio::read.beast("tree_file_clock1.tre")
-tree_clock2 = treeio::read.beast("tree_file_clock2.tre")
+tree_clock1 <- treeio::read.beast("tree_file_clock1.tre")
+tree_clock2 <- treeio::read.beast("tree_file_clock2.tre")
 ```
 
 Below, we use the example BEAST2 multiple clock trees `tree_clock1` and `tree_clock2` that accompany `EvoPhylo`.
@@ -88,7 +88,7 @@ Alternatively, the different clocks can also be passed as a list (can be conveni
 
 ```{r}
 ## Get all clocks in list
-all_clocks = list(tree_clock1, tree_clock2)
+all_clocks <- list(tree_clock1, tree_clock2)
 ## Get table of clock rates with summary stats for each node in 
 ## the tree for each relaxed clock partition, with clocks as list
 rate_table_means_beast2 <- do.call(get_clockrate_table_BEAST2, args = c(all_clocks, list(summary = "mean")))

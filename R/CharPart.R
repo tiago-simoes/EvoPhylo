@@ -147,15 +147,15 @@ cluster_to_nexus <- function(cluster_df, file = NULL) {
 #' 
 #' # Write to Nexus files
 #' \dontrun{write_partitioned_alignments(characters, cluster_df, "example.nex")}
-write_partitioned_alignments = function(characters, cluster_df, file) {
-  nk = length(levels(cluster_df$cluster))
-  file = tools::file_path_sans_ext(file)
+write_partitioned_alignments <- function(characters, cluster_df, file) {
+  nk <- length(levels(cluster_df$cluster))
+  file <- tools::file_path_sans_ext(file)
   
   for(ii in 1:nk) {
-    charset = cluster_df$character_number[cluster_df$cluster==ii]
-    aln = lapply(as.data.frame(characters), function(char) char[charset])
+    charset <- cluster_df$character_number[cluster_df$cluster==ii]
+    aln <- lapply(as.data.frame(characters), function(char) char[charset])
     
-    fn = paste0(file, "_part", ii, ".nex")
-    ape::write.nexus.data(aln, file = fn, format = "standard", interleaved = F)
+    fn <- paste0(file, "_part", ii, ".nex")
+    ape::write.nexus.data(aln, file = fn, format = "standard", interleaved = FALSE)
   }
 }

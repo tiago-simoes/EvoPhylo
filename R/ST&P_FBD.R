@@ -76,7 +76,7 @@ FBD_reshape <- function(posterior, variables = NULL, log.type = c("MrBayes", "BE
     stop("'posterior' must be a data frame.", call. = FALSE)
   }
   if(!is.null(variables)) {
-    exist = sapply(names, function(nm) {
+    exist <- sapply(names, function(nm) {
       any(startsWith(names(posterior), nm))
     })
     if(any(!exist)) stop("Specified variables not found in posterior")
@@ -86,15 +86,15 @@ FBD_reshape <- function(posterior, variables = NULL, log.type = c("MrBayes", "BE
     }
   }
   else {
-    autodetect = detect_posterior(posterior)
-    variables = autodetect$variables
-    log.type = autodetect$log.type
+    autodetect <- detect_posterior(posterior)
+    variables <- autodetect$variables
+    log.type <- autodetect$log.type
   }
 
-  varying = lapply(variables, function(v) {
+  varying <- lapply(variables, function(v) {
     names(posterior)[startsWith(names(posterior), v)]
   })
-  idname = if(log.type == "MrBayes") "Gen" else "Sample"
+  idname <- if(log.type == "MrBayes") "Gen" else "Sample"
 
   posterior_long <- reshape(posterior, direction = "long",
                             varying = varying,
@@ -107,8 +107,8 @@ FBD_reshape <- function(posterior, variables = NULL, log.type = c("MrBayes", "BE
   rownames(posterior_long) <- NULL
   attr(posterior_long, "reshapeLong") <- NULL
 
-  attr(posterior_long, "log.type") = log.type
-  attr(posterior_long, "variables") = variables
+  attr(posterior_long, "log.type") <- log.type
+  attr(posterior_long, "variables") <- variables
 
   posterior_long
 }
@@ -120,7 +120,7 @@ FBD_summary <- function(posterior, file = NULL, digits = 3) {
     stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
   }
 
-  parameters = attr(posterior, "variables")
+  parameters <- attr(posterior, "variables")
 
   time.bins <- sort(unique(posterior$Time_bin))
 
@@ -176,7 +176,7 @@ FBD_dens_plot <- function(posterior, parameter, type = "density", stack = FALSE,
     stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
   }
 
-  parameters = attr(posterior, "variables")
+  parameters <- attr(posterior, "variables")
 
   type <- match.arg(type, c("density", "violin"))
 
@@ -188,7 +188,7 @@ FBD_dens_plot <- function(posterior, parameter, type = "density", stack = FALSE,
   if(attr(posterior, "log.type") == "MrBayes") {
     param.names <- setNames(gsub("_", " ", firstup(parameters), fixed = TRUE), parameters)
   }
-  else param.names = setNames(beast2.names(parameters), parameters)
+  else param.names <- setNames(beast2.names(parameters), parameters)
 
   posterior <- posterior[c("Time_bin", parameter)]
 
@@ -237,7 +237,7 @@ FBD_tests1 <- function(posterior, downsample = TRUE) {
     stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
   }
 
-  parameters = attr(posterior, "variables")
+  parameters <- attr(posterior, "variables")
 
   posterior$Time_bin <- factor(posterior$Time_bin)
 
@@ -326,7 +326,7 @@ FBD_tests2 <- function(posterior, p.adjust.method = "fdr") {
     stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
   }
 
-  parameters = attr(posterior, "variables")
+  parameters <- attr(posterior, "variables")
 
   posterior$Time_bin <- factor(posterior$Time_bin)
 
@@ -390,12 +390,12 @@ FBD_normality_plot <- function(posterior) {
     stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
   }
 
-  parameters = attr(posterior, "variables")
+  parameters <- attr(posterior, "variables")
 
   if(attr(posterior, "log.type") == "MrBayes") {
     param.names <- setNames(gsub("_", " ", firstup(parameters), fixed = TRUE), parameters)
   }
-  else param.names = setNames(beast2.names(parameters), parameters)
+  else param.names <- setNames(beast2.names(parameters), parameters)
 
   posterior <- posterior[c("Time_bin", parameters)]
 
