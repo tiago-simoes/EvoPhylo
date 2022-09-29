@@ -94,8 +94,8 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#Import all clock summary trees produced by BEAST2 from your local directory</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">tree_clock1</span> <span class="op">=</span> <span class="fu">treeio</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/treeio/reference/beast-parser.html" class="external-link">read.beast</a></span><span class="op">(</span><span class="st">"tree_file_clock1.tre"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">tree_clock2</span> <span class="op">=</span> <span class="fu">treeio</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/treeio/reference/beast-parser.html" class="external-link">read.beast</a></span><span class="op">(</span><span class="st">"tree_file_clock2.tre"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tree_clock1</span> <span class="op">&lt;-</span> <span class="fu">treeio</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/treeio/reference/beast-parser.html" class="external-link">read.beast</a></span><span class="op">(</span><span class="st">"tree_file_clock1.tre"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tree_clock2</span> <span class="op">&lt;-</span> <span class="fu">treeio</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/treeio/reference/beast-parser.html" class="external-link">read.beast</a></span><span class="op">(</span><span class="st">"tree_file_clock2.tre"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#Or use the example BEAST2 multiple clock trees that accompany EvoPhylo.</span></span></span>
@@ -103,7 +103,7 @@
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">tree_clock2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># obtain the rate table from BEAST2 trees</span></span></span>
-<span class="r-in"><span><span class="va">rate_table</span> <span class="op">=</span> <span class="fu">get_clockrate_table_BEAST2</span><span class="op">(</span><span class="va">tree_clock1</span>, <span class="va">tree_clock2</span>, summary <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rate_table</span> <span class="op">&lt;-</span> <span class="fu">get_clockrate_table_BEAST2</span><span class="op">(</span><span class="va">tree_clock1</span>, <span class="va">tree_clock2</span>, summary <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
