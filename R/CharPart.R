@@ -86,7 +86,7 @@ plot.cluster_df <- function(x, seed = NA, nrow = 1, ...) {
         theme_bw() + labs(color = "Cluster")
     })
 
-    p <- Reduce("+", plots) + patchwork::plot_layout(nrow = nrow, guides = "collect")
+    p <- patchwork::wrap_plots(plots, nrow = nrow, guides = "collect")
   }
   else {
     pos <- position_jitter(seed = seed, width = .3)
@@ -154,8 +154,9 @@ write_partitioned_alignments <- function(characters, cluster_df, file) {
   for(ii in 1:nk) {
     charset <- cluster_df$character_number[cluster_df$cluster==ii]
     aln <- lapply(as.data.frame(characters), function(char) char[charset])
-
+    
     fn <- paste0(file, "_part", ii, ".nex")
-    ape::write.nexus.data(aln, file = fn, format = "standard", interleaved = F)
+    ape::write.nexus.data(aln, file = fn, format = "standard", interleaved = FALSE)
+
   }
 }

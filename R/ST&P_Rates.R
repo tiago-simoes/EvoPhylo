@@ -32,7 +32,7 @@
 #'
 #' @md
 get_clockrate_table_BEAST2 <- function(..., summary = "median", drop_dummy = NULL) {
-  trees = list(...)
+  trees <- list(...)
   if(length(trees) == 0) stop("No trees provided")
 
   summary <- match.arg(summary, c("mean", "median"))
@@ -42,7 +42,7 @@ get_clockrate_table_BEAST2 <- function(..., summary = "median", drop_dummy = NUL
     trees <- lapply(trees, function(tr) treeio::drop.tip(tr, drop_dummy))
   }
 
-  rate_table = data.frame(nodes = as.integer(trees[[1]]@data$node))
+  rate_table <- data.frame(nodes = as.integer(trees[[1]]@data$node))
   for(tr in trees) {
     data <- tr@data[match(rate_table$nodes, as.integer(tr@data$node)), ] #get rates in same order as 1st column
     rate_table <- cbind(rate_table, data[[name]])

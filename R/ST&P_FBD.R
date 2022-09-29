@@ -76,7 +76,7 @@ FBD_reshape <- function(posterior, variables = NULL, log.type = c("MrBayes", "BE
     stop("'posterior' must be a data frame.", call. = FALSE)
   }
   if(!is.null(variables)) {
-    exist <- sapply(names, function(nm) {
+    exist <- sapply(variables, function(nm) {
       any(startsWith(names(posterior), nm))
     })
     if(any(!exist)) stop("Specified variables not found in posterior")
@@ -176,7 +176,7 @@ FBD_dens_plot <- function(posterior, parameter, type = "density", stack = FALSE,
     stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
   }
 
-  parameters = attr(posterior, "variables")
+  parameters <- attr(posterior, "variables")
 
   type <- match.arg(type, c("density", "violin"))
 
@@ -188,7 +188,7 @@ FBD_dens_plot <- function(posterior, parameter, type = "density", stack = FALSE,
   if(attr(posterior, "log.type") == "MrBayes") {
     param.names <- setNames(gsub("_", " ", firstup(parameters), fixed = TRUE), parameters)
   }
-  else param.names = setNames(beast2.names(parameters), parameters)
+  else param.names <- setNames(beast2.names(parameters), parameters)
 
   posterior <- posterior[c("Time_bin", parameter)]
 
@@ -395,7 +395,7 @@ FBD_normality_plot <- function(posterior) {
   if(attr(posterior, "log.type") == "MrBayes") {
     param.names <- setNames(gsub("_", " ", firstup(parameters), fixed = TRUE), parameters)
   }
-  else param.names = setNames(beast2.names(parameters), parameters)
+  else param.names <- setNames(beast2.names(parameters), parameters)
 
   posterior <- posterior[c("Time_bin", parameters)]
 

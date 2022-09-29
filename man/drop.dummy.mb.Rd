@@ -28,7 +28,7 @@ This method is designed to remove the dummy tip added to a dataset before runnin
 }
 \examples{
 # Remove the dummy tip from the summary tree
-final_tree = drop.dummy.mb(system.file("extdata", "tree_mb_dummy.tre", package = "EvoPhylo"))
+final_tree <- drop.dummy.mb(system.file("extdata", "tree_mb_dummy.tre", package = "EvoPhylo"))
 
 }
 \seealso{
