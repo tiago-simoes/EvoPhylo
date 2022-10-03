@@ -125,7 +125,7 @@ RateTable_Means_3p <- get_clockrate_table_MrBayes(tree3p, summary = "mean")
 ```
 
 
-### 2. Export the rate table 
+### 2. Export the rate table and plot tree with node values
 
 Once a rate table has been obtained (from [Mr. Bayes](https://nbisweden.github.io/MrBayes/) or [BEAST2](https://www.beast2.org/) files), it is necessary to export it. This is a necessary step to subsequently open the rate table spreadsheet locally (e.g., using Microsoft Office Excel) and customize the table with clade names associated with with each node in the tree for downstream analyses.
 
@@ -135,7 +135,7 @@ write.csv(RateTable_Means_3p, file = "RateTable_Means_3p.csv")
 ```
 
 
-### 3. Plot tree node labels
+## Plot tree node labels to customize clade names
 
 To visualize the node values in the tree, you can use `ggtree()`.
 
@@ -153,9 +153,9 @@ ggplot2::ggsave("Tree_nodes.pdf", width = 10, height = 10)
 ```
 
 
-### 4. Get summary statistics table and plots 
+### 3. Import rate table with custom clade memberships 
 
-Import the rate table with clade membership (new "clade" column added)
+## A new "clade" column has been added to the rates table
 
 ```{r,eval=FALSE}
 ## Import rate table with clade membership (new "clade" column added) 
@@ -171,7 +171,9 @@ data(RateTable_Means_3p_Clades)
 head(RateTable_Means_3p_Clades)
 ```
 
-Obtain summary statistics table and plots for each clade by clock using `clockrate_summary()`. Supplying a file path to `file` save the output to that file.
+### 4. Get summary stats for each clade/clock partition
+
+Obtain summary statistics table and plots for each clade by clock partition using `clockrate_summary()`. Supplying a file path to `file` save the output to that file.
 
 ```{r, eval = FALSE}
 ## Get summary statistics table for each clade by clock 
@@ -234,7 +236,7 @@ ggplot2::ggsave("Plot_regs.pdf", width = 8, height = 8)
 ```
 
 
-### Addendum: Rates from single clock analysis (no partitioning)
+### ADDENDUM: Example using rates from single clock analysis (no partitioning)
 
 You can also explore clock rates for summary trees including a single clock shared among all character partitions (or an unpartitioned analysis):
 
@@ -338,28 +340,28 @@ data(posterior3p)
 head(posterior3p, 10)
 ```
 
-### 3. Pairwise t-tests of Rate values 
+### 3. Pairwise t-tests of rate values among clades
 
 The function `get_pwt_rates()` will produce a table of pairwise t-tests for differences between the mean clockrate value in the posterior and the absolute rate for each tree node. 
 
 ```{r, eval = FALSE}
 ## Get table of pairwise t-tests for difference between the posterior 
 ## mean and the rate for each tree node
-rate_sign_tests <- get_pwt_rates(RateTable_Means_3p_Clades, posterior3p)
+RateSign_Tests <- get_pwt_rates(RateTable_Means_3p_Clades, posterior3p)
 
 ## Show first 10 lines of table
-head(rate_sign_tests, 10)
+head(RateSign_Tests, 10)
 ```
 ```{r, echo = FALSE}
-rate_sign_tests <- get_pwt_rates(RateTable_Means_3p_Clades, posterior3p)
-t3 <- head(rate_sign_tests, 10)
+RateSign_Tests <- get_pwt_rates(RateTable_Means_3p_Clades, posterior3p)
+t3 <- head(RateSign_Tests, 10)
 kableExtra::kbl(t3, caption = "Combined log file") |> 
   kableExtra::kable_styling(font_size = 15, full_width = FALSE,
                             bootstrap_options = "striped", "condensed")
 ```
 ```{r, eval=FALSE}
 ## Export the table
-write.csv(rate_sign_tests, file = "RateSign_tests.csv")
+write.csv(RateSign_Tests, file = "RateSign_Tests.csv")
 ```
 
 ### 4. Plot selection gradient on the summary tree
@@ -374,7 +376,7 @@ A1 <- plot_treerates_sgn(
   summary = "mean",        #sets summary stats to get from summary tree nodes
   branch_size = 1.5, tip_size = 3,                      #sets size for tree elements
   xlim = c(-450, -260), nbreaks = 8, geo_size = list(3, 3),  #sets limits and breaks for geoscale
-  threshold = c("1 SD", "2 SD"))                 #sets threshold for selection mode
+  threshold = c("1 SD", "3 SD"))                 #sets threshold for selection mode
 A1
 ```
 
@@ -388,7 +390,7 @@ A2 <- plot_treerates_sgn(
   summary = "mean",        #sets summary stats to get from summary tree nodes
   branch_size = 1.5, tip_size = 3,                      #sets size for tree elements
   xlim = c(-450, -260), nbreaks = 8, geo_size = list(3, 3),  #sets limits and breaks for geoscale
-  threshold = c("1 SD", "2 SD"))                 #sets threshold for selection mode
+  threshold = c("1 SD", "3 SD"))                 #sets threshold for selection mode
 
 A3 <- plot_treerates_sgn(
   tree3p, posterior3p, 
@@ -396,7 +398,7 @@ A3 <- plot_treerates_sgn(
   summary = "mean",        #sets summary stats to get from summary tree nodes
   branch_size = 1.5, tip_size = 3,                      #sets size for tree elements
   xlim = c(-450, -260), nbreaks = 8, geo_size = list(3, 3),  #sets limits and breaks for geoscale
-  threshold = c("1 SD", "2 SD"))                 #sets threshold for selection mode
+  threshold = c("1 SD", "3 SD"))                 #sets threshold for selection mode
 
 library(patchwork)
 A1 + A2 + A3 + plot_layout(nrow = 1)
