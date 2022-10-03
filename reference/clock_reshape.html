@@ -94,18 +94,14 @@
 <span class="r-in"><span><span class="co">## The example dataset rate_table_clades_means3 already</span></span></span>
 <span class="r-in"><span><span class="co">## has clades and 3 clock rate columns:</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"rate_table_clades_means3"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set ‘rate_table_clades_means3’ not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">rate_table_clades_means3</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         clade nodes   rates1   rates2   rates3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Dipnomorpha     1 0.943696 0.981486 1.006164</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Dipnomorpha     2 1.065326 0.772074 0.913194</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Dipnomorpha     3 1.182460 0.656872 0.813618</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Dipnomorpha     4 1.229767 0.523709 0.722519</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Dipnomorpha     5 1.230564 0.517773 0.720479</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       Other     6 0.658855 0.717277 0.663950</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in head(rate_table_clades_means3):</span> object 'rate_table_clades_means3' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Reshape a clock rate table with clade names to long format</span></span></span>
 <span class="r-in"><span><span class="va">rates_by_clade</span> <span class="op">&lt;-</span> <span class="fu">clock_reshape</span><span class="op">(</span><span class="va">rate_table_clades_means3</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in startsWith(names(rate_table), "rates"):</span> object 'rate_table_clades_means3' not found</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

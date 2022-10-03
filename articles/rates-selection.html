@@ -77,7 +77,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Evolutionary Rates &amp; Selection Mode</h1>
             
-            <h4 data-toc-skip class="date">2022-09-29</h4>
+            <h4 data-toc-skip class="date">2022-10-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/tiago-simoes/EvoPhylo/blob/HEAD/vignettes/rates-selection.Rmd" class="external-link"><code>vignettes/rates-selection.Rmd</code></a></small>
       <div class="d-none name"><code>rates-selection.Rmd</code></div>
@@ -118,7 +118,7 @@
 <span></span>
 <span><span class="va">tree_clock1</span> <span class="op">&lt;-</span> <span class="fu">treeio</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/treeio/reference/beast-parser.html" class="external-link">read.beast</a></span><span class="op">(</span><span class="st">"tree_file_clock1.tre"</span><span class="op">)</span></span>
 <span><span class="va">tree_clock2</span> <span class="op">&lt;-</span> <span class="fu">treeio</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/treeio/reference/beast-parser.html" class="external-link">read.beast</a></span><span class="op">(</span><span class="st">"tree_file_clock2.tre"</span><span class="op">)</span></span></code></pre></div>
-<p>Below, we use the example BEAST2 multiple clock trees <code>tree_clock1</code> and <code>tree_clock2</code> that accompany <code>EvoPhylo</code>.</p>
+<p>Below, we use the example BEAST2 clock trees from 2 morphological partitions <code>tree_clock1</code> and <code>tree_clock2</code> from XXX that accompany <code>EvoPhylo</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">tree_clock1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">tree_clock2</span><span class="op">)</span></span></code></pre></div>
@@ -126,15 +126,15 @@
 <p>The example shown here uses two different clocks, however the function supports any number of clocks which can all be passed as separate arguments.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Get table of clock rates with summary stats for each node in </span></span>
-<span><span class="co">## the tree for each relaxed clock partition </span></span>
-<span><span class="va">rate_table_means_beast2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_clockrate_table_BEAST2.html">get_clockrate_table_BEAST2</a></span><span class="op">(</span><span class="va">tree_clock1</span>, <span class="va">tree_clock2</span>, summary <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co">## the tree for each relaxed clock partition (2 partitions in this dataset) </span></span>
+<span><span class="va">RateTable_Means_2p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_clockrate_table_BEAST2.html">get_clockrate_table_BEAST2</a></span><span class="op">(</span><span class="va">tree_clock1</span>, <span class="va">tree_clock2</span>, summary <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span></code></pre></div>
 <p>Alternatively, the different clocks can also be passed as a list (can be convenient for a large number of clocks), as shown in this example.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Get all clocks in list</span></span>
 <span><span class="va">all_clocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">tree_clock1</span>, <span class="va">tree_clock2</span><span class="op">)</span></span>
 <span><span class="co">## Get table of clock rates with summary stats for each node in </span></span>
 <span><span class="co">## the tree for each relaxed clock partition, with clocks as list</span></span>
-<span><span class="va">rate_table_means_beast2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">get_clockrate_table_BEAST2</span>, args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">all_clocks</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>summary <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">RateTable_Means_2p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">get_clockrate_table_BEAST2</span>, args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">all_clocks</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>summary <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="b--get-rates-from-the-clock-tree-and-create-a-rate-table-mrbayes">1b. Get rates from the clock tree and create a rate table (MrBayes)<a class="anchor" aria-label="anchor" href="#b--get-rates-from-the-clock-tree-and-create-a-rate-table-mrbayes"></a>
@@ -146,23 +146,23 @@
 <span><span class="co">## Mr. Bayes (.t or .tre files) from your local directory</span></span>
 <span></span>
 <span><span class="va">tree3p</span> <span class="op">&lt;-</span> <span class="fu">treeio</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/treeio/reference/beast-parser.html" class="external-link">read.mrbayes</a></span><span class="op">(</span><span class="st">"Tree3p.t"</span><span class="op">)</span></span></code></pre></div>
-<p>Below, we use the example Mr.Bayes single multi-clock tree <code>tree3p</code> that accompanies <code>EvoPhylo</code>.</p>
+<p>Below, we use the example Mr.Bayes single multi-clock tree with 3 morphological partitions <code>tree3p</code> from <span class="citation">Simões and Pierce (<a href="#ref-sim%C3%B5es2021" role="doc-biblioref">2021</a>)</span> that accompanies <code>EvoPhylo</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">tree3p</span><span class="op">)</span></span></code></pre></div>
 <p>Subsequently, using <code><a href="../reference/get_clockrate_table_MrBayes.html">get_clockrate_table_MrBayes()</a></code>, users can extract mean or median rate values for each node in the summary tree that were annotated by <a href="https://nbisweden.github.io/MrBayes/" class="external-link">Mr. Bayes</a> when creating the summary tree with <a href="https://nbisweden.github.io/MrBayes/" class="external-link">Mr. Bayes</a> “sumt” command. These mean or median rate values are calculated by <a href="https://nbisweden.github.io/MrBayes/" class="external-link">Mr. Bayes</a> taking into account all trees from the posterior sample. This works for any summary tree produced by <a href="https://nbisweden.github.io/MrBayes/" class="external-link">Mr. Bayes</a>: a majority rule consensus or the fully resolved maximum compatible tree (the latter is used in the examples here).</p>
 <p>Please note that analyses must have reached the stationarity phase and independent runs converging for the summary statistics in each node to be meaningful summaries of the posterior sample.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Get table of clock rates with summary stats for each node in </span></span>
-<span><span class="co">## the tree for each relaxed clock partition </span></span>
-<span><span class="va">rate_table_means_no_clades3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_clockrate_table_MrBayes.html">get_clockrate_table_MrBayes</a></span><span class="op">(</span><span class="va">tree3p</span>, summary <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co">## the tree for each relaxed clock partition (3 partitions in this tree file)</span></span>
+<span><span class="va">RateTable_Means_3p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_clockrate_table_MrBayes.html">get_clockrate_table_MrBayes</a></span><span class="op">(</span><span class="va">tree3p</span>, summary <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="export-the-rate-table">2. Export the rate table<a class="anchor" aria-label="anchor" href="#export-the-rate-table"></a>
 </h3>
 <p>Once a rate table has been obtained (from <a href="https://nbisweden.github.io/MrBayes/" class="external-link">Mr. Bayes</a> or <a href="https://www.beast2.org/" class="external-link">BEAST2</a> files), it is necessary to export it. This is a necessary step to subsequently open the rate table spreadsheet locally (e.g., using Microsoft Office Excel) and customize the table with clade names associated with with each node in the tree for downstream analyses.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Export the rate tables</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">rate_table_means_no_clades3</span>, file <span class="op">=</span> <span class="st">"RateTable_Means3.csv"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Export the rate tables (using Mr. Bayes example with 3 partitions)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">RateTable_Means_3p</span>, file <span class="op">=</span> <span class="st">"RateTable_Means_3p.csv"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plot-tree-node-labels">3. Plot tree node labels<a class="anchor" aria-label="anchor" href="#plot-tree-node-labels"></a>
@@ -187,12 +187,12 @@
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Import rate table with clade membership (new "clade" column added) </span></span>
 <span><span class="co">## from your local directory</span></span>
-<span><span class="va">rate_table_clades_means3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"RateTable_Means3_Clades.csv"</span>, header <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>Below, we use the rate table with clade membership <code>rate_table_clades_means3</code> that accompanies <code>EvoPhylo</code>.</p>
+<span><span class="va">RateTable_Means_3p_Clades</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"RateTable_Means_3p_Clades.csv"</span>, header <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Below, we use the rate table with clade membership <code>RateTable_Means_3p_Clades</code> that accompanies <code>EvoPhylo</code>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">rate_table_clades_means3</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">rate_table_clades_means3</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##         clade nodes   rates1   rates2   rates3</span></span>
 <span><span class="co">## 1 Dipnomorpha     1 0.943696 0.981486 1.006164</span></span>
 <span><span class="co">## 2 Dipnomorpha     2 1.065326 0.772074 0.913194</span></span>
@@ -203,8 +203,8 @@
 <p>Obtain summary statistics table and plots for each clade by clock using <code><a href="../reference/clockrate_summary.html">clockrate_summary()</a></code>. Supplying a file path to <code>file</code> save the output to that file.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Get summary statistics table for each clade by clock </span></span>
-<span><span class="fu"><a href="../reference/clockrate_summary.html">clockrate_summary</a></span><span class="op">(</span><span class="va">rate_table_clades_means3</span>,</span>
-<span>                  file <span class="op">=</span> <span class="st">"Sum_RateTable_Means3.csv"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/clockrate_summary.html">clockrate_summary</a></span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span>,</span>
+<span>                  file <span class="op">=</span> <span class="st">"Sum_RateTable_Means_3p.csv"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-striped" style="font-size: 15px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
 Rate table summary statistics
@@ -827,19 +827,19 @@ Other
 <p>Plot distributions of rates by clock partition and clade with <code><a href="../reference/clockrate_dens_plot.html">clockrate_dens_plot()</a></code>.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Overlapping plots</span></span>
-<span><span class="fu"><a href="../reference/clockrate_dens_plot.html">clockrate_dens_plot</a></span><span class="op">(</span><span class="va">rate_table_clades_means3</span>, stack <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span><span class="fu"><a href="../reference/clockrate_dens_plot.html">clockrate_dens_plot</a></span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span>, stack <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                    nrow <span class="op">=</span> <span class="fl">1</span>, scales <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="rates-selection_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;"></p>
 <p>Sometimes using stacked plots provides a better visualization as it avoids overlapping distributions.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Stacked plots</span></span>
-<span><span class="fu"><a href="../reference/clockrate_dens_plot.html">clockrate_dens_plot</a></span><span class="op">(</span><span class="va">rate_table_clades_means3</span>, stack <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span><span class="fu"><a href="../reference/clockrate_dens_plot.html">clockrate_dens_plot</a></span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span>, stack <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                    nrow <span class="op">=</span> <span class="fl">1</span>, scales <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="rates-selection_files/figure-html/unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;"></p>
 <p>It is also possible to append extra layers using <code>ggplot2</code> function, such as for changing the color scale. Below, we change the color scale to be the Viridis scale.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Stacked plots with viridis color scale</span></span>
-<span><span class="fu"><a href="../reference/clockrate_dens_plot.html">clockrate_dens_plot</a></span><span class="op">(</span><span class="va">rate_table_clades_means3</span>, stack <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span><span class="fu"><a href="../reference/clockrate_dens_plot.html">clockrate_dens_plot</a></span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span>, stack <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                    nrow <span class="op">=</span> <span class="fl">1</span>, scales <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_d</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -851,9 +851,9 @@ Other
 <p>We can also plot linear model regressions between rates from two or more clocks with <code><a href="../reference/clockrate_reg_plot.html">clockrate_reg_plot()</a></code>.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot regressions of rates from two clocks</span></span>
-<span><span class="va">p12</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clockrate_reg_plot.html">clockrate_reg_plot</a></span><span class="op">(</span><span class="va">rate_table_clades_means3</span>, clock_x <span class="op">=</span> <span class="fl">1</span>, clock_y <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">p13</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clockrate_reg_plot.html">clockrate_reg_plot</a></span><span class="op">(</span><span class="va">rate_table_clades_means3</span>, clock_x <span class="op">=</span> <span class="fl">1</span>, clock_y <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="va">p23</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clockrate_reg_plot.html">clockrate_reg_plot</a></span><span class="op">(</span><span class="va">rate_table_clades_means3</span>, clock_x <span class="op">=</span> <span class="fl">2</span>, clock_y <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">p12</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clockrate_reg_plot.html">clockrate_reg_plot</a></span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span>, clock_x <span class="op">=</span> <span class="fl">1</span>, clock_y <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">p13</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clockrate_reg_plot.html">clockrate_reg_plot</a></span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span>, clock_x <span class="op">=</span> <span class="fl">1</span>, clock_y <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">p23</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clockrate_reg_plot.html">clockrate_reg_plot</a></span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span>, clock_x <span class="op">=</span> <span class="fl">2</span>, clock_y <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span> <span class="co">#for combining plots</span></span>
 <span><span class="va">p12</span> <span class="op">+</span> <span class="va">p13</span> <span class="op">+</span> <span class="va">p23</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
@@ -875,20 +875,20 @@ Other
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">tree1p</span><span class="op">)</span></span></code></pre></div>
 <p>Then, get table of clock rates with summary stats for each node in the tree for each relaxed clock partition.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rate_table_means_no_clades1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_clockrate_table_MrBayes.html">get_clockrate_table_MrBayes</a></span><span class="op">(</span><span class="va">tree1p</span>, summary <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">RateTable_Means_1p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_clockrate_table_MrBayes.html">get_clockrate_table_MrBayes</a></span><span class="op">(</span><span class="va">tree1p</span>, summary <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span></code></pre></div>
 <p>Then proceed with the analysis, as in the case with multiple clocks.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Export the rate tables</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">rate_table_means_no_clades1</span>, file <span class="op">=</span> <span class="st">"RateTable_Means1.csv"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">RateTable_Means_1p</span>, file <span class="op">=</span> <span class="st">"RateTable_Means1.csv"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Import rate table after adding clade membership (new "clade" column added)</span></span>
-<span><span class="va">rate_table_clades_means1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"RateTable_Means1_Clades.csv"</span>, header <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">RateTable_Means_1p_Clades</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"RateTable_Means1_Clades.csv"</span>, header <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#Below, we use the rate table with clade membership `rate_table_clades_means1` that accompanies `EvoPhylo`.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">rate_table_clades_means1</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#Below, we use the rate table with clade membership `RateTable_Means_1p_Clades` that accompanies `EvoPhylo`.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">RateTable_Means_1p_Clades</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Get summary statistics table for each clade by clock </span></span>
-<span><span class="fu"><a href="../reference/clockrate_summary.html">clockrate_summary</a></span><span class="op">(</span><span class="va">rate_table_clades_means1</span>,</span>
+<span><span class="fu"><a href="../reference/clockrate_summary.html">clockrate_summary</a></span><span class="op">(</span><span class="va">RateTable_Means_1p_Clades</span>,</span>
 <span>                  file <span class="op">=</span> <span class="st">"Sum_RateTable_Medians1.csv"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-striped" style="font-size: 15px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
@@ -1102,7 +1102,7 @@ Other
 </table>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Stacked plots with viridis color scale</span></span>
-<span><span class="fu"><a href="../reference/clockrate_dens_plot.html">clockrate_dens_plot</a></span><span class="op">(</span><span class="va">rate_table_clades_means1</span>, stack <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span><span class="fu"><a href="../reference/clockrate_dens_plot.html">clockrate_dens_plot</a></span><span class="op">(</span><span class="va">RateTable_Means_1p_Clades</span>, stack <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                    nrow <span class="op">=</span> <span class="fl">1</span>, scales <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_d</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -1121,14 +1121,14 @@ Other
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Import rate table with clade membership (new "clade" column added) </span></span>
 <span><span class="co">## from your local directory with "mean" values</span></span>
-<span><span class="va">rate_table_clades_means3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"RateTable_Means3_Clades.csv"</span>, header <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>Below, we use the rate table with clade membership <code>rate_table_clades_means3</code> that accompanies <code>EvoPhylo</code>.</p>
+<span><span class="va">RateTable_Means_3p_Clades</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"RateTable_Means_Clades.csv"</span>, header <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Below, we use the rate table with clade membership <code>RateTable_Means_3p_Clades</code> that accompanies <code>EvoPhylo</code>.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">rate_table_clades_means3</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span><span class="op">)</span></span></code></pre></div>
 <p>It is necessary to transform the table from wide to long format with <code><a href="../reference/clock_reshape.html">clock_reshape()</a></code>.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Transform table from wide to long format</span></span>
-<span><span class="va">rates_by_clade</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clock_reshape.html">clock_reshape</a></span><span class="op">(</span><span class="va">rate_table_clades_means3</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">rates_by_clade</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clock_reshape.html">clock_reshape</a></span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="import-combined-log-file-from-all-runs-">2. Import combined log file from all runs.<a class="anchor" aria-label="anchor" href="#import-combined-log-file-from-all-runs-"></a>
@@ -1152,7 +1152,7 @@ Other
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Get table of pairwise t-tests for difference between the posterior </span></span>
 <span><span class="co">## mean and the rate for each tree node</span></span>
-<span><span class="va">rate_sign_tests</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pwt_rates.html">get_pwt_rates</a></span><span class="op">(</span><span class="va">rate_table_clades_means3</span>, <span class="va">posterior3p</span><span class="op">)</span></span>
+<span><span class="va">rate_sign_tests</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pwt_rates.html">get_pwt_rates</a></span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span>, <span class="va">posterior3p</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Show first 10 lines of table</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">rate_sign_tests</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
