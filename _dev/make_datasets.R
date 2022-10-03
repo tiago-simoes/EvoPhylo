@@ -26,15 +26,15 @@ save(tree3p, file = "data/tree3p.rda")
 tree1p <- treeio::read.mrbayes("_dev/extdata/MrBayes/SingleClockTree/Tree1p.t")
 save(tree1p, file = "data/tree1p.rda")
 
-#making rate_table_clades_means3
+#making RateTable_Means_3p_Clades
 #same as get_clockrate_table(tree3p) with clades added
-rate_table_clades_means3 <- read.csv("_dev/extdata/MrBayes/MultiClockTree/RateTable_Means_Clades.csv")
-save(rate_table_clades_means3, file = "data/rate_table_clades_means3.rda")
+RateTable_Means_3p_Clades <- read.csv("_dev/extdata/MrBayes/MultiClockTree/RateTable_Means_Clades.csv")
+save(RateTable_Means_3p_Clades, file = "data/RateTable_Means_3p_Clades.rda")
 
-#making rate_table_clades_means1
+#making RateTable_Means_1p_Clades
 #same as get_clockrate_table(tree1p) with clades added
-rate_table_clades_means1 <- read.csv("_dev/extdata/MrBayes/SingleClockTree/RateTable_Means_Clades.csv")
-save(rate_table_clades_means1, file = "data/rate_table_clades_means1.rda")
+RateTable_Means_1p_Clades <- read.csv("_dev/extdata/MrBayes/SingleClockTree/RateTable_Means_Clades.csv")
+save(RateTable_Means_1p_Clades, file = "data/RateTable_Means_1p_Clades.rda")
 
 ######### BEAST2 example files
 
