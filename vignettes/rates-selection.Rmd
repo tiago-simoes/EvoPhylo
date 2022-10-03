@@ -66,7 +66,7 @@ tree_clock1 <- treeio::read.beast("tree_file_clock1.tre")
 tree_clock2 <- treeio::read.beast("tree_file_clock2.tre")
 ```
 
-Below, we use the example BEAST2 multiple clock trees `tree_clock1` and `tree_clock2` that accompany `EvoPhylo`.
+Below, we use the example BEAST2 clock trees from 2 morphological partitions `tree_clock1` and `tree_clock2` from XXX that accompany `EvoPhylo`.
 
 ```{r}
 data(tree_clock1)
@@ -80,8 +80,8 @@ The example shown here uses two different clocks, however the function supports 
 
 ```{r}
 ## Get table of clock rates with summary stats for each node in 
-## the tree for each relaxed clock partition 
-rate_table_means_beast2 <- get_clockrate_table_BEAST2(tree_clock1, tree_clock2, summary = "mean")
+## the tree for each relaxed clock partition (2 partitions in this dataset) 
+RateTable_Means_2p <- get_clockrate_table_BEAST2(tree_clock1, tree_clock2, summary = "mean")
 ```
 
 Alternatively, the different clocks can also be passed as a list (can be convenient for a large number of clocks), as shown in this example.
@@ -91,7 +91,7 @@ Alternatively, the different clocks can also be passed as a list (can be conveni
 all_clocks <- list(tree_clock1, tree_clock2)
 ## Get table of clock rates with summary stats for each node in 
 ## the tree for each relaxed clock partition, with clocks as list
-rate_table_means_beast2 <- do.call(get_clockrate_table_BEAST2, args = c(all_clocks, list(summary = "mean")))
+RateTable_Means_2p <- do.call(get_clockrate_table_BEAST2, args = c(all_clocks, list(summary = "mean")))
 ```
 
 
@@ -108,7 +108,7 @@ First, import a Bayesian clock tree using `treeio`'s function `read.mrbayes()` (
 tree3p <- treeio::read.mrbayes("Tree3p.t")
 ```
 
-Below, we use the example Mr.Bayes single multi-clock tree `tree3p` that accompanies `EvoPhylo`.
+Below, we use the example Mr.Bayes single multi-clock tree with 3 morphological partitions `tree3p` from @simões2021 that accompanies `EvoPhylo`.
 
 ```{r}
 data(tree3p)
@@ -120,8 +120,8 @@ Please note that analyses must have reached the stationarity phase and independe
 
 ```{r}
 ## Get table of clock rates with summary stats for each node in 
-## the tree for each relaxed clock partition 
-rate_table_means_no_clades3 <- get_clockrate_table_MrBayes(tree3p, summary = "mean")
+## the tree for each relaxed clock partition (3 partitions in this tree file)
+RateTable_Means_3p <- get_clockrate_table_MrBayes(tree3p, summary = "mean")
 ```
 
 
@@ -130,8 +130,8 @@ rate_table_means_no_clades3 <- get_clockrate_table_MrBayes(tree3p, summary = "me
 Once a rate table has been obtained (from [Mr. Bayes](https://nbisweden.github.io/MrBayes/) or [BEAST2](https://www.beast2.org/) files), it is necessary to export it. This is a necessary step to subsequently open the rate table spreadsheet locally (e.g., using Microsoft Office Excel) and customize the table with clade names associated with with each node in the tree for downstream analyses.
 
 ```{r, eval = FALSE}
-## Export the rate tables
-write.csv(rate_table_means_no_clades3, file = "RateTable_Means3.csv")
+## Export the rate tables (using Mr. Bayes example with 3 partitions)
+write.csv(RateTable_Means_3p, file = "RateTable_Means_3p.csv")
 ```
 
 
@@ -160,27 +160,27 @@ Import the rate table with clade membership (new "clade" column added)
 ```{r,eval=FALSE}
 ## Import rate table with clade membership (new "clade" column added) 
 ## from your local directory
-rate_table_clades_means3 <- read.csv("RateTable_Means3_Clades.csv", header = TRUE)
+RateTable_Means_3p_Clades <- read.csv("RateTable_Means_3p_Clades.csv", header = TRUE)
 ```
 
-Below, we use the rate table with clade membership `rate_table_clades_means3` that accompanies `EvoPhylo`.
+Below, we use the rate table with clade membership `RateTable_Means_3p_Clades` that accompanies `EvoPhylo`.
 
 ```{r}
-data(rate_table_clades_means3)
+data(RateTable_Means_3p_Clades)
 
-head(rate_table_clades_means3)
+head(RateTable_Means_3p_Clades)
 ```
 
 Obtain summary statistics table and plots for each clade by clock using `clockrate_summary()`. Supplying a file path to `file` save the output to that file.
 
 ```{r, eval = FALSE}
 ## Get summary statistics table for each clade by clock 
-clockrate_summary(rate_table_clades_means3,
-                  file = "Sum_RateTable_Means3.csv")
+clockrate_summary(RateTable_Means_3p_Clades,
+                  file = "Sum_RateTable_Means_3p.csv")
 ```
 
 ```{r, echo = FALSE}
-t1 <- clockrate_summary(rate_table_clades_means3, digits = 2) 
+t1 <- clockrate_summary(RateTable_Means_3p_Clades, digits = 2) 
 kableExtra::kbl(t1, caption = "Rate table summary statistics") |> 
   kableExtra::kable_styling(font_size = 15, full_width = FALSE,
                             bootstrap_options = "striped", "condensed")
@@ -193,7 +193,7 @@ Plot distributions of rates by clock partition and clade with `clockrate_dens_pl
 
 ```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "100%"}
 ## Overlapping plots
-clockrate_dens_plot(rate_table_clades_means3, stack = FALSE,
+clockrate_dens_plot(RateTable_Means_3p_Clades, stack = FALSE,
                     nrow = 1, scales = "fixed")
 ```
 
@@ -201,7 +201,7 @@ Sometimes using stacked plots provides a better visualization as it avoids overl
 
 ```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "100%"}
 ## Stacked plots
-clockrate_dens_plot(rate_table_clades_means3, stack = TRUE,
+clockrate_dens_plot(RateTable_Means_3p_Clades, stack = TRUE,
                     nrow = 1, scales = "fixed")
 ```
 
@@ -209,7 +209,7 @@ It is also possible to append extra layers using `ggplot2` function, such as for
 
 ```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "100%"}
 ## Stacked plots with viridis color scale
-clockrate_dens_plot(rate_table_clades_means3, stack = TRUE,
+clockrate_dens_plot(RateTable_Means_3p_Clades, stack = TRUE,
                     nrow = 1, scales = "fixed") +
   ggplot2::scale_color_viridis_d() +
   ggplot2::scale_fill_viridis_d()
@@ -221,9 +221,9 @@ We can also plot linear model regressions between rates from two or more clocks 
 
 ```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
 ## Plot regressions of rates from two clocks
-p12 <- clockrate_reg_plot(rate_table_clades_means3, clock_x = 1, clock_y = 2)
-p13 <- clockrate_reg_plot(rate_table_clades_means3, clock_x = 1, clock_y = 3)
-p23 <- clockrate_reg_plot(rate_table_clades_means3, clock_x = 2, clock_y = 3)
+p12 <- clockrate_reg_plot(RateTable_Means_3p_Clades, clock_x = 1, clock_y = 2)
+p13 <- clockrate_reg_plot(RateTable_Means_3p_Clades, clock_x = 1, clock_y = 3)
+p23 <- clockrate_reg_plot(RateTable_Means_3p_Clades, clock_x = 2, clock_y = 3)
 
 library(patchwork) #for combining plots
 p12 + p13 + p23 + plot_layout(ncol = 2)
@@ -253,29 +253,29 @@ data(tree1p)
 Then, get table of clock rates with summary stats for each node in the tree for each relaxed clock partition.
 
 ```{r}
-rate_table_means_no_clades1 <- get_clockrate_table_MrBayes(tree1p, summary = "mean")
+RateTable_Means_1p <- get_clockrate_table_MrBayes(tree1p, summary = "mean")
 ```
 
 Then proceed with the analysis, as in the case with multiple clocks.
 
 ```{r, eval = FALSE}
 ## Export the rate tables
-write.csv(rate_table_means_no_clades1, file = "RateTable_Means1.csv")
+write.csv(RateTable_Means_1p, file = "RateTable_Means1.csv")
 
 ## Import rate table after adding clade membership (new "clade" column added)
-rate_table_clades_means1 <- read.csv("RateTable_Means1_Clades.csv", header = TRUE)
+RateTable_Means_1p_Clades <- read.csv("RateTable_Means1_Clades.csv", header = TRUE)
 ```
 ```{r}
-#Below, we use the rate table with clade membership `rate_table_clades_means1` that accompanies `EvoPhylo`.
-data(rate_table_clades_means1)
+#Below, we use the rate table with clade membership `RateTable_Means_1p_Clades` that accompanies `EvoPhylo`.
+data(RateTable_Means_1p_Clades)
 ```
 ```{r,eval = FALSE}
 ## Get summary statistics table for each clade by clock 
-clockrate_summary(rate_table_clades_means1,
+clockrate_summary(RateTable_Means_1p_Clades,
                   file = "Sum_RateTable_Medians1.csv")
 ```
 ```{r, echo = FALSE}
-t1 <- clockrate_summary(rate_table_clades_means1, digits = 2) 
+t1 <- clockrate_summary(RateTable_Means_1p_Clades, digits = 2) 
 kableExtra::kbl(t1, caption = "Rate table summary statistics") |> 
   kableExtra::kable_styling(font_size = 15, full_width = FALSE,
                             bootstrap_options = "striped", "condensed")
@@ -283,7 +283,7 @@ kableExtra::kbl(t1, caption = "Rate table summary statistics") |>
 
 ```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "100%"}
 ## Stacked plots with viridis color scale
-clockrate_dens_plot(rate_table_clades_means1, stack = TRUE,
+clockrate_dens_plot(RateTable_Means_1p_Clades, stack = TRUE,
                     nrow = 1, scales = "fixed") +
   ggplot2::scale_color_viridis_d() +
   ggplot2::scale_fill_viridis_d()
@@ -303,20 +303,20 @@ In this section, we will use evolutionary rate based inference of selection mode
 ```{r,eval=FALSE}
 ## Import rate table with clade membership (new "clade" column added) 
 ## from your local directory with "mean" values
-rate_table_clades_means3 <- read.csv("RateTable_Means3_Clades.csv", header = TRUE)
+RateTable_Means_3p_Clades <- read.csv("RateTable_Means_Clades.csv", header = TRUE)
 ```
 
-Below, we use the rate table with clade membership `rate_table_clades_means3` that accompanies `EvoPhylo`.
+Below, we use the rate table with clade membership `RateTable_Means_3p_Clades` that accompanies `EvoPhylo`.
 
 ```{r}
-data(rate_table_clades_means3)
+data(RateTable_Means_3p_Clades)
 ```
 
 It is necessary to transform the table from wide to long format with `clock_reshape()`.
 
 ```{r}
 ## Transform table from wide to long format
-rates_by_clade <- clock_reshape(rate_table_clades_means3)
+rates_by_clade <- clock_reshape(RateTable_Means_3p_Clades)
 ```
 
 ### 2. Import combined log file from all runs. 
@@ -345,13 +345,13 @@ The function `get_pwt_rates()` will produce a table of pairwise t-tests for diff
 ```{r, eval = FALSE}
 ## Get table of pairwise t-tests for difference between the posterior 
 ## mean and the rate for each tree node
-rate_sign_tests <- get_pwt_rates(rate_table_clades_means3, posterior3p)
+rate_sign_tests <- get_pwt_rates(RateTable_Means_3p_Clades, posterior3p)
 
 ## Show first 10 lines of table
 head(rate_sign_tests, 10)
 ```
 ```{r, echo = FALSE}
-rate_sign_tests <- get_pwt_rates(rate_table_clades_means3, posterior3p)
+rate_sign_tests <- get_pwt_rates(RateTable_Means_3p_Clades, posterior3p)
 t3 <- head(rate_sign_tests, 10)
 kableExtra::kbl(t3, caption = "Combined log file") |> 
   kableExtra::kable_styling(font_size = 15, full_width = FALSE,
