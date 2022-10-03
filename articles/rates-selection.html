@@ -157,16 +157,17 @@
 <span><span class="va">RateTable_Means_3p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_clockrate_table_MrBayes.html">get_clockrate_table_MrBayes</a></span><span class="op">(</span><span class="va">tree3p</span>, summary <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="export-the-rate-table">2. Export the rate table<a class="anchor" aria-label="anchor" href="#export-the-rate-table"></a>
+<h3 id="export-the-rate-table-and-plot-tree-with-node-values">2. Export the rate table and plot tree with node values<a class="anchor" aria-label="anchor" href="#export-the-rate-table-and-plot-tree-with-node-values"></a>
 </h3>
 <p>Once a rate table has been obtained (from <a href="https://nbisweden.github.io/MrBayes/" class="external-link">Mr. Bayes</a> or <a href="https://www.beast2.org/" class="external-link">BEAST2</a> files), it is necessary to export it. This is a necessary step to subsequently open the rate table spreadsheet locally (e.g., using Microsoft Office Excel) and customize the table with clade names associated with with each node in the tree for downstream analyses.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Export the rate tables (using Mr. Bayes example with 3 partitions)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">RateTable_Means_3p</span>, file <span class="op">=</span> <span class="st">"RateTable_Means_3p.csv"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="plot-tree-node-labels">3. Plot tree node labels<a class="anchor" aria-label="anchor" href="#plot-tree-node-labels"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="plot-tree-node-labels-to-customize-clade-names">Plot tree node labels to customize clade names<a class="anchor" aria-label="anchor" href="#plot-tree-node-labels-to-customize-clade-names"></a>
+</h2>
 <p>To visualize the node values in the tree, you can use <code><a href="https://rdrr.io/pkg/ggtree/man/ggtree.html" class="external-link">ggtree()</a></code>.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot tree node labels</span></span>
@@ -179,11 +180,14 @@
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Save your plot to your working directory as a PDF</span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"Tree_nodes.pdf"</span>, width <span class="op">=</span> <span class="fl">10</span>, height <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-</div>
 <div class="section level3">
-<h3 id="get-summary-statistics-table-and-plots">4. Get summary statistics table and plots<a class="anchor" aria-label="anchor" href="#get-summary-statistics-table-and-plots"></a>
+<h3 id="import-rate-table-with-custom-clade-memberships">3. Import rate table with custom clade memberships<a class="anchor" aria-label="anchor" href="#import-rate-table-with-custom-clade-memberships"></a>
 </h3>
-<p>Import the rate table with clade membership (new “clade” column added)</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="a-new-clade-column-has-been-added-to-the-rates-table">A new “clade” column has been added to the rates table<a class="anchor" aria-label="anchor" href="#a-new-clade-column-has-been-added-to-the-rates-table"></a>
+</h2>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Import rate table with clade membership (new "clade" column added) </span></span>
 <span><span class="co">## from your local directory</span></span>
@@ -200,7 +204,10 @@
 <span><span class="co">## 4 Dipnomorpha     4 1.229767 0.523709 0.722519</span></span>
 <span><span class="co">## 5 Dipnomorpha     5 1.230564 0.517773 0.720479</span></span>
 <span><span class="co">## 6       Other     6 0.658855 0.717277 0.663950</span></span></code></pre>
-<p>Obtain summary statistics table and plots for each clade by clock using <code><a href="../reference/clockrate_summary.html">clockrate_summary()</a></code>. Supplying a file path to <code>file</code> save the output to that file.</p>
+<div class="section level3">
+<h3 id="get-summary-stats-for-each-cladeclock-partition">4. Get summary stats for each clade/clock partition<a class="anchor" aria-label="anchor" href="#get-summary-stats-for-each-cladeclock-partition"></a>
+</h3>
+<p>Obtain summary statistics table and plots for each clade by clock partition using <code><a href="../reference/clockrate_summary.html">clockrate_summary()</a></code>. Supplying a file path to <code>file</code> save the output to that file.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Get summary statistics table for each clade by clock </span></span>
 <span><span class="fu"><a href="../reference/clockrate_summary.html">clockrate_summary</a></span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span>,</span>
@@ -863,7 +870,7 @@ Other
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"Plot_regs.pdf"</span>, width <span class="op">=</span> <span class="fl">8</span>, height <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="addendum-rates-from-single-clock-analysis-no-partitioning">Addendum: Rates from single clock analysis (no partitioning)<a class="anchor" aria-label="anchor" href="#addendum-rates-from-single-clock-analysis-no-partitioning"></a>
+<h3 id="addendum-example-using-rates-from-single-clock-analysis-no-partitioning">ADDENDUM: Example using rates from single clock analysis (no partitioning)<a class="anchor" aria-label="anchor" href="#addendum-example-using-rates-from-single-clock-analysis-no-partitioning"></a>
 </h3>
 <p>You can also explore clock rates for summary trees including a single clock shared among all character partitions (or an unpartitioned analysis):</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
@@ -1146,16 +1153,16 @@ Other
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">posterior3p</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="pairwise-t-tests-of-rate-values">3. Pairwise t-tests of Rate values<a class="anchor" aria-label="anchor" href="#pairwise-t-tests-of-rate-values"></a>
+<h3 id="pairwise-t-tests-of-rate-values-among-clades">3. Pairwise t-tests of rate values among clades<a class="anchor" aria-label="anchor" href="#pairwise-t-tests-of-rate-values-among-clades"></a>
 </h3>
 <p>The function <code><a href="../reference/get_pwt_rates.html">get_pwt_rates()</a></code> will produce a table of pairwise t-tests for differences between the mean clockrate value in the posterior and the absolute rate for each tree node.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Get table of pairwise t-tests for difference between the posterior </span></span>
 <span><span class="co">## mean and the rate for each tree node</span></span>
-<span><span class="va">rate_sign_tests</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pwt_rates.html">get_pwt_rates</a></span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span>, <span class="va">posterior3p</span><span class="op">)</span></span>
+<span><span class="va">RateSign_Tests</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pwt_rates.html">get_pwt_rates</a></span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span>, <span class="va">posterior3p</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Show first 10 lines of table</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">rate_sign_tests</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">RateSign_Tests</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-striped" style="font-size: 15px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
 Combined log file
@@ -1418,7 +1425,7 @@ Osteolepididae
 </table>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Export the table</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">rate_sign_tests</span>, file <span class="op">=</span> <span class="st">"RateSign_tests.csv"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">RateSign_Tests</span>, file <span class="op">=</span> <span class="st">"RateSign_Tests.csv"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plot-selection-gradient-on-the-summary-tree">4. Plot selection gradient on the summary tree<a class="anchor" aria-label="anchor" href="#plot-selection-gradient-on-the-summary-tree"></a>
@@ -1432,9 +1439,9 @@ Osteolepididae
 <span>  summary <span class="op">=</span> <span class="st">"mean"</span>,        <span class="co">#sets summary stats to get from summary tree nodes</span></span>
 <span>  branch_size <span class="op">=</span> <span class="fl">1.5</span>, tip_size <span class="op">=</span> <span class="fl">3</span>,                      <span class="co">#sets size for tree elements</span></span>
 <span>  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">450</span>, <span class="op">-</span><span class="fl">260</span><span class="op">)</span>, nbreaks <span class="op">=</span> <span class="fl">8</span>, geo_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>,  <span class="co">#sets limits and breaks for geoscale</span></span>
-<span>  threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1 SD"</span>, <span class="st">"2 SD"</span><span class="op">)</span><span class="op">)</span>                 <span class="co">#sets threshold for selection mode</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "-2 SD" "-1 SD" "+1 SD" "+2 SD"</span></span>
-<span><span class="co">## [1] 0.4965128 0.7482564 1.2517436 1.5034872</span></span></code></pre>
+<span>  threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1 SD"</span>, <span class="st">"3 SD"</span><span class="op">)</span><span class="op">)</span>                 <span class="co">#sets threshold for selection mode</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "-3 SD" "-1 SD" "+1 SD" "+3 SD"</span></span>
+<span><span class="co">## [1] 0.2447693 0.7482564 1.2517436 1.7552307</span></span></code></pre>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">A1</span></span></code></pre></div>
 <p><img src="rates-selection_files/figure-html/unnamed-chunk-37-1.png" width="70%" style="display: block; margin: auto;"></p>
@@ -1447,9 +1454,9 @@ Osteolepididae
 <span>  summary <span class="op">=</span> <span class="st">"mean"</span>,        <span class="co">#sets summary stats to get from summary tree nodes</span></span>
 <span>  branch_size <span class="op">=</span> <span class="fl">1.5</span>, tip_size <span class="op">=</span> <span class="fl">3</span>,                      <span class="co">#sets size for tree elements</span></span>
 <span>  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">450</span>, <span class="op">-</span><span class="fl">260</span><span class="op">)</span>, nbreaks <span class="op">=</span> <span class="fl">8</span>, geo_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>,  <span class="co">#sets limits and breaks for geoscale</span></span>
-<span>  threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1 SD"</span>, <span class="st">"2 SD"</span><span class="op">)</span><span class="op">)</span>                 <span class="co">#sets threshold for selection mode</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "-2 SD" "-1 SD" "+1 SD" "+2 SD"</span></span>
-<span><span class="co">## [1] 0.4965128 0.7482564 1.2517436 1.5034872</span></span></code></pre>
+<span>  threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1 SD"</span>, <span class="st">"3 SD"</span><span class="op">)</span><span class="op">)</span>                 <span class="co">#sets threshold for selection mode</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "-3 SD" "-1 SD" "+1 SD" "+3 SD"</span></span>
+<span><span class="co">## [1] 0.2447693 0.7482564 1.2517436 1.7552307</span></span></code></pre>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">A3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_treerates_sgn.html">plot_treerates_sgn</a></span><span class="op">(</span></span>
 <span>  <span class="va">tree3p</span>, <span class="va">posterior3p</span>, </span>
@@ -1457,9 +1464,9 @@ Osteolepididae
 <span>  summary <span class="op">=</span> <span class="st">"mean"</span>,        <span class="co">#sets summary stats to get from summary tree nodes</span></span>
 <span>  branch_size <span class="op">=</span> <span class="fl">1.5</span>, tip_size <span class="op">=</span> <span class="fl">3</span>,                      <span class="co">#sets size for tree elements</span></span>
 <span>  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">450</span>, <span class="op">-</span><span class="fl">260</span><span class="op">)</span>, nbreaks <span class="op">=</span> <span class="fl">8</span>, geo_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>,  <span class="co">#sets limits and breaks for geoscale</span></span>
-<span>  threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1 SD"</span>, <span class="st">"2 SD"</span><span class="op">)</span><span class="op">)</span>                 <span class="co">#sets threshold for selection mode</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "-2 SD" "-1 SD" "+1 SD" "+2 SD"</span></span>
-<span><span class="co">## [1] 0.4965128 0.7482564 1.2517436 1.5034872</span></span></code></pre>
+<span>  threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1 SD"</span>, <span class="st">"3 SD"</span><span class="op">)</span><span class="op">)</span>                 <span class="co">#sets threshold for selection mode</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "-3 SD" "-1 SD" "+1 SD" "+3 SD"</span></span>
+<span><span class="co">## [1] 0.2447693 0.7482564 1.2517436 1.7552307</span></span></code></pre>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
 <span><span class="va">A1</span> <span class="op">+</span> <span class="va">A2</span> <span class="op">+</span> <span class="va">A3</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
