@@ -61,13 +61,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">write_partitioned_alignments</span><span class="op">(</span><span class="va">characters</span>, <span class="va">cluster_df</span>, <span class="va">file</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">write_partitioned_alignments</span><span class="op">(</span><span class="va">x</span>, <span class="va">cluster_df</span>, <span class="va">file</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>characters</dt>
-<dd><p>character data matrix as matrix or data frame (with taxa as columns and characters as rows)</p></dd>
+    <dl><dt>x</dt>
+<dd><p>character data matrix as Nexus file or data frame (with taxa as rows and characters as columns, read directly from local directory)</p></dd>
 
 
 <dt>cluster_df</dt>
@@ -97,7 +97,7 @@
 <span class="r-in"><span><span class="va">cluster_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="make_clusters.html">make_clusters</a></span><span class="op">(</span><span class="va">Dmatrix</span>, k <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Write to Nexus files</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="fu">write_partitioned_alignments</span><span class="op">(</span><span class="va">characters</span>, <span class="va">cluster_df</span>, <span class="st">"example.nex"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="fu">write_partitioned_alignments</span><span class="op">(</span><span class="va">x</span>, <span class="va">cluster_df</span>, <span class="st">"example.nex"</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
