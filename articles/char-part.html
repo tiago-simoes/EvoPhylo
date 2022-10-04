@@ -96,8 +96,12 @@
 </h3>
 <p>Generate a Gower distance matrix with <code><a href="../reference/get_gower_dist.html">get_gower_dist()</a></code> by supplying the file path of a .nex file containing a character data matrix:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#Load a character data matrix and produce a Gower distance matrix</span></span>
-<span><span class="va">dist_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_gower_dist.html">get_gower_dist</a></span><span class="op">(</span><span class="st">"DataMatrix.nex"</span>, numeric <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#Load a character data matrix from your local directory to produce a Gower distance matrix</span></span>
+<span><span class="va">dist_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_gower_dist.html">get_gower_dist</a></span><span class="op">(</span><span class="st">"DataMatrix.nex"</span>, numeric <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">## OR</span></span>
+<span><span class="co">#Load an example data matrix 'DataMatrix.nex' that accompanies `EvoPhylo`.</span></span>
+<span><span class="va">DataMatrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"DataMatrix.nex"</span>, package <span class="op">=</span> <span class="st">"EvoPhylo"</span><span class="op">)</span></span>
+<span><span class="va">dist_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_gower_dist.html">get_gower_dist</a></span><span class="op">(</span><span class="va">DataMatrix</span>, numeric <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>Below, we use the example data matrix <code>characters</code> that accompanies <code>EvoPhylo</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">characters</span><span class="op">)</span></span>
@@ -132,7 +136,8 @@
 <span><span class="fu"><a href="../reference/cluster_to_nexus.html">cluster_to_nexus</a></span><span class="op">(</span><span class="va">clusters</span>, file <span class="op">=</span> <span class="st">"Clusters_MB.txt"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write partitioned alignments to separate Nexus files for BEAUTi</span></span>
-<span><span class="fu"><a href="../reference/write_partitioned_alignments.html">write_partitioned_alignments</a></span><span class="op">(</span><span class="va">characters</span>, <span class="va">clusters</span>, file <span class="op">=</span> <span class="st">"Clusters_BEAUTi.nex"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Make reference to your original character data matrix in your local directory</span></span>
+<span><span class="fu"><a href="../reference/write_partitioned_alignments.html">write_partitioned_alignments</a></span><span class="op">(</span><span class="st">"DataMatrix.nex"</span>, <span class="va">clusters</span>, file <span class="op">=</span> <span class="st">"Clusters_BEAUTi.nex"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="complete-workflow">4. Complete Workflow<a class="anchor" aria-label="anchor" href="#complete-workflow"></a>
@@ -151,7 +156,8 @@
 <span><span class="fu"><a href="../reference/cluster_to_nexus.html">cluster_to_nexus</a></span><span class="op">(</span><span class="va">clusters</span>, file <span class="op">=</span> <span class="st">"Clusters_MB.txt"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Write partitioned alignments to separate Nexus files for BEAUTi</span></span>
-<span><span class="fu"><a href="../reference/write_partitioned_alignments.html">write_partitioned_alignments</a></span><span class="op">(</span><span class="va">characters</span>, <span class="va">clusters</span>, file <span class="op">=</span> <span class="st">"Clusters_BEAUTi.nex"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Make reference to your original character data matrix in your local directory</span></span>
+<span><span class="fu"><a href="../reference/write_partitioned_alignments.html">write_partitioned_alignments</a></span><span class="op">(</span><span class="st">"DataMatrix.nex"</span>, <span class="va">clusters</span>, file <span class="op">=</span> <span class="st">"Clusters_BEAUTi.nex"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2 unnumbered">
