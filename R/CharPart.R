@@ -128,7 +128,7 @@ cluster_to_nexus <- function(cluster_df, file = NULL) {
 
 #' Write character partitions as separate Nexus files (for use in BEAUti)
 #'
-#' @param characters character data matrix as matrix or data frame (with taxa as columns and characters as rows)
+#' @param x character data matrix as Nexus file or data frame (with taxa as rows and characters as columns, read directly from local directory)
 #' @param cluster_df cluster partitions as outputted by \code{make.clusters}
 #' @param file path to save the alignments. If \code{file = "example.nex"}, alignments will be saved to files \code{"example_part1.nex"}, \code{"example_part2.nex"}, etc.
 #'
@@ -146,15 +146,24 @@ cluster_to_nexus <- function(cluster_df, file = NULL) {
 #' cluster_df <- make_clusters(Dmatrix, k = 3)
 #'
 #' # Write to Nexus files
-#' \dontrun{write_partitioned_alignments(characters, cluster_df, "example.nex")}
-write_partitioned_alignments <- function(characters, cluster_df, file) {
+#' \dontrun{write_partitioned_alignments(x, cluster_df, "example.nex")}
+write_partitioned_alignments <- function(x, cluster_df, file) {
+    if (is.matrix(x) || is.data.frame(x) ||
+      (is.list(x) && all(lengths(x) == length(x[[1]])))) {
+    data <- as.data.frame(as.matrix(x))
+  }
+  else if (length(x) == 1 && is.character(x) && endsWith(x, ".nex")) {
+    data <- as.data.frame(ape::read.nexus.data(x))
+  }
+  else stop("'x' must be a data frame, matrix, or file path to a .nex file.", call. = FALSE)
+
   nk <- length(levels(cluster_df$cluster))
   file <- tools::file_path_sans_ext(file)
 
   for(ii in 1:nk) {
     charset <- cluster_df$character_number[cluster_df$cluster==ii]
-    aln <- lapply(as.data.frame(characters), function(char) char[charset])
-    
+    aln <- lapply(as.data.frame(data), function(char) char[charset])
+
     fn <- paste0(file, "_part", ii, ".nex")
     ape::write.nexus.data(aln, file = fn, format = "standard", interleaved = FALSE)
 

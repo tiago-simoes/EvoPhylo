@@ -4,10 +4,10 @@
 \alias{write_partitioned_alignments}
 \title{Write character partitions as separate Nexus files (for use in BEAUti)}
 \usage{
-write_partitioned_alignments(characters, cluster_df, file)
+write_partitioned_alignments(x, cluster_df, file)
 }
 \arguments{
-\item{characters}{character data matrix as matrix or data frame (with taxa as columns and characters as rows)}
+\item{x}{character data matrix as Nexus file or data frame (with taxa as rows and characters as columns, read directly from local directory)}
 
 \item{cluster_df}{cluster partitions as outputted by \code{make.clusters}}
 
@@ -30,5 +30,5 @@ Dmatrix <- get_gower_dist(characters)
 cluster_df <- make_clusters(Dmatrix, k = 3)
 
 # Write to Nexus files
-\dontrun{write_partitioned_alignments(characters, cluster_df, "example.nex")}
+\dontrun{write_partitioned_alignments(x, cluster_df, "example.nex")}
 }
