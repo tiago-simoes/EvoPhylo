@@ -31,8 +31,12 @@ library(EvoPhylo)
 Generate a Gower distance matrix with `get_gower_dist()` by supplying the file path of a .nex file containing a character data matrix:
 
 ```{r, eval = FALSE}
-#Load a character data matrix and produce a Gower distance matrix
+#Load a character data matrix from your local directory to produce a Gower distance matrix
 dist_matrix <- get_gower_dist("DataMatrix.nex", numeric = FALSE)
+## OR
+#Load an example data matrix 'DataMatrix.nex' that accompanies `EvoPhylo`.
+DataMatrix <- system.file("extdata", "DataMatrix.nex", package = "EvoPhylo")
+dist_matrix <- get_gower_dist(DataMatrix, numeric = FALSE)
 ```
 
 Below, we use the example data matrix `characters` that accompanies `EvoPhylo`.
@@ -75,7 +79,8 @@ plot(clusters)
 cluster_to_nexus(clusters, file = "Clusters_MB.txt")
 
 ## Write partitioned alignments to separate Nexus files for BEAUTi
-write_partitioned_alignments(characters, clusters, file = "Clusters_BEAUTi.nex")
+# Make reference to your original character data matrix in your local directory
+write_partitioned_alignments("DataMatrix.nex", clusters, file = "Clusters_BEAUTi.nex")
 ```
 
 ### 4. Complete Workflow
@@ -97,7 +102,8 @@ plot(clusters, nrow = 2, max.overlaps = 5)
 cluster_to_nexus(clusters, file = "Clusters_MB.txt")
 
 ## Write partitioned alignments to separate Nexus files for BEAUTi
-write_partitioned_alignments(characters, clusters, file = "Clusters_BEAUTi.nex")
+# Make reference to your original character data matrix in your local directory
+write_partitioned_alignments("DataMatrix.nex", clusters, file = "Clusters_BEAUTi.nex")
 ```
 
 ## References

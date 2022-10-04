@@ -128,7 +128,7 @@ cluster_to_nexus <- function(cluster_df, file = NULL) {
 
 #' Write character partitions as separate Nexus files (for use in BEAUti)
 #'
-#' @param x character data matrix as Nexus file or data frame (with taxa as rows and characters as columns, read directly from local directory)
+#' @param x character data matrix as Nexus file (.nex) or data frame (with taxa as rows and characters as columns) read directly from local directory
 #' @param cluster_df cluster partitions as outputted by \code{make.clusters}
 #' @param file path to save the alignments. If \code{file = "example.nex"}, alignments will be saved to files \code{"example_part1.nex"}, \code{"example_part2.nex"}, etc.
 #'

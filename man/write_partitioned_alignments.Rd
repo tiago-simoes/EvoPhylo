@@ -7,7 +7,7 @@
 write_partitioned_alignments(x, cluster_df, file)
 }
 \arguments{
-\item{x}{character data matrix as Nexus file or data frame (with taxa as rows and characters as columns, read directly from local directory)}
+\item{x}{character data matrix as Nexus file (.nex) or data frame (with taxa as rows and characters as columns) read directly from local directory}
 
 \item{cluster_df}{cluster partitions as outputted by \code{make.clusters}}
 
