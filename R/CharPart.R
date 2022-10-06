@@ -146,7 +146,7 @@ cluster_to_nexus <- function(cluster_df, file = NULL) {
 #' cluster_df <- make_clusters(Dmatrix, k = 3)
 #'
 #' # Write to Nexus files
-#' \dontrun{write_partitioned_alignments(x, cluster_df, "example.nex")}
+#' \dontrun{write_partitioned_alignments(characters, cluster_df, "example.nex")}
 write_partitioned_alignments <- function(x, cluster_df, file) {
     if (is.matrix(x) || is.data.frame(x) ||
       (is.list(x) && all(lengths(x) == length(x[[1]])))) {

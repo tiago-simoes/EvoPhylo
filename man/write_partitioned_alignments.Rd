@@ -30,5 +30,5 @@ Dmatrix <- get_gower_dist(characters)
 cluster_df <- make_clusters(Dmatrix, k = 3)
 
 # Write to Nexus files
-\dontrun{write_partitioned_alignments(x, cluster_df, "example.nex")}
+\dontrun{write_partitioned_alignments(characters, cluster_df, "example.nex")}
 }
