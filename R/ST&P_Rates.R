@@ -50,7 +50,7 @@ get_clockrate_table_BEAST2 <- function(..., summary = "median", drop_dummy = NUL
   colnames(rate_table)[2:ncol(rate_table)] <- paste0("rates", 1:(ncol(rate_table) - 1))
   row.names(rate_table) <- NULL
 
-  rate_table
+  return(rate_table)
 }
 
 #Rate Table - MrBayes version

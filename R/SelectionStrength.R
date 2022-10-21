@@ -13,8 +13,8 @@ clock_reshape <- function(rate_table) {
   rate_table_long
 }
 
-#t-tests
-get_pwt_rates <- function(rate_table, posterior) {
+#t-tests with MrBayes output
+get_pwt_rates_MrBayes <- function(rate_table, posterior) {
   if (missing(rate_table) || !is.data.frame(rate_table)) {
     stop("'rate_table' must be a data frame.", call. = FALSE)
   }
@@ -52,9 +52,72 @@ get_pwt_rates <- function(rate_table, posterior) {
                     rate_table_long$abs_rate,
                     rate_table_long$abs_rate,
                     pvals)
-  names(out) <- c("clade", "nodes", "clock", "relative rate", "absolute rate (mean)", "null", "p.value")
-  out
+  names(out) <- c("clade", "nodes", "clock", "relative.rate(mean)", "absolute.rate(mean)", "null", "p.value")
+  return(out)
 }
+
+
+#t-tests with BEAST2 output
+get_pwt_rates_BEAST2 <- function(rate_table, posterior) {
+  if (missing(rate_table) || !is.data.frame(rate_table)) {
+    stop("'rate_table' must be a data frame.", call. = FALSE)
+  }
+  if (!any(startsWith(names(rate_table), "rates"))) {
+    stop("'rate_table' must contain \"rates\" columns containing clockrate summaries.", call. = FALSE)
+  }
+  if (!hasName(rate_table, "clade")) {
+    stop("A 'clade' column must be present in 'rate_table'.", call. = FALSE)
+  }
+  if (missing(posterior) || !is.data.frame(posterior)) {
+    stop("'posterior' must be a data frame.", call. = FALSE)
+  }
+  if (!any(startsWith(names(posterior), "rate"))) {
+    stop("At least one clock 'rate' column must be present in 'posterior'.", call. = FALSE)
+  }
+
+  posterior.clockrate<-get_clockrate_posterior(posterior)       #get rate table from posterior sample using 'get_clockrate_posterior' helper
+
+  post.df <- nrow(posterior.clockrate) - 1
+
+  #Get mean of posterior means
+  post.mean <- as.data.frame(lapply(posterior.clockrate, mean))
+  rownames(post.mean)<- "rates"
+  post.mean.long <- post_mean_reshape(post.mean)                 #convert posterior mean rates table to long using 'post_mean_reshape' helper
+
+  #Get standard error of posterior means
+  post.se <-as.data.frame(lapply(posterior.clockrate, function(x){
+    sd(x)/sqrt(length(x))
+    }))
+  rownames(post.se)<- "se"
+  post.se.long <- post_se_reshape(post.se)                       #convert post.se table to long using 'post_se_reshape' helper
+
+  #Get branch rates in long format
+  rate.table.long <- clock_reshape(rate_table)
+
+  #Combine all tables by background clock partition
+  comb_rates<- Reduce(function(x, y) merge(x, y, all = FALSE, by = "clock"),
+                        list(post.mean.long, post.se.long, rate.table.long))
+  comb_rates<-subset(comb_rates, select = c(clade, nodes, clock, rate, mean.rates.post, post.se))
+
+  #Calculate relative branch rates
+  comb_rates$rel_rate <- comb_rates$rate/comb_rates$mean.rates.post
+
+  #Calculate pairwise t-tests (post.ts) and p-values (pvals)
+  post.ts <- abs(comb_rates$mean.rates.post - comb_rates$rate)/comb_rates$post.se
+  pvals <- 2*pt(post.ts, df = post.df, lower.tail = FALSE)
+
+  #Output all to a new table
+  out <- data.frame(comb_rates$clade,
+                    comb_rates$nodes,
+                    comb_rates$clock,
+                    comb_rates$mean.rates.post,
+                    comb_rates$rate,
+                    comb_rates$rel_rate,
+                    pvals)
+  names(out) <- c("clade", "node", "clock", "background.rate(mean)", "absolute.rate(mean)", "relative.rate(mean)", "p.value")
+  return(out)
+}
+
 
 
 #Plot tree with colored thresholds

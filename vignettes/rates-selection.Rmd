@@ -73,7 +73,7 @@ data(tree_clock1)
 data(tree_clock2)
 ```
 
-Subsequently, using `get_clockrate_table()`, users can extract mean or median rate values for each node in the summary tree. These mean or median rate values are calculated by TreeAnnotator taking into account all trees from the posterior sample. 
+Subsequently, using `get_clockrate_table_BEAST2()`, users can extract mean or median rate values for each node in the summary tree. These mean or median rate values are calculated by TreeAnnotator taking into account all trees from the posterior sample. 
 Please note that analyses must have reached the stationarity phase and independent runs converging for the summary statistics in each node to be meaningful summaries of the posterior sample.
 
 The example shown here uses two different clocks, however the function supports any number of clocks which can all be passed as separate arguments.
@@ -127,7 +127,7 @@ RateTable_Means_3p <- get_clockrate_table_MrBayes(tree3p, summary = "mean")
 
 ### 2. Export the rate table and plot tree with node values
 
-Once a rate table has been obtained (from [Mr. Bayes](https://nbisweden.github.io/MrBayes/) or [BEAST2](https://www.beast2.org/) files), it is necessary to export it. This is a necessary step to subsequently open the rate table spreadsheet locally (e.g., using Microsoft Office Excel) and customize the table with clade names associated with with each node in the tree for downstream analyses.
+Once a rate table has been obtained (from [Mr. Bayes](https://nbisweden.github.io/MrBayes/) or [BEAST2](https://www.beast2.org/) files), it is necessary to export it. This is a necessary step to subsequently open the rate table spreadsheet locally (e.g., using Microsoft Office Excel) and customize the table with clade names associated with with each node in the tree for downstream analyses. Note that the root node may include "NA" for rate value, so it must be removed from the rate table.
 
 ```{r, eval = FALSE}
 ## Export the rate tables (using Mr. Bayes example with 3 partitions)
