@@ -3,13 +3,18 @@
 `EvoPhylo` News and Updates
 ======
 
+## Development: EvoPhylo 0.3.1
+(OCtober 20th, 2022)
+
+#Bug fixes and adjustment of selection functions for BEAST2: old `get_pwt_rates` function exists now in two versions`get_pwt_rates_MrBayes` and `get_pwt_rates_BEAST2` 
+
 ## Development: EvoPhylo 0.3
 (August 1st, 2022)
 
 Implementation of functions for BEAST2 data now complete! 
 
  * Added function (`write_partitioned_alignments`) to write partitioned alignments based on the inferred clusters.
- * Added BEAST2 support for clock rate table import - function exists now in two versions, `get_clockrate_table_MrBayes` and `get_clockrate_table_BEAST2`
+ * Added BEAST2 support for clock rate table import - old `get_clockrate_table` function exists now in two versions, `get_clockrate_table_MrBayes` and `get_clockrate_table_BEAST2`
   
 ## Development: EvoPhylo 0.2.1
 (July 8th, 2022)
