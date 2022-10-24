@@ -30,7 +30,8 @@ reference:
   - combine_log
   - get_clockrate_table_MrBayes
   - get_clockrate_table_BEAST2
-  - get_pwt_rates
+  - get_pwt_rates_MrBayes
+  - get_pwt_rates_BEAST2
   - plot_treerates_sgn
 - subtitle: Analyzing FBD parameters
   desc: >

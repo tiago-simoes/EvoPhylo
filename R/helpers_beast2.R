@@ -94,3 +94,19 @@ post_se_reshape <- function(post.mean) {
 
   return(post.se.long)
 }
+
+# reshape tables with posterior clock rates
+posterior_clockrate_reshape <- function(posterior.clockrate) {
+  posterior.clockrate.long <- reshape(posterior.clockrate, direction = "long",
+                             varying = which(startsWith(names(posterior.clockrate), "rates")),
+                             v.names = "rates.post",
+                             timevar = "clock",
+                             sep = "_")
+  posterior.clockrate.long[["clock"]] <- factor(posterior.clockrate.long[["clock"]])
+  rownames(posterior.clockrate.long) <- NULL
+  attr(posterior.clockrate.long, "reshapeLong") <- NULL
+
+  return(posterior.clockrate.long)
+}
+
+
