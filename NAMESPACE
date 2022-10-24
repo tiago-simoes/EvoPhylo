@@ -17,7 +17,7 @@ importFrom("grid",
 
 export("get_gower_dist", "get_sil_widths", "make_clusters", "cluster_to_nexus", "write_partitioned_alignments",
        "get_clockrate_table_BEAST2", "get_clockrate_table_MrBayes", "clockrate_summary", "clockrate_dens_plot", "clockrate_reg_plot",
-       "clock_reshape", "get_pwt_rates_MrBayes", "get_pwt_rates_BEAST2", "plot_treerates_sgn",
+       "clock_reshape", "get_pwt_rates_MrBayes", "get_pwt_rates_BEAST2", "plot_treerates_sgn_MrBayes", "plot_treerates_sgn_BEAST2",
        "combine_log", "FBD_summary", "FBD_dens_plot", "FBD_tests1", "FBD_tests2", "FBD_normality_plot", "FBD_reshape",
        "drop.dummy.beast", "drop.dummy.mb", "offset.to.dummy", "write.beast.treedata", "offset.to.dummy.metadata")
 

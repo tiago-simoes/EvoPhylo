@@ -1,4 +1,4 @@
-"","clade","node","clock","background.rate(mean)","absolute.rate(mean)","relative.rate(mean)","p.value"
+"","clade","node","clock","background.rate.mean","absolute.rate.mean","relative.rate.mean","p.value"
 "1","EarlyStemPenguins",43,"1",0.0299739460407987,0.01569367,0.523577041829551,0
 "2","LateStemPenguins",65,"1",0.0299739460407987,0.021501971,0.717355364913675,3.66613989613555e-182
 "3","LateStemPenguins",37,"1",0.0299739460407987,0.015336691,0.511667398717693,0

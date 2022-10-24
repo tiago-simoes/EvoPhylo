@@ -1,16 +1,16 @@
-\name{plot_treerates_sgn}
-\alias{plot_treerates_sgn}
+\name{plot_treerates_sgn_BEAST2}
+\alias{plot_treerates_sgn_BEAST2}
 
 \title{
-Plot Bayesian evolutionary tree with rate thresholds for selection mode
+Plot Bayesian evolutionary tree with rate thresholds for selection mode (on BEAST2 output)
 }
 \description{
-Plots the summary Bayesian evolutionary tree with branches, according to user-defined thresholds (in units of standard deviations) used to infer the strength and mode of selection.
+Plots the summary Bayesian evolutionary tree with branches, according to user-defined thresholds (in units of standard deviations) used to infer the strength and mode of selection (BEAST2 version).
 }
 \usage{
-plot_treerates_sgn(tree, posterior, clock = 1,
-       summary = "mean", threshold = c("1 SD", "2 SD"),
-       drop.dummyextant = TRUE,
+plot_treerates_sgn_BEAST2(tree, pwt_rate_table, clock = 1,
+       threshold = c("1 SD", "2 SD"),
+       offset = 0,
        low = "blue", mid = "gray90", high = "red",
        branch_size = 2, tip_size = 2,
        xlim = NULL, nbreaks = 10, geo_size=list(2, 3),
@@ -18,22 +18,19 @@ plot_treerates_sgn(tree, posterior, clock = 1,
 }
 \arguments{
   \item{tree}{
-A \code{tidytree} object; the output of a call to \code{\link[treeio:read.mrbayes]{treeio::read.mrbayes}}.
+A \code{tidytree} object containing the summary tree with the clock to plot, as produced by \code{\link[treeio:read.beast]{treeio::read.beast}}.
 }
-  \item{posterior}{
-A data frame of posterior parameter estimates including a "clockrate" column indicating the base of the clock rate estimate for each generation that will be used for pairwise t-tests. Such data frame can be imported using \code{\link{combine_log}} (no need to reshape from wide to long). See the \code{\link{posterior1p}} or \code{\link{posterior3p}} datasets for an examples of how the input file should look.
+  \item{pwt_rate_table}{
+Data frame of clades, absolute and relative clock rates. Such data frame can be produced using \code{\link{get_pwt_rates_BEAST2}}. See the \code{\link{posterior1p}} or \code{\link{posterior3p}} datasets for an examples of how the input file should look.
 }
   \item{clock}{
-The clock number to plot, (i.e., the number in "rate<clockmodel>Brlens\{#\}_mean"). Ignored if only one clock is available.
+The clock number to plot.
 }
-  \item{summary}{
-The rate summary to plot, (i.e., the value in "rate<clockmodel>Brlens1_\{summary\}"). Only "mean" and "median" are allowed. Default is "mean".
+  \item{offset}{
+Age of the youngest sample in the tree. Default 0.
 }
   \item{threshold}{
 A vector of threshold values. Default is to display thresholds of ±1 relative standard deviation (SD) of the relative posterior clock rates. Should be specified as a number of standard deviations (e.g., \code{"1 SD"}) or the confidence level for a confidence interal around the mean relative posterior clockrate (e.g., \code{"95\%"}). Multiple values are allowed to produce a plot with multiple thresholds. Set to \code{NULL} to omit thresholds.
-}
-  \item{drop.dummyextant}{
-\code{logical}; whether to drop the "Dummyextant" tip (if present) from the tree before plotting the tree. Default is \code{TRUE}.
 }
   \item{low, mid, high}{
 Colors passed to \code{\link{scale_color_steps2}} to control the colors of the branches based on which thresholds are exceeded. When no thresholds are supplied, use \code{mid} to control the color of the tree.
@@ -69,23 +66,25 @@ Simões, T. R. and S. E. Pierce (2021). Sustained High Rates of Morphological Ev
 }
 \seealso{
 \code{vignette("rates-selection")} for the use of this function as part of an analysis pipeline.
-
+\code{\link{plot_treerates_sgn_MrBayes}} for the equivalent function for MrBayes output files.
 \code{\link[ggtree:ggtree]{ggtree::ggtree}}, \code{\link[deeptime:coord_geo]{deeptime::coord_geo}}
 }
 \examples{
 # See vignette("rates-selection") for how to use this
 # function as part of an analysis pipeline
 
-# Load example tree and posterior
-data("tree3p")
-data("posterior3p")
+# Load example tree
+data(tree_clock2)
 
-plot_treerates_sgn(
-  tree3p, posterior3p,
+# Load example rate table
+rate_table_file <- system.file("extdata", "ex_pwt_rate_table.csv", package = "EvoPhylo")
+pwt_rate_table <- read.csv(rate_table_file, header = TRUE)
+
+plot_treerates_sgn_BEAST2(
+  tree_clock2, pwt_rate_table,
   # show rates for clock partition 1
-  clock = 1,
-  # set summary stats to get from summary tree nodes
-  summary = "mean",
+  clock = 2,
+  offset = 0,
   # set size for tree elements
   branch_size = 1.5, tip_size = 3,
   # set limits, breaks, and size for geological scale
