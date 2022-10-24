@@ -342,18 +342,18 @@ head(posterior3p, 10)
 
 ### 3. Pairwise t-tests of rate values among clades
 
-The function `get_pwt_rates()` will produce a table of pairwise t-tests for differences between the mean clockrate value in the posterior and the absolute rate for each tree node. 
+The function `get_pwt_rates_MrBayes()` will produce a table of pairwise t-tests for differences between the mean clockrate value in the posterior and the absolute rate for each tree node. 
 
 ```{r, eval = FALSE}
 ## Get table of pairwise t-tests for difference between the posterior 
 ## mean and the rate for each tree node
-RateSign_Tests <- get_pwt_rates(RateTable_Means_3p_Clades, posterior3p)
+RateSign_Tests <- get_pwt_rates_MrBayes(RateTable_Means_3p_Clades, posterior3p)
 
 ## Show first 10 lines of table
 head(RateSign_Tests, 10)
 ```
 ```{r, echo = FALSE}
-RateSign_Tests <- get_pwt_rates(RateTable_Means_3p_Clades, posterior3p)
+RateSign_Tests <- get_pwt_rates_MrBayes(RateTable_Means_3p_Clades, posterior3p)
 t3 <- head(RateSign_Tests, 10)
 kableExtra::kbl(t3, caption = "Combined log file") |> 
   kableExtra::kable_styling(font_size = 15, full_width = FALSE,
@@ -370,7 +370,7 @@ Using different thresholds, Identify the selection mode across branches in the t
 
 ```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
 ## Plot tree using various thresholds for clock partition 1
-A1 <- plot_treerates_sgn(
+A1 <- plot_treerates_sgn_MrBayes(
   tree3p, posterior3p, 
   clock = 1,               #Show rates for clock partition 1
   summary = "mean",        #sets summary stats to get from summary tree nodes
@@ -384,7 +384,7 @@ Plot tree using various thresholds for the other clock partitions and combine th
 
 ```{r, fig.width=20, fig.height=8, fig.align = "default", out.width = "100%"}
 ## Plot tree using various thresholds for other clock partition and combine them
-A2 <- plot_treerates_sgn(
+A2 <- plot_treerates_sgn_MrBayes(
   tree3p, posterior3p, 
   clock = 2,               #Show rates for clock partition 2
   summary = "mean",        #sets summary stats to get from summary tree nodes
@@ -392,7 +392,7 @@ A2 <- plot_treerates_sgn(
   xlim = c(-450, -260), nbreaks = 8, geo_size = list(3, 3),  #sets limits and breaks for geoscale
   threshold = c("1 SD", "3 SD"))                 #sets threshold for selection mode
 
-A3 <- plot_treerates_sgn(
+A3 <- plot_treerates_sgn_MrBayes(
   tree3p, posterior3p, 
   clock = 3,               #Show rates for clock partition 2
   summary = "mean",        #sets summary stats to get from summary tree nodes

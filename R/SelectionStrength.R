@@ -9,7 +9,7 @@ clock_reshape <- function(rate_table) {
   rate_table_long[["clock"]] <- factor(rate_table_long[["clock"]])
   rownames(rate_table_long) <- NULL
   attr(rate_table_long, "reshapeLong") <- NULL
-
+  
   rate_table_long
 }
 
@@ -33,18 +33,18 @@ get_pwt_rates_MrBayes <- function(rate_table, posterior) {
   if (!hasName(posterior, "clockrate")) {
     stop("A 'clockrate' column must be present in 'posterior'.", call. = FALSE)
   }
-
+  
   posterior.clockrate <- posterior$clockrate
   post.df <- length(posterior.clockrate) - 1
   post.mean <- mean(posterior.clockrate)
-
+  
   rate_table_long <- clock_reshape(rate_table)
   rate_table_long$abs_rate <- rate_table_long$rate * post.mean
-
+  
   post.se <- sd(posterior.clockrate)/sqrt(length(posterior.clockrate))
   post.ts <- abs(post.mean - rate_table_long$abs_rate)/post.se
   pvals <- 2*pt(post.ts, df = post.df, lower.tail = FALSE)
-
+  
   out <- data.frame(rate_table_long$clade,
                     rate_table_long$nodes,
                     rate_table_long$clock,
@@ -74,38 +74,38 @@ get_pwt_rates_BEAST2 <- function(rate_table, posterior) {
   if (!any(startsWith(names(posterior), "rate"))) {
     stop("At least one clock 'rate' column must be present in 'posterior'.", call. = FALSE)
   }
-
+  
   posterior.clockrate<-get_clockrate_posterior(posterior)       #get rate table from posterior sample using 'get_clockrate_posterior' helper
-
+  
   post.df <- nrow(posterior.clockrate) - 1
-
+  
   #Get mean of posterior means
   post.mean <- as.data.frame(lapply(posterior.clockrate, mean))
   rownames(post.mean)<- "rates"
   post.mean.long <- post_mean_reshape(post.mean)                 #convert posterior mean rates table to long using 'post_mean_reshape' helper
-
+  
   #Get standard error of posterior means
   post.se <-as.data.frame(lapply(posterior.clockrate, function(x){
     sd(x)/sqrt(length(x))
-    }))
+  }))
   rownames(post.se)<- "se"
   post.se.long <- post_se_reshape(post.se)                       #convert post.se table to long using 'post_se_reshape' helper
-
+  
   #Get branch rates in long format
   rate.table.long <- clock_reshape(rate_table)
-
+  
   #Combine all tables by background clock partition
   comb_rates<- Reduce(function(x, y) merge(x, y, all = FALSE, by = "clock"),
-                        list(post.mean.long, post.se.long, rate.table.long))
+                      list(post.mean.long, post.se.long, rate.table.long))
   comb_rates<-subset(comb_rates, select = c(clade, nodes, clock, rate, mean.rates.post, post.se))
-
+  
   #Calculate relative branch rates
   comb_rates$rel_rate <- comb_rates$rate/comb_rates$mean.rates.post
-
+  
   #Calculate pairwise t-tests (post.ts) and p-values (pvals)
   post.ts <- abs(comb_rates$mean.rates.post - comb_rates$rate)/comb_rates$post.se
   pvals <- 2*pt(post.ts, df = post.df, lower.tail = FALSE)
-
+  
   #Output all to a new table
   out <- data.frame(comb_rates$clade,
                     comb_rates$nodes,
@@ -114,63 +114,107 @@ get_pwt_rates_BEAST2 <- function(rate_table, posterior) {
                     comb_rates$rate,
                     comb_rates$rel_rate,
                     pvals)
-  names(out) <- c("clade", "node", "clock", "background.rate(mean)", "absolute.rate(mean)", "relative.rate(mean)", "p.value")
+  names(out) <- c("clade", "node", "clock", "background.rate.mean", "absolute.rate.mean", "relative.rate.mean", "p.value")
   return(out)
 }
 
 
 
 #Plot tree with colored thresholds
-plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", threshold = c("1 SD", "2 SD"),
-                               drop.dummyextant = TRUE,
-                               low = "blue", mid = "gray90", high = "red",
-                               branch_size = 2, tip_size = 2,
-                               xlim = NULL, nbreaks = 10, geo_size = list(2, 3),
-                               geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")) {
+plot_treerates_sgn_MrBayes <- function(tree, posterior, clock = 1, summary = "mean", threshold = c("1 SD", "2 SD"),
+                                       drop.dummyextant = TRUE,
+                                       low = "blue", mid = "gray90", high = "red",
+                                       branch_size = 2, tip_size = 2,
+                                       xlim = NULL, nbreaks = 10, geo_size = list(2, 3),
+                                       geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")) {
+  helper_plot_treerates(type = "MrBayes",
+                        tree = tree, posterior = posterior, clock = clock, summary = summary, threshold = threshold,
+                        drop.dummyextant = drop.dummyextant, low = low, mid = mid, high = high, branch_size = branch_size,
+                        tip_size = tip_size, xlim = xlim, nbreaks = nbreaks, geo_size = geo_size, geo_skip = geo_skip)
+}
 
-    #Drop extant "dummy" tip
-  if (drop.dummyextant) {
+plot_treerates_sgn_BEAST2 <- function(tree, pwt_rate_table, clock = 1, threshold = c("1 SD", "2 SD"), offset = 0,
+                                      low = "blue", mid = "gray90", high = "red",
+                                      branch_size = 2, tip_size = 2,
+                                      xlim = NULL, nbreaks = 10, geo_size = list(2, 3),
+                                      geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")) {
+  helper_plot_treerates(type = "BEAST2",
+                        tree = tree, pwt_rate_table = pwt_rate_table, clock = clock, threshold = threshold,
+                        offset = offset, low = low, mid = mid, high = high, branch_size = branch_size,
+                        tip_size = tip_size, xlim = xlim, nbreaks = nbreaks, geo_size = geo_size, geo_skip = geo_skip) 
+}
+
+helper_plot_treerates = function(tree, clock = 1, threshold = c("1 SD", "2 SD"),
+                                 pwt_rate_table = NULL, offset = 0, #BEAST2 specific
+                                 posterior = NULL, summary = "mean", drop.dummyextant = TRUE, #MrBayes specific
+                                 type = c("MrBayes", "BEAST2"),
+                                 low = "blue", mid = "gray90", high = "red",
+                                 branch_size = 2, tip_size = 2,
+                                 xlim = NULL, nbreaks = 10, geo_size = list(2, 3),
+                                 geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")) {
+  if(!type %in% c("MrBayes", "BEAST2")) stop("Bad type call")
+  
+  #Drop extant "dummy" tip
+  if (type == "MrBayes" && drop.dummyextant) {
     tree <- treeio::drop.tip(tree, "Dummyextant")
   }
-
+  
   #Process threshold
   if (length(threshold) > 0) {
-    if (missing(posterior) || !is.data.frame(posterior)) {
-      stop("'posterior' must be a data frame.", call. = FALSE)
+    if (type == "BEAST2" && (missing(pwt_rate_table) || !is.data.frame(pwt_rate_table))) {
+      stop("'pwt_rate_table' must be a data frame.", call. = FALSE)
     }
-    if (hasName(posterior, "clockrate.all.")) {
-      names(posterior)[which(names(posterior) == "clockrate.all.")] <- "clockrate"
+    
+    if(type == "MrBayes") {
+      if (missing(posterior) || !is.data.frame(posterior)) {
+        stop("'posterior' must be a data frame.", call. = FALSE)
+      }
+      if (hasName(posterior, "clockrate.all.")) {
+        names(posterior)[which(names(posterior) == "clockrate.all.")] <- "clockrate"
+      }
+      if (!hasName(posterior, "clockrate")) {
+        stop("A 'clockrate' column must be present in 'posterior'.", call. = FALSE)
+      }
     }
-    if (!hasName(posterior, "clockrate")) {
-      stop("A 'clockrate' column must be present in 'posterior'.", call. = FALSE)
-    }
-
+    
     if (!is.character(threshold))
       stop("'threshold' must be a character vector.", call. = FALSE)
     thresh_conf <- endsWith(threshold, "%")
     thresh_sd <- endsWith(tolower(threshold), "sd")
-
+    
     if (any(!thresh_conf & !thresh_sd)) {
       stop("All entries in 'threshold' must end in '%' for confidence intervals or 'SD' for standard deviations.", call. = FALSE)
     }
-
+    
     thresh_vals <- character(length(threshold))
-
+    
     if (any(thresh_conf)) thresh_vals[thresh_conf] <- substring(threshold[thresh_conf], 1, nchar(threshold[thresh_conf]) - 1)
     if (any(thresh_sd)) thresh_vals[thresh_sd] <- substring(threshold[thresh_sd], 1, nchar(threshold[thresh_sd]) - 2)
-
+    
     if (anyNA(suppressWarnings(as.numeric(thresh_vals)))) {
       stop("All entries in 'threshold' must be confidence levels or the number of standard deviations to use as the thresholds.", call. = FALSE)
     }
     thresh_vals <- as.numeric(thresh_vals)
-
-    #Use relative clockrate
-    posterior.rel.clockrate <- posterior$clockrate/mean(posterior$clockrate)
-    mean.posterior.rel.clockrate <- 1
-
+    
+    if(type == "BEAST2") {
+      ###Use relative background clock rate
+      #Get mean of background rel rate means from all clock partitions
+      posterior.rel.clockrate <-tapply(pwt_rate_table$relative.rate.mean, pwt_rate_table$clock, function(x){
+        x/mean(x)
+      })[[clock]]
+      
+      mean.posterior.rel.clockrate <- 1
+    }
+    else {
+      #Use relative clockrate
+      posterior.rel.clockrate <- posterior$clockrate/mean(posterior$clockrate)
+      mean.posterior.rel.clockrate <- 1
+    }
+    
     breaks <- numeric(2*length(threshold))
     labels <- character(2*length(threshold))
-
+    
+    # Get threshold sd/conf values for each clock partition
     if (any(thresh_sd)) {
       breaks[c(thresh_sd, thresh_sd)] <- mean.posterior.rel.clockrate + c(-thresh_vals[thresh_sd], thresh_vals[thresh_sd]) * sd(posterior.rel.clockrate)
       labels[c(thresh_sd, thresh_sd)] <- c(sprintf("-%s SD", round(thresh_vals[thresh_sd], 2)),
@@ -183,7 +227,7 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
       labels[c(thresh_conf, thresh_conf)] <- c(sprintf("Lower %s%%CI", round(thresh_vals[thresh_conf],2)),
                                                sprintf("Lower %s%%CI", round(thresh_vals[thresh_conf],2)))
     }
-
+    
     break_order <- order(breaks)
     breaks <- breaks[break_order]
     labels <- labels[break_order]
@@ -192,54 +236,64 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
     breaks <- numeric(0)
     labels <- character(0)
   }
-
-  print(labels)
-  print(breaks)
-
- #Getting multiple clock rates
-  p <- unglue::unglue_data(names(tree@data), "rate<model>Brlens<clock>_<summary>",
-                           open = "<", close = ">")
-  rownames(p) <- names(tree@data)
-
-  p <- p[rowSums(is.na(p)) < ncol(p),,drop=FALSE]
-
-  p$clock <- gsub("\\{|\\}", "", p$clock)
-
-  summary <- match.arg(summary, c("mean", "median"))
-
-  #Process lens
-  if (all(p[["clock"]] == "")) {
-    p[["clock"]] <- 1L
-    if (!isTRUE(clock == 1)) {
-      warning("Only one clock is available; ignoring 'clock'.", call. = FALSE)
+  
+  if(type == "MrBayes") {
+    #Getting multiple clock rates
+    p <- unglue::unglue_data(names(tree@data), "rate<model>Brlens<clock>_<summary>",
+                             open = "<", close = ">")
+    rownames(p) <- names(tree@data)
+    
+    p <- p[rowSums(is.na(p)) < ncol(p),,drop=FALSE]
+    
+    p$clock <- gsub("\\{|\\}", "", p$clock)
+    
+    summary <- match.arg(summary, c("mean", "median"))
+    
+    #Process lens
+    if (all(p[["clock"]] == "")) {
+      p[["clock"]] <- 1L
+      if (!isTRUE(clock == 1)) {
+        warning("Only one clock is available; ignoring 'clock'.", call. = FALSE)
+      }
+      clock <- 1L
     }
-    clock <- 1L
+    else if (!is.numeric(clock) || !clock %in% as.numeric(p[["clock"]])) {
+      stop(paste0("Only the following values are allowed for 'clock': ", paste(unique(p[["clock"]]), collapse = ", ")), call. = FALSE)
+    }
+    
+    rate_var <- rownames(p)[as.numeric(p[["clock"]]) == clock & p[["summary"]] == summary]
+    
+    tree@data$`prob+-sd` <- as.factor(tree@data$`prob+-sd`)
+    
+    char_col <- vapply(tree@data, is.character, logical(1L))
+    tree@data[char_col] <- lapply(tree@data[char_col], as.numeric)
+    
+    offset <- min(tree@data$age_median)
   }
-  else if (!is.numeric(clock) || !clock %in% as.numeric(p[["clock"]])) {
-    stop(paste0("Only the following values are allowed for 'clock': ", paste(unique(p[["clock"]]), collapse = ", ")), call. = FALSE)
-  }
-
-  rate_var <- rownames(p)[as.numeric(p[["clock"]]) == clock & p[["summary"]] == summary]
-
-  tree@data$`prob+-sd` <- as.factor(tree@data$`prob+-sd`)
-
-  char_col <- vapply(tree@data, is.character, logical(1L))
-  tree@data[char_col] <- lapply(tree@data[char_col], as.numeric)
-
-  offset <- min(tree@data$age_median)
-
-  if (is.null(xlim)) {
+  
+  if (type == "MrBayes" && is.null(xlim)) {
     x1 <- -round(max(tree@data$age_median) + 15, -1)
     x2 <- -round(min(tree@data$age_median) - 15, -1)
+  }
+  else if (type == "BEAST2" && is.null(xlim)) {
+    x1 <- -round(max(tree@data$height) + 15, -1)
+    x2 <- -round(min(tree@data$height) - 15, -1)
   }
   else {
     x1 <- round(xlim[1], -1)
     x2 <- round(xlim[2], -1)
   }
-
+  
   #Create integer version of variable split up by breaks
-  tree@data$clockfac <- as.numeric(cut(tree@data[[rate_var]], breaks = c(-Inf, breaks, Inf)))
-
+  if(type == "MrBayes") {
+    tree@data$clockfac <- as.numeric(cut(tree@data[[rate_var]], breaks = c(-Inf, breaks, Inf)))
+  }
+  else {
+    summary <- match.arg(summary, c("mean", "median"))
+    rate_var <- if(summary == "mean") "rate" else "rate_median"
+    tree@data$clockfac <- as.numeric(cut(tree@data[[rate_var]], breaks = c(-Inf, breaks, Inf)))
+  }
+  
   #Make tree plot
   selection_plot <- ggtree::ggtree(tree, layout = "rectangular", ladderize = TRUE, right = TRUE,
                                    position = position_nudge(x = -offset),
@@ -267,8 +321,8 @@ plot_treerates_sgn <- function(tree, posterior, clock = 1, summary = "mean", thr
           legend.title = element_text(size = 8, face = "bold"),
           legend.key.size = unit(0.5,'cm'),
           legend.text = element_text(size=7))
-
+  
   selection_plot <- ggtree::revts(selection_plot)
-
+  
   return(selection_plot)
 }
