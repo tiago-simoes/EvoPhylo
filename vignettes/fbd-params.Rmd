@@ -12,25 +12,20 @@ bibliography: references.bib
 link-citations: true
 ---
 
-This vignette explains how to extract, plot, and statistically test for differences among BD (Birth-Death) or FBD (fossilized birth-death) parameters (e.g., *net diversification*, *relative extinction (turnover)*, and *relative fossilization*) across the tree when using the Skyline BD or Skyline FBD tree models produced by the program [Mr. Bayes](https://nbisweden.github.io/MrBayes/) or [BEAST2](http://www.beast2.org/) (SA or BDSKY packages) since **EvoPhylo** v. 0.2.0.
+This vignette explains how to extract, plot, and statistically test for differences among BD (Birth-Death) or FBD (fossilized birth-death) parameters (e.g., *net diversification*, *relative extinction (turnover)*, and *relative fossilization*) across the tree when using the Skyline BD or Skyline FBD tree models produced by the program [Mr. Bayes](https://nbisweden.github.io/MrBayes/) or [BEAST2](http://www.beast2.org/) (SA or BDSKY packages).
 
 ```{r, setup, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## FBD Parameters Statistics and Plots
+## FBD Parameters Statistics and Plots (Mr. Bayes)
 
 Below we demonstrate how to extract evolutionary rate summary statistics from each node from a Bayesian clock (time-calibrate) summary tree produced by Mr. Bayes, store them in a data frame, produce summary tables, and plots.
 
-Load the **EvoPhylo** package
-
-```{r}
-library(EvoPhylo)
-```
 
 ### 1. Import combined log file from all runs. 
 
-This is produced by using `combine_log()`. Alternatively, users can also use **LogCombiner** from the [BEAST2](https://www.beast2.org/beagle-beast-2-in-cluster/index.html) software package. The first argument passed to `combine_log()` should be a path to the folder containing the log files to be imported and combined.
+This is produced by using `combine_log()`.The first argument passed to `combine_log()` should be a path to the folder containing the log files to be imported and combined.
 
 ```{r,eval=FALSE}
 ## Import all log (.p) files from all runs and combine them, with burn-in = 25% 
@@ -262,6 +257,97 @@ kableExtra::kbl(k3.3b, digits=4, align=c('c','c','c','c'),
                 caption = "Mann-Whitney tests") |> 
   kableExtra::kable_styling(font_size = 12, full_width = FALSE, 
                             bootstrap_options = "striped", "condensed")
+```
+
+&nbsp;  
+&nbsp;  
+&nbsp;  
+
+## FBD Parameters Statistics and Plots (BEAST2)
+
+### 1. Import combined log file from all runs. 
+
+The combined posterior log file from [BEAST2](https://www.beast2.org/beagle-beast-2-in-cluster/index.html) is outputted by **LogCombiner** from their  software package. Our own function to combined log files `combine_log` is intended to work with Mr. Bayes posterior files only.
+
+Below, we use the posterior dataset "Penguins_log.log" that accompanies `EvoPhylo`.
+
+```{r, results='hide'}
+posterior <- system.file("extdata", "Penguins_log.log", package = "EvoPhylo")
+posterior <- read.table(posterior, header = TRUE)
+
+## Show first 10 lines of combined log file
+head(posterior, 10)
+```
+
+The posterior data must first be transformed from wide to long to be used with the functions described below; `FBD_reshape()` accomplishes this.
+
+```{r}
+## Reshape imported combined log file from wide to long with FBD_reshape
+posterior_long <- FBD_reshape(posterior, variables = NULL, log.type = "BEAST2")
+
+## Show first 5 lines of combined log file
+head(posterior_long, 5)
+```
+
+### 2. Summarize FBD parameters by time bin
+
+Summary statistics for each FBD parameter by time bin can be quickly summarized using `FBD_summary()`:
+
+```{r, eval = FALSE}
+## Summarize parameters by time bin and analysis
+t3.1 <- FBD_summary(posterior_long)
+t3.1
+```
+```{r, echo = FALSE}
+t3.1 <- FBD_summary(posterior_long, digits = 2)
+kableExtra::kbl(t3.1, caption = "FBD parameters by time bin") |> 
+  kableExtra::kable_styling(font_size = 15, full_width = FALSE,
+                            bootstrap_options = "striped", "condensed")
+```
+```{r, eval=FALSE}
+## Export the table
+write.csv(t3.1, file = "FBD_summary_BEAST2.csv")
+```
+
+### 3. Plot the distribution of each FBD parameter
+
+Each of (or all) the FBD parameter distributions can be plotted by time bin using various plotting alternatives with `FBD_dens_plot()`:
+
+```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "70%"}
+## Plot distribution of the desired FBD parameter by time bin with 
+## kernel density plot
+FBD_dens_plot(posterior_long, parameter = "diversificationRateFBD",
+              type = "density", stack = FALSE)
+```
+
+```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "70%"}
+## Plot distribution of the desired FBD parameter by time bin with 
+## stacked kernel density plot
+FBD_dens_plot(posterior_long, parameter = "diversificationRateFBD",
+              type = "density", stack = TRUE)
+```
+
+```{r, fig.width=4, fig.height=4, fig.align = "center", out.width = "50%"}
+## Plot distribution of the desired FBD parameter by time bin with 
+## a violin plot
+FBD_dens_plot(posterior_long, parameter = "diversificationRateFBD",
+              type = "violin", stack = FALSE, color = "red")
+```
+```{r, fig.width=12, fig.height=4, fig.align = "center", out.width = "100%", warning=FALSE}
+## Plot distribution of all FBD parameter by time bin with a violin plot
+p1 <- FBD_dens_plot(posterior_long, parameter = "diversificationRateFBD",
+                    type = "violin", stack = FALSE, color = "red")
+p2 <- FBD_dens_plot(posterior_long, parameter = "turnoverFBD",
+                    type = "violin", stack = FALSE, color = "cyan3")
+p3 <- FBD_dens_plot(posterior_long, parameter = "samplingProportionFBD",
+                    type = "violin", stack = FALSE, color = "green3")
+
+library(patchwork)
+p1 + p2 + p3 + plot_layout(nrow = 1)
+```
+```{r, eval = FALSE}
+## Save your plot to your working directory as a PDF
+ggplot2::ggsave("Plot_regs.pdf", width = 12, height = 4)
 ```
 
 ## References
