@@ -22,20 +22,20 @@ plot_treerates_sgn_MrBayes(type = c("MrBayes", "BEAST2"),
 Whether to use data output from "Mr.Bayes" or "BEAST2".
 }
   \item{tree}{
-A \code{tidytree} object; the output of a call to \code{\link[treeio:read.beast]{treeio::read.beast}}.
+A \code{tidytree} object; the output of a call to \code{\link[treeio:read.beast]{treeio::read.beast}}. Summary trees from Mr. Bayes will include branch specific rates for all clock partitions, and the partition to be plotted will be specified using the "clock" argument. On the other hand, BEAST2 will output one separate summary tree file for each clock partition. For the latter, the tree file for the partition of interest should be provided for plotting.
 }
   \item{posterior}{
 A data frame of posterior parameter estimates (log file). From Mr.Bayes, it includes a "clockrate" column indicating the mean (background) clock rate estimate for each generation that will be used for pairwise t-tests. Such data frame can be imported using \code{\link{combine_log}} (no need to reshape from wide to long). See the \code{\link{posterior1p}} or \code{\link{posterior3p}} datasets for an examples of how the input file should look.
      From BEAST2, it will include at least one "rate<filename>.mean" column indicating the mean (background) clock rate estimate for each generation. If there are "P" unlinked clock partitions in BEAST2, there will be P x "rate<filename>.mean" columns (one for each partition) in the posterior log file.
 }
   \item{summary}{
-The rate summary to plot, (i.e., the value in "rate<clockmodel>Brlens1_\{summary\}"). Only "mean" and "median" are allowed. Default is "mean".
+The rate summary stats chosen to calculate selection mode. Only rates "mean" and "median" are allowed. Default is "mean".
 }
   \item{drop.dummyextant}{
 \code{logical}; whether to drop the "Dummyextant" tip (if present) from the tree before plotting the tree. Default is \code{TRUE}.
 }
   \item{clock}{
-The clock number to plot, (i.e., the number in "rate<clockmodel>Brlens\{#\}_mean"). Ignored if only one clock is available.
+The clock partition number to calculate selection mode. Ignored if only one clock is available.
 }
   \item{threshold}{
 A vector of threshold values. Default is to display thresholds of ±1 relative standard deviation (SD) of the relative posterior clock rates. Should be specified as a number of standard deviations (e.g., \code{"1 SD"}) or the confidence level for a confidence interal around the mean relative posterior clockrate (e.g., \code{"95\%"}). Multiple values are allowed to produce a plot with multiple thresholds. Set to \code{NULL} to omit thresholds.
@@ -63,7 +63,9 @@ A vector of interval names indicating which intervals should not be labeled. Pas
 }
 }
 \details{
-Plots the phylogentic tree contained in \code{tree} using \code{\link[ggtree:ggtree]{ggtree::ggtree}}. Branches undergoing accelerating evolutionary rates (e.g., >\code{"1 SD"}, \code{"3 SD"}, or \code{"5 SD"} relative to the background rate) for each morphological partition suggest directional (or positive) selection for that morphological partition in that branch of the tree. Branches undergoing decelerating evolutionary rates (e.g., <\code{"1 SD"}, \code{"3 SD"}, or \code{"5 SD"} relative to the background rate) for each morphological partition suggest stabilizing selection for that morphological partition in that branch of the tree. For details methods and rationale, see Simões & Pierce (2021).
+Plots the phylogentic tree contained in \code{tree} using \code{\link[ggtree:ggtree]{ggtree::ggtree}}. Branches undergoing accelerating evolutionary rates (e.g., >\code{"1 SD"}, \code{"3 SD"}, or \code{"5 SD"} relative to the background rate) for each morphological clock partition suggest directional (or positive) selection for that morphological partition in that branch of the tree. Branches undergoing decelerating evolutionary rates (e.g., <\code{"1 SD"}, \code{"3 SD"}, or \code{"5 SD"} relative to the background rate) for each morphological clock partition suggest stabilizing selection for that morphological partition in that branch of the tree. For details on rationale, see Simões & Pierce (2021).
+
+Please double check that the distribution of background rates (mean rates for the tree) sampled from the posterior follow the assumptions of a normal distribution (e.g., check for normality of distribution in Tracer). Otherwise, displayed results may not have a valid interpretation.
 }
 
 \value{
@@ -88,7 +90,7 @@ data("posterior3p")
 plot_treerates_sgn2(
   type = "MrBayes",
   tree = tree3p, posterior = posterior3p,
-  summary = "mean", drop.dummyextant = TRUE,                 #MrBayes specific aerguments
+  summary = "mean", drop.dummyextant = TRUE,                 #MrBayes specific arguments
   clock = 1,                                                 #Show rates for clock partition 1
   threshold = c("1 SD", "3 SD"),                             #sets background rate threshold for selection mode
   branch_size = 1.5, tip_size = 3,                           #sets size for tree elements

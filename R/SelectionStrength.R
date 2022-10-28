@@ -122,14 +122,16 @@ get_pwt_rates_BEAST2 <- function(rate_table, posterior) {
 
 #Plot tree with colored thresholds
 
-plot_treerates_sgn = function(type = c("MrBayes", "BEAST2"), tree, posterior,
-                                 offset = 0, #BEAST2 specific
+plot_treerates_sgn = function(type = c("MrBayes", "BEAST2"),
+                                 tree, posterior,
+                                 trans = c("none", "log", "log10"),
                                  summary = "mean", drop.dummyextant = TRUE, #MrBayes specific
                                  clock = 1, threshold = c("1 SD", "2 SD"),
                                  low = "blue", mid = "gray90", high = "red",
                                  branch_size = 2, tip_size = 2,
                                  xlim = NULL, nbreaks = 10, geo_size = list(2, 3),
-                                 geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")){
+                                 geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")) {
+
 
   if(!type %in% c("MrBayes", "BEAST2")) stop("Bad type call")
 
@@ -176,23 +178,59 @@ plot_treerates_sgn = function(type = c("MrBayes", "BEAST2"), tree, posterior,
     thresh_vals <- as.numeric(thresh_vals)
 
     if(type == "BEAST2") {
-
-      #get relative background clock rate (for each relevant clock partition)
+      #get BEAST2 relative background clock rate (for the desired clock partition) and data transform
+      #get background clock rate
       posterior.clockrate<-get_clockrate_posterior(posterior)                     #get rate table from posterior sample using 'get_clockrate_posterior' helper
       posterior.clockrate.long<-posterior_clockrate_reshape(posterior.clockrate)  #convert posterior mean rates table to long using 'posterior_clockrate_reshape' helper
+      posterior.final<-posterior.clockrate.long[posterior.clockrate.long$clock == clock,]                       #keep values for desired clock
+      #  check original data distribution
+      backrate_dist<- hist(posterior.final$rates.post, breaks = 20, main =paste("Original background rate distribution"))
 
-      posterior.rel.clockrate <-tapply(posterior.clockrate.long$rates.post, posterior.clockrate.long$clock, function(x){
-        x/mean(x)
-      })[[clock]]
+      if (trans == "none") {
+      #get relative background clock rate
+      posterior.rel.clockrate <- posterior.final$rates.post/mean(posterior.final$rates.post)
+      }
+      else if (trans == "log10"){
+      # log10 transform data
+      posterior.final$rates.post.log<-log10(posterior.final$rates.post)
+      backrate_dist_log<- hist(posterior.final$rates.post.log, breaks = 20, main =paste("Log10 background rate distribution"))
+      #get relative background clock rate
+      posterior.rel.clockrate <- posterior.final$rates.post.log/mean(posterior.final$rates.post.log)
+      }
+      else {
+      # log transform data
+      posterior.final$rates.post.log<-log(posterior.final$rates.post)
+      backrate_dist_log<- hist(posterior.final$rates.post.log, breaks = 20, main =paste("Ln background rate distribution"))
+      #get relative background clock rate
+      posterior.rel.clockrate <- posterior.final$rates.post.log/mean(posterior.final$rates.post.log)
+      }}
 
-      mean.posterior.rel.clockrate <- 1
-
-    }
-    else {
-      #get relative background clock rate (shared among all partitions)
+     else {
+      #get Mr. Bayes relative background clock rate (shared among all partitions)
+       #  check original data distribution
+      backrate_dist<- hist(posterior$clockrate, breaks = 20, main =paste("Original background rate distribution"))
+       if (trans == "none") {
       posterior.rel.clockrate <- posterior$clockrate/mean(posterior$clockrate)
-      mean.posterior.rel.clockrate <- 1
-    }
+      }
+      else if (trans == "log10"){
+      # log10 transform data
+      posterior$clockrate.log<-log10(posterior$clockrate)
+      backrate_dist_log<- hist(posterior$clockrate.log, breaks = 20, main =paste("Log10 background rate distribution"))
+      #get relative background clock rate
+      posterior.rel.clockrate <- posterior$clockrate.log/mean(posterior$clockrate.log)
+      }
+      else {
+      # log transform data
+      posterior$clockrate.log<-log(posterior$clockrate)
+      backrate_dist_log<- hist(posterior$clockrate.log, breaks = 20, main =paste("Ln background rate distribution"))
+      #get relative background clock rate
+      posterior.rel.clockrate <- posterior$clockrate.log/mean(posterior$clockrate.log)
+      }}
+
+    #check final rel data dist
+    rel_backrate <- hist(posterior.rel.clockrate, breaks = 20, main =paste("Relative background rate distribution"))
+
+    mean.posterior.rel.clockrate <- 1
 
     breaks <- numeric(2*length(threshold))
     labels <- character(2*length(threshold))
@@ -256,12 +294,11 @@ plot_treerates_sgn = function(type = c("MrBayes", "BEAST2"), tree, posterior,
   else {
     offset <- min(tree@data$height_median)
   }
-
   if (type == "MrBayes" && is.null(xlim)) {
     x1 <- -round(max(tree@data$age_median) + 15, -1)
     x2 <- -round(min(tree@data$age_median) - 15, -1)
   }
-  else if (type == "BEAST2" && is.null(xlim)) {
+   else if (type == "BEAST2" && is.null(xlim)) {
     x1 <- -round(max(tree@data$height_median) + 15, -1)
     x2 <- -round(min(tree@data$height_median) - 15, -1)
   }
@@ -270,15 +307,17 @@ plot_treerates_sgn = function(type = c("MrBayes", "BEAST2"), tree, posterior,
     x2 <- round(xlim[2], -1)
   }
 
+
   #Create integer version of rate variable split up by breaks
-  if(type == "MrBayes") {
-    tree@data$clockfac <- as.numeric(cut(tree@data[[rate_var]], breaks = c(-Inf, breaks, Inf)))
-  }
+  #MrBayes already uses relative branch rates (normalized)
+  if(type == "BEAST2") {
+    #get relative branch rates (normalize) and split up by breaks
+    tree@data$rel.rate <- tree@data$rate/mean(posterior.final$rates.post)
+    tree@data$clockfac <- as.numeric(cut(tree@data$rel.rate, breaks = c(-Inf, breaks, Inf)))
+   }
   else {
-    tree@data$rel_rate_mean <- tree@data$rate/mean(posterior.clockrate.long$rates.post)[clock]
-    rate_var <- "rel_rate_mean"
     tree@data$clockfac <- as.numeric(cut(tree@data[[rate_var]], breaks = c(-Inf, breaks, Inf)))
-  }
+    }
 
   #Make tree plot
   selection_plot <- ggtree::ggtree(tree, layout = "rectangular", ladderize = TRUE, right = TRUE,
@@ -311,7 +350,5 @@ plot_treerates_sgn = function(type = c("MrBayes", "BEAST2"), tree, posterior,
   selection_plot <- ggtree::revts(selection_plot)
   return(selection_plot)
 }
-
-
 
 
