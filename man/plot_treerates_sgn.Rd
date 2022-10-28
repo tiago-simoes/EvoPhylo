@@ -87,7 +87,7 @@ Simões, T. R. and S. E. Pierce (2021). Sustained High Rates of Morphological Ev
 data("tree3p")
 data("posterior3p")
 
-plot_treerates_sgn2(
+plot_treerates_sgn(
   type = "MrBayes",
   tree = tree3p, posterior = posterior3p,
   summary = "mean", drop.dummyextant = TRUE,                 #MrBayes specific arguments
@@ -98,16 +98,16 @@ plot_treerates_sgn2(
 
 
 ## BEAST2 example
-tree_clock1 <- treeio::read.beast("Penguins_MCC_morpho_part1.t")
+tree_clock1 <- system.file("extdata", "Penguins_MCC_morpho_part1", package = "EvoPhylo")
+tree_clock1 <- treeio::read.beast(tree_clock1)
 posterior_BEAST2 <- read.csv(posterior_BEAST2, header = TRUE)
 
-plot_treerates_sgn2(
+plot_treerates_sgn(
   type = "BEAST2",
   tree = tree_clock1, posterior = posterior_BEAST2,       #BEAST2 tree file with data for partition 1
   clock = 1,                                              #Show rates for clock partition 1
-  threshold = "95%",                                      #sets threshold for selection mode
+  threshold = c("1 SD", "3 SD"),                          #sets background rate threshold for selection mode
   branch_size = 1.5, tip_size = 3,                        #sets size for tree elements
   xlim = c(-70, 30), nbreaks = 8, geo_size = list(3, 3))  #sets limits and breaks for geoscale
-
 }
 
