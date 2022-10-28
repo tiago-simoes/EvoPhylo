@@ -239,12 +239,6 @@ Below, we use the rate table with clade membership `RateTable_Means_3p_Clades` t
 data(RateTable_Means_3p_Clades)
 ```
 
-It is necessary to transform the table from wide to long format with `clock_reshape()`.
-
-```{r}
-## Transform table from wide to long format
-rates_by_clade <- clock_reshape(RateTable_Means_3p_Clades)
-```
 
 ### 2. Import combined log file from all runs. 
 

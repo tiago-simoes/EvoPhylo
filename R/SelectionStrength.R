@@ -2,7 +2,7 @@
 clock_reshape <- function(rate_table) {
   rate_table_long <- reshape(rate_table, direction = "long",
                              varying = which(startsWith(names(rate_table), "rates")),
-                             v.names = "rate",
+                             v.names = "rates",
                              timevar = "clock",
                              idvar = "nodes",
                              sep = "_")
@@ -50,9 +50,8 @@ get_pwt_rates_MrBayes <- function(rate_table, posterior) {
                     rate_table_long$clock,
                     rate_table_long$rate,
                     rate_table_long$abs_rate,
-                    rate_table_long$abs_rate,
                     pvals)
-  names(out) <- c("clade", "nodes", "clock", "relative.rate(mean)", "absolute.rate(mean)", "null", "p.value")
+  names(out) <- c("clade", "nodes", "clock", "relative.rate.mean", "absolute.rate.mean", "p.value")
   return(out)
 }
 
@@ -97,10 +96,10 @@ get_pwt_rates_BEAST2 <- function(rate_table, posterior) {
   #Combine all tables by background clock partition
   comb_rates<- Reduce(function(x, y) merge(x, y, all = FALSE, by = "clock"),
                       list(post.mean.long, post.se.long, rate.table.long))
-  comb_rates<-subset(comb_rates, select = c(clade, nodes, clock, rate, mean.rates.post, post.se))
+  comb_rates<-subset(comb_rates, select = c(clade, nodes, clock, rates, mean.rates.post, post.se))
 
   #Calculate relative branch rates
-  comb_rates$rel_rate <- comb_rates$rate/comb_rates$mean.rates.post
+  comb_rates$rel_rate <- comb_rates$rates/comb_rates$mean.rates.post
 
   #Calculate pairwise t-tests (post.ts) and p-values (pvals)
   post.ts <- abs(comb_rates$mean.rates.post - comb_rates$rate)/comb_rates$post.se
@@ -111,7 +110,7 @@ get_pwt_rates_BEAST2 <- function(rate_table, posterior) {
                     comb_rates$nodes,
                     comb_rates$clock,
                     comb_rates$mean.rates.post,
-                    comb_rates$rate,
+                    comb_rates$rates,
                     comb_rates$rel_rate,
                     pvals)
   names(out) <- c("clade", "node", "clock", "background.rate.mean", "absolute.rate.mean", "relative.rate.mean", "p.value")

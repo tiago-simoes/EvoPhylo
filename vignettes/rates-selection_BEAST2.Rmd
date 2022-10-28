@@ -220,12 +220,6 @@ RateTable_Means_Clades <- system.file("extdata", "RateTable_Means_Clades.csv", p
 RateTable_Means_Clades <- read.csv(RateTable_Means_Clades, header = TRUE)
 ```
 
-It is necessary to transform the table from wide to long format with `clock_reshape()`.
-
-```{r}
-## Transform table from wide to long format
-rates_by_clade <- clock_reshape(RateTable_Means_Clades)
-```
 
 ### 2. Import combined log file from all runs. 
 
@@ -238,23 +232,20 @@ posterior <- system.file("extdata", "Penguins_log.log", package = "EvoPhylo")
 posterior <- read.table(posterior, header = TRUE)
 
 ## Show first 10 lines of combined log file
-head(posterior4p, 10)
+head(posterior, 10)
 ```
 
 ### 3. Pairwise t-tests of rate values among clades
 
-The function `get_pwt_rates_MrBayes()` will produce a table of pairwise t-tests for differences between the mean clockrate value in the posterior and the absolute rate for each tree node. 
+The function `get_pwt_rates_BEAST2()` will produce a table of pairwise t-tests for differences between the mean clockrate value in the posterior and the absolute rate for each tree node. 
 
 ```{r, eval = FALSE}
 ## Get table of pairwise t-tests for difference between the posterior 
 ## mean and the rate for each tree node
 RateSign_Tests <- get_pwt_rates_BEAST2(RateTable_Means_Clades, posterior)
-
-## Show first 10 lines of table
-head(RateSign_Tests, 10)
 ```
 ```{r, echo = FALSE}
-RateSign_Tests <- get_pwt_rates_MrBayes(RateTable_Means_Clades, posterior3p)
+RateSign_Tests <- get_pwt_rates_BEAST2(RateTable_Means_Clades, posterior)
 t3 <- head(RateSign_Tests, 10)
 kableExtra::kbl(t3, caption = "Combined log file") |> 
   kableExtra::kable_styling(font_size = 15, full_width = FALSE,

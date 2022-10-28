@@ -164,7 +164,7 @@ clockrate_dens_plot <- function(rate_table, clock = NULL, stack = FALSE, nrow = 
   rt <- clock_reshape(rate_table)
   levels(rt$clock) <- paste("Clock", levels(rt$clock))
 
-  rateplot <- ggplot(data = rt, mapping = aes(x = .data$rate, fill = .data$clade,
+  rateplot <- ggplot(data = rt, mapping = aes(x = .data$rates, fill = .data$clade,
                                               color = .data$clade)) +
     geom_hline(yintercept = 0) +
     geom_density(position = if (stack) "stack" else "identity",
