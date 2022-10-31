@@ -13,6 +13,125 @@ clock_reshape <- function(rate_table) {
   rate_table_long
 }
 
+# Check background rates distribution and if they need transformation
+plot_back_rates = function(type = c("MrBayes", "BEAST2"),
+                           posterior,
+                           clock = 1,
+                           trans = c("none", "log", "log10"),
+                           size = 12, quantile = 0.95) {
+
+  if(!type %in% c("MrBayes", "BEAST2")) stop("Bad type call")
+
+  if (type == "BEAST2" && (missing(posterior) || !is.data.frame(posterior))) {
+      stop("'posterior' must be a data frame.", call. = FALSE)
+    }
+
+  if(type == "MrBayes") {
+      if (missing(posterior) || !is.data.frame(posterior)) {
+        stop("'posterior' must be a data frame.", call. = FALSE)
+      }
+      if (hasName(posterior, "clockrate.all.")) {
+        names(posterior)[which(names(posterior) == "clockrate.all.")] <- "clockrate"
+      }
+      if (!hasName(posterior, "clockrate")) {
+        stop("A 'clockrate' column must be present in 'posterior'.", call. = FALSE)
+      }}
+
+  if(type == "BEAST2") {
+      #get BEAST2 relative background clock rate (for the desired clock partition) and data transform
+      posterior.clockrate<-get_clockrate_posterior(posterior)                     #get rate table from posterior sample using 'get_clockrate_posterior' helper
+      posterior.clockrate.long<-posterior_clockrate_reshape(posterior.clockrate)  #convert posterior mean rates table to long using 'posterior_clockrate_reshape' helper
+      posterior.final<-posterior.clockrate.long[posterior.clockrate.long$clock == clock,]                       #keep values for desired clock
+
+      #check original data distribution
+      P1<-ggplot2::ggplot(posterior.final, aes(x=rates.post)) +
+        geom_histogram(aes(y=..density..), colour="black", fill="white")+
+        geom_density(alpha=.2, fill="cyan")+
+        geom_vline(aes(xintercept=mean(rates.post)),color="red", linetype="dashed", size=1)+
+        labs(x = "Absolute background rates", y = "Density") +
+        xlim(c(0,quantile(posterior.final$rates.post, quantile)))+
+        theme_bw()+
+        labs(title = paste0("Clock partition ", clock), call. = FALSE) +
+        theme(plot.title = element_text(size = size, face = "bold", hjust = 0.5))
+
+      if (trans == "none") {
+      #get relative background clock rate
+      posterior.rel.clockrate <- posterior.final$rates.post/mean(posterior.final$rates.post)
+      }
+      else if (trans == "log10"){
+      posterior.final$rates.post.log<-log10(posterior.final$rates.post)
+      #get relative background clock rate
+      posterior.rel.clockrate <- posterior.final$rates.post.log/mean(posterior.final$rates.post.log)
+      }
+      else {
+      # ln transform data
+      posterior.final$rates.post.log<-log(posterior.final$rates.post)
+      #get relative background clock rate
+      posterior.rel.clockrate <- posterior.final$rates.post.log/mean(posterior.final$rates.post.log)
+      }}
+
+   else {
+      #get Mr. Bayes relative background clock rate (shared among all partitions)
+      #check original data distribution
+      P1<-ggplot2::ggplot(posterior, aes(x=clockrate)) +
+        geom_histogram(aes(y=..density..), colour="black", fill="white")+
+        geom_density(alpha=.2, fill="cyan")+
+        geom_vline(aes(xintercept=mean(clockrate)),color="red", linetype="dashed", size=1)+
+        labs(x = "Absolute background rates", y = "Density") +
+        xlim(c(0,quantile(posterior$clockrate, quantile)))+
+        theme_bw() +
+        labs(title = paste0("Clock partition ", clock), call. = FALSE) +
+        theme(plot.title = element_text(size = 12, face = "bold", hjust = 0.5))
+
+       if (trans == "none") {
+      posterior.rel.clockrate <- posterior$clockrate/mean(posterior$clockrate)
+      }
+      else if (trans == "log10"){
+      posterior$clockrate.log<-log10(posterior$clockrate)
+      #get relative background clock rate
+      posterior.rel.clockrate <- posterior$clockrate.log/mean(posterior$clockrate.log)
+      }
+      else {
+      # ln transform data
+      posterior$clockrate.log<-log(posterior$clockrate)
+      #get relative background clock rate
+      posterior.rel.clockrate <- posterior$clockrate.log/mean(posterior$clockrate.log)
+      }}
+
+  #Plot final rel background rate dist
+  if(trans == "none"){
+    posterior.rel.clockrate<- as.data.frame(posterior.rel.clockrate)
+    names(posterior.rel.clockrate) <- "Rel.Back.Rate"
+    P2<- ggplot2::ggplot(posterior.rel.clockrate, aes(x=Rel.Back.Rate)) +
+        geom_histogram(aes(y=..density..), colour="black", fill="white")+
+        geom_density(alpha=.2, fill="cyan")+
+        geom_vline(aes(xintercept=mean(Rel.Back.Rate)),color="red", linetype="dashed", size=1)+
+        #xlim(c(0,quantile(posterior.rel.clockrate$Rel.Back.Rate, quantile)))+
+        labs(x = "Relative background rates", y = "Density") +
+        theme_bw() +
+        labs(title = paste0("Clock partition ", clock), call. = FALSE) +
+        theme(plot.title = element_text(size = 12, face = "bold", hjust = 0.5))
+
+    All_P<- P1 + P2
+     }
+  else{
+    posterior.rel.clockrate<- as.data.frame(posterior.rel.clockrate)
+    names(posterior.rel.clockrate) <- "Rel.Back.Rate"
+    P2<- ggplot2::ggplot(posterior.rel.clockrate, aes(x=Rel.Back.Rate)) +
+        geom_histogram(aes(y=..density..), colour="black", fill="white")+
+        geom_density(alpha=.2, fill="cyan")+
+        geom_vline(aes(xintercept=mean(Rel.Back.Rate)),color="red", linetype="dashed", size=1)+
+        labs(x = "Relative background rates (Transformed)", y = "Density") +
+        theme_bw() +
+        labs(title = paste0("Clock partition ", clock), call. = FALSE) +
+        theme(plot.title = element_text(size = 12, face = "bold", hjust = 0.5))
+
+    All_P<- P1 + P2
+  }
+      return(All_P)
+  }
+
+
 #t-tests with MrBayes output
 get_pwt_rates_MrBayes <- function(rate_table, posterior) {
   if (missing(rate_table) || !is.data.frame(rate_table)) {
@@ -129,7 +248,7 @@ plot_treerates_sgn = function(type = c("MrBayes", "BEAST2"),
                                  low = "blue", mid = "gray90", high = "red",
                                  branch_size = 2, tip_size = 2,
                                  xlim = NULL, nbreaks = 10, geo_size = list(2, 3),
-                                 geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")) {
+                                 geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")){
 
 
   if(!type %in% c("MrBayes", "BEAST2")) stop("Bad type call")
@@ -178,56 +297,42 @@ plot_treerates_sgn = function(type = c("MrBayes", "BEAST2"),
 
     if(type == "BEAST2") {
       #get BEAST2 relative background clock rate (for the desired clock partition) and data transform
-      #get background clock rate
       posterior.clockrate<-get_clockrate_posterior(posterior)                     #get rate table from posterior sample using 'get_clockrate_posterior' helper
       posterior.clockrate.long<-posterior_clockrate_reshape(posterior.clockrate)  #convert posterior mean rates table to long using 'posterior_clockrate_reshape' helper
       posterior.final<-posterior.clockrate.long[posterior.clockrate.long$clock == clock,]                       #keep values for desired clock
-      #  check original data distribution
-      backrate_dist<- hist(posterior.final$rates.post, breaks = 20, main =paste("Original background rate distribution"))
 
       if (trans == "none") {
       #get relative background clock rate
       posterior.rel.clockrate <- posterior.final$rates.post/mean(posterior.final$rates.post)
       }
       else if (trans == "log10"){
-      # log10 transform data
       posterior.final$rates.post.log<-log10(posterior.final$rates.post)
-      backrate_dist_log<- hist(posterior.final$rates.post.log, breaks = 20, main =paste("Log10 background rate distribution"))
       #get relative background clock rate
       posterior.rel.clockrate <- posterior.final$rates.post.log/mean(posterior.final$rates.post.log)
       }
       else {
-      # log transform data
+      # ln transform data
       posterior.final$rates.post.log<-log(posterior.final$rates.post)
-      backrate_dist_log<- hist(posterior.final$rates.post.log, breaks = 20, main =paste("Ln background rate distribution"))
       #get relative background clock rate
       posterior.rel.clockrate <- posterior.final$rates.post.log/mean(posterior.final$rates.post.log)
       }}
 
      else {
       #get Mr. Bayes relative background clock rate (shared among all partitions)
-       #  check original data distribution
-      backrate_dist<- hist(posterior$clockrate, breaks = 20, main =paste("Original background rate distribution"))
        if (trans == "none") {
       posterior.rel.clockrate <- posterior$clockrate/mean(posterior$clockrate)
       }
       else if (trans == "log10"){
-      # log10 transform data
       posterior$clockrate.log<-log10(posterior$clockrate)
-      backrate_dist_log<- hist(posterior$clockrate.log, breaks = 20, main =paste("Log10 background rate distribution"))
       #get relative background clock rate
       posterior.rel.clockrate <- posterior$clockrate.log/mean(posterior$clockrate.log)
       }
       else {
-      # log transform data
+      # ln transform data
       posterior$clockrate.log<-log(posterior$clockrate)
-      backrate_dist_log<- hist(posterior$clockrate.log, breaks = 20, main =paste("Ln background rate distribution"))
       #get relative background clock rate
       posterior.rel.clockrate <- posterior$clockrate.log/mean(posterior$clockrate.log)
       }}
-
-    #check final rel data dist
-    rel_backrate <- hist(posterior.rel.clockrate, breaks = 20, main =paste("Relative background rate distribution"))
 
     mean.posterior.rel.clockrate <- 1
 
@@ -349,5 +454,3 @@ plot_treerates_sgn = function(type = c("MrBayes", "BEAST2"),
   selection_plot <- ggtree::revts(selection_plot)
   return(selection_plot)
 }
-
-

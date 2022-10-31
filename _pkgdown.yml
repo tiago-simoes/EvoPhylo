@@ -9,28 +9,43 @@ reference:
   desc: >
     See `vignette("char-part")` for a complete workflow that uses these functions to
     conduct automated morphological character partitioning as a pre-processing step
-    for clock (time-calibrated) Bayesian phylogenetic analysis of morphological data.
+    for clock (time-calibrated) Bayesian phylogenetic analysis of morphological data
+    using the programs Mr. Bayes or BEAST2.
 - contents:
   - get_gower_dist
   - get_sil_widths
   - make_clusters
   - cluster_to_nexus
   - write_partitioned_alignments
-- subtitle: Evolutionary rates and selection mode
+- subtitle: Evolutionary rates & selection mode (MrBayes)
   desc: >
-    See `vignette("rates-selection")` for a complete workflow that uses these functions
+    See `vignette("rates-selection_MrBayes")` for a complete workflow that uses these functions
     to extract evolutionary rate parameters estimated from relaxed clock Bayesian
     inference analyses produced by the program Mr. Bayes and use evolutionary rate
     based inference of selection mode (or strength) adapted to clock-based rates.
 - contents:
-  - clock_reshape
+  - get_clockrate_table_MrBayes
   - clockrate_dens_plot
   - clockrate_reg_plot
   - clockrate_summary
   - combine_log
-  - get_clockrate_table_MrBayes
-  - get_clockrate_table_BEAST2
+  - clock_reshape
+  - plot_back_rates
   - get_pwt_rates_MrBayes
+  - plot_treerates_sgn
+  - subtitle: Evolutionary rates & selection mode (BEAST2)
+  desc: >
+    See `vignette("rates-selection_BEAST2")` for a complete workflow that uses these functions
+    to extract evolutionary rate parameters estimated from relaxed clock Bayesian
+    inference analyses produced by the program BEAST2 and use evolutionary rate
+    based inference of selection mode (or strength) adapted to clock-based rates.
+- contents:
+  - get_clockrate_table_BEAST2
+  - clockrate_dens_plot
+  - clockrate_reg_plot
+  - clockrate_summary
+  - clock_reshape
+  - plot_back_rates
   - get_pwt_rates_BEAST2
   - plot_treerates_sgn
 - subtitle: Analyzing FBD parameters

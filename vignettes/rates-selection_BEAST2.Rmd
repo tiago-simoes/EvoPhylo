@@ -15,8 +15,16 @@ link-citations: true
 This vignette explains how to extract evolutionary rate parameters estimated from relaxed clock Bayesian inference analyses produced by [BEAST2](https://www.beast2.org/). It also shows how to use evolutionary rate based inference of selection mode (strength) adapted to clock-based rates, as introduced by @simões2021. See the sister vignette "Evolutionary Rates & Selection Mode (BEAST2)" for an equivalent workflow using output data produced by [Mr. Bayes](https://nbisweden.github.io/MrBayes/).
 
 ```{r, setup, echo=FALSE}
-knitr::opts_chunk$set(echo=TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, collapse = TRUE)
 ```
+
+Load the **EvoPhylo** package
+
+```{r}
+library(EvoPhylo)
+```
+
+# Character Partitioning (Case 1)
 
 ## Evolutionary Rates Statistics and Plots
 
@@ -209,23 +217,13 @@ In this section, we will use evolutionary rate based inference of selection mode
 
 Although the dataset used in the example here includes both morphological and molecular partitions, we will focus the selection mode inference using morphological partitions only. There are multiple available methods to infer the strength of selection using molecular data (e.g., dn/ds ratio) that are better suited to the intrinsic properties of molecular data, or which take into account additional variables available for extant taxa (generation times), and we refer users to those approaches.
 
-### 1. Import and transform table
+### 1. Import posterior log file 
 
-Below, we use the rate table with clade membership `RateTable_Means_4p_Clades` that accompanies `EvoPhylo`.
+The combined posterior log file from [BEAST2](https://www.beast2.org/beagle-beast-2-in-cluster/index.html) is outputted by **LogCombiner** from their  software package. Our own function to combined log files `combine_log` is intended to work with [Mr. Bayes](https://nbisweden.github.io/MrBayes/) posterior files only.
 
-```{r,eval=FALSE}
-## Import rate table with clade membership (new "clade" column added) 
-## from your local directory with "mean" values
-RateTable_Means_Clades <- system.file("extdata", "RateTable_Means_Clades.csv", package = "EvoPhylo")
-RateTable_Means_Clades <- read.csv(RateTable_Means_Clades, header = TRUE)
-```
+When using more two or more clock partitions, posterior log files from BEAST2 will have the mean evolutionary rates for each partition labeled as "rate<Filename><PartitionNumber>.mean". To be read and analyzed by `Evophylo`, users must ensure that all clock partitions that wish to be analyzed should include the word "part" just before the partition number in this label, as outputted by the `Evophylo`'s function `write_partitioned_alignments`. So, this label should read "rate<Filename>part<PartitionNumber>.mean". In our example provided here, with filename "KairukuEA2015", the first morphological partition was exported with `write_partitioned_alignments` as a Nexus file labeled "KairukuEA2015_Morpho_3p_part1", and so the mean evolutionary rates for the first partition is labeled "rate.KairukuEA2015_Morpho_3p_part1.mean".
 
-
-### 2. Import combined log file from all runs. 
-
-The combined posterior log file from [BEAST2](https://www.beast2.org/beagle-beast-2-in-cluster/index.html) is outputted by **LogCombiner** from their  software package. Our own function to combined log files `combine_log` is intended to work with Mr. Bayes posterior files only.
-
-Below, we use the posterior dataset `posterior3p` that accompanies `EvoPhylo`.
+Below, we use the posterior dataset "Penguins_log.log" that accompanies `EvoPhylo`.
 
 ```{r, results='hide'}
 posterior <- system.file("extdata", "Penguins_log.log", package = "EvoPhylo")
@@ -235,9 +233,87 @@ posterior <- read.table(posterior, header = TRUE)
 head(posterior, 10)
 ```
 
-### 3. Pairwise t-tests of rate values among clades
+###2. Check background rates distribution and if they need transformation
 
-The function `get_pwt_rates_BEAST2()` will produce a table of pairwise t-tests for differences between the mean clockrate value in the posterior and the absolute rate for each tree node. 
+The output includes histograms showing the data distribution before and after data transformation for comparisons. 
+
+```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
+B1 <- plot_back_rates (type = "BEAST2", posterior, clock = 1,
+                      trans = "log10", size = 10, quantile = 1)
+B2 <- plot_back_rates (type = "BEAST2", posterior, clock = 2,
+                      trans = "log10", size = 10, quantile = 1)
+B3 <- plot_back_rates (type = "BEAST2", posterior, clock = 3,
+                      trans = "log10", size = 10, quantile = 1)
+
+B1+B2+B3
+```
+
+
+### 3. Plot selection gradient on the summary tree
+
+Using different thresholds, Identify the selection mode across branches in the tree for each clock partition with `plot_treerates_sgn()`.
+
+Users must indicate the type of output file (between [Mr. Bayes](https://nbisweden.github.io/MrBayes/) and [BEAST2](https://www.beast2.org/)) and whether they would like to log transform the background rate to meet assumptions of normally distributed data, based on the results obtained from `plot_back_rates`. Users should also indicate in "clock" the number of the clock partition they would like to plot rates from and the desired significance threshold to interpret branch rates (we recommend number of standard deviations around the mean of background rates).Finally, a series of arguments enable users to customize the geological timescale to add to the tree.
+
+```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
+## Plot tree using various thresholds for clock partition 1
+A1<-plot_treerates_sgn2(
+  type = "BEAST2", trans = "log10",                         #Indicates software name output and type of transformation
+  tree_clock1, posterior,                                   #Calls tree for clock partition 1 and posterior log file
+  clock = 1,                                                #Use background rates for clock partition 1
+  threshold = c("1 SD", "3 SD"),                            #sets threshold for selection mode
+  branch_size = 1.5, tip_size = 3,                          #sets size for tree elements
+  xlim = c(-70, 30), nbreaks = 8, geo_size = list(3, 3))    #sets limits and breaks for geoscale
+A1
+```
+
+Plot tree using various thresholds for the other clock partitions and combine them.
+
+```{r, fig.width=20, fig.height=8, fig.align = "default", out.width = "100%"}
+## Plot tree using various thresholds for other clock partition and combine them
+A2<-plot_treerates_sgn(
+  type = "BEAST2", trans = "log10",                         #Indicates software name output and type of transformation
+  tree_clock2, posterior,                                   #Calls tree for clock partition 2 and posterior log file
+  clock = 2,                                                #Use background rates for clock partition 3
+  threshold = c("1 SD", "3 SD"),                            #sets threshold for selection mode
+  branch_size = 1.5, tip_size = 3,                          #sets size for tree elements
+  xlim = c(-70, 30), nbreaks = 8, geo_size = list(3, 3))    #sets limits and breaks for geoscale
+
+
+A3<-plot_treerates_sgn(
+  type = "BEAST2", trans = "log10",                         #Indicates software name output and type of transformation
+  tree_clock3, posterior,                                   #Calls tree for clock partition 3 and posterior log file
+  clock = 3,                                                #Use background rates for clock partition 3
+  threshold = c("1 SD", "3 SD"),                            #sets threshold for selection mode
+  branch_size = 1.5, tip_size = 3,                          #sets size for tree elements
+  xlim = c(-70, 30), nbreaks = 8, geo_size = list(3, 3))    #sets limits and breaks for geoscale
+
+
+library(patchwork)
+A1 + A2 + A3 + plot_layout(nrow = 1)
+```
+```{eval = FALSE}
+## Save your plot to your working directory as a PDF
+ggplot2::ggsave("Tree_Sel_Morpho_3p.pdf", width = 18, height = 8)
+```
+
+
+### 4. Pairwise t-tests of rate values among clades
+
+The function `get_pwt_rates_BEAST2()` complements the functionality of `plot_treerates_sgn` by producing a table of pairwise t-tests for differences between the mean background rate in the posterior and the absolute rate for each summary tree branches Should be used only for normally distributed data in which a CI=0.95 is considered a good threshold. In many cases, however, using multiple standard deviations as outputted using `plot_treerates_sgn` provides a more robust test of whether branch rates are significantly different from background rates.
+
+4.1. Import rate table with clade membership (new "clade" column added) from your local directory with "mean" values
+
+Below, we use the rate table with clade membership "RateTable_Means_Clades.csv" that accompanies `EvoPhylo`.
+
+```{r,eval=FALSE}
+## Import rate table with clade membership (new "clade" column added) 
+## from your local directory with "mean" values
+RateTable_Means_Clades <- system.file("extdata", "RateTable_Means_Clades.csv", package = "EvoPhylo")
+RateTable_Means_Clades <- read.csv(RateTable_Means_Clades, header = TRUE)
+```
+
+4.2. Get and export table of pairwise t-tests
 
 ```{r, eval = FALSE}
 ## Get table of pairwise t-tests for difference between the posterior 
@@ -254,52 +330,6 @@ kableExtra::kbl(t3, caption = "Combined log file") |>
 ```{r, eval=FALSE}
 ## Export the table
 write.csv(RateSign_Tests, file = "RateSign_Tests.csv")
-```
-
-### 4. Plot selection gradient on the summary tree
-
-Using different thresholds, Identify the selection mode across branches in the tree for each clock partition with `plot_treerates_sgn()`.
-
-```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
-## Plot tree using various thresholds for clock partition 1
-A1<-plot_treerates_sgn(
-  type = "BEAST2", trans = "log10",                         #Indicates software name output and type of transformation
-  tree = tree_clock1, posterior = posterior,                #Calls tree for clock partition 1 and posterior log file
-  clock = 1,                                                #Use background rates for clock partition 1
-  threshold = c("1 SD", "3 SD"),                            #sets threshold for selection mode
-  branch_size = 1.5, tip_size = 3,                          #sets size for tree elements
-  xlim = c(-70, 30), nbreaks = 8, geo_size = list(3, 3))    #sets limits and breaks for geoscale
-A1
-```
-
-Plot tree using various thresholds for the other clock partitions and combine them.
-
-```{r, fig.width=20, fig.height=8, fig.align = "default", out.width = "100%"}
-## Plot tree using various thresholds for other clock partition and combine them
-A2<-plot_treerates_sgn(
-  type = "BEAST2", trans = "log10",                         #Indicates software name output and type of transformation
-  tree = tree_clock2, posterior = posterior,                #Calls tree for clock partition 3 and posterior log file
-  clock = 2,                                                #Use background rates for clock partition 3
-  threshold = c("1 SD", "3 SD"),                            #sets threshold for selection mode
-  branch_size = 1.5, tip_size = 3,                          #sets size for tree elements
-  xlim = c(-70, 30), nbreaks = 8, geo_size = list(3, 3))    #sets limits and breaks for geoscale
-
-
-A3<-plot_treerates_sgn(
-  type = "BEAST2", trans = "log10",                         #Indicates software name output and type of transformation
-  tree = tree_clock3, posterior = posterior,                #Calls tree for clock partition 3 and posterior log file
-  clock = 3,                                                #Use background rates for clock partition 3
-  threshold = c("1 SD", "3 SD"),                            #sets threshold for selection mode
-  branch_size = 1.5, tip_size = 3,                          #sets size for tree elements
-  xlim = c(-70, 30), nbreaks = 8, geo_size = list(3, 3))    #sets limits and breaks for geoscale
-
-
-library(patchwork)
-A1 + A2 + A3 + plot_layout(nrow = 1)
-```
-```{eval = FALSE}
-## Save your plot to your working directory as a PDF
-ggplot2::ggsave("Tree_Sel_Morpho_3p.pdf", width = 18, height = 8)
 ```
 
 ## References
