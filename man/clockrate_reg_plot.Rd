@@ -46,14 +46,14 @@ A \code{ggplot} object, which can be modified using \pkg{ggplot2} functions.
 # See vignette("rates-selection") for how to use this
 # function as part of an analysis pipeline
 
-data("rate_table_clades_means3")
+data("RateTable_Means_3p_Clades")
 
 #Plot correlations between clocks 1 and 3
-clockrate_reg_plot(rate_table_clades_means3,
+clockrate_reg_plot(RateTable_Means_3p_Clades,
                    clock_x = 1, clock_y = 3)
 
 #Use arguments supplied to geom_smooth():
-clockrate_reg_plot(rate_table_clades_means3,
+clockrate_reg_plot(RateTable_Means_3p_Clades,
                    clock_x = 1, clock_y = 3,
                    color = "red", se = FALSE)
 }

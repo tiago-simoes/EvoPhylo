@@ -28,7 +28,6 @@ library(EvoPhylo)
 devtools::load_all(".")
 ```
 
-# Character Partitioning (Case 1)
 
 ## Evolutionary Rates Statistics and Plots
 
@@ -67,7 +66,7 @@ Here we assume that a consensus or summary tree has been generated for each of t
 
 tree_clock1 <- treeio::read.beast("tree_clock1.tre")
 tree_clock2 <- treeio::read.beast("tree_clock2.tre")
-tree_clock2 <- treeio::read.beast("tree_clock3.tre")
+#etc
 ```
 
 Below, we use the example BEAST2 clock trees from 3 morphological partitions and one molecular clock partition that accompany `EvoPhylo`.
@@ -135,7 +134,7 @@ A new "clade" column has been added to the rates table. Below, we use the rate t
 RateTable_Medians_Clades <- system.file("extdata", "RateTable_Medians_Clades.csv", package = "EvoPhylo")
 RateTable_Medians_Clades <- read.csv(RateTable_Medians_Clades, header = TRUE)
 
-head(RateTable_Medians_Clades)
+head(RateTable_Medians_Clades, 5)
 ```
 
 
@@ -161,7 +160,7 @@ kableExtra::kbl(t1, caption = "Rate table summary statistics") |>
 
 Plot distributions of rates by clock partition and clade with `clockrate_dens_plot()`.
 
-```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "100%"}
+```{r, fig.width=10, fig.height=3, fig.align = "center", out.width = "100%"}
 ## Overlapping plots
 clockrate_dens_plot(RateTable_Medians_Clades, stack = FALSE,
                     nrow = 1, scales = "fixed")
@@ -169,7 +168,7 @@ clockrate_dens_plot(RateTable_Medians_Clades, stack = FALSE,
 
 Sometimes using stacked plots provides a better visualization as it avoids overlapping distributions.
 
-```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "100%"}
+```{r, fig.width=10, fig.height=3, fig.align = "center", out.width = "100%"}
 ## Stacked plots
 clockrate_dens_plot(RateTable_Medians_Clades, stack = TRUE,
                     nrow = 1, scales = "fixed")
@@ -177,7 +176,7 @@ clockrate_dens_plot(RateTable_Medians_Clades, stack = TRUE,
 
 It is also possible to append extra layers using `ggplot2` function, such as for changing the color scale. Below, we change the color scale to be the Viridis scale.
 
-```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "100%"}
+```{r, fig.width=10, fig.height=3, fig.align = "center", out.width = "100%"}
 ## Stacked plots with viridis color scale
 clockrate_dens_plot(RateTable_Medians_Clades, stack = TRUE,
                     nrow = 1, scales = "fixed") +
@@ -189,7 +188,7 @@ clockrate_dens_plot(RateTable_Medians_Clades, stack = TRUE,
 
 We can also plot linear model regressions between rates from two or more clocks with `clockrate_reg_plot()`.
 
-```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
+```{r, fig.width=10, fig.height=8, fig.align = "center", out.width = "100%"}
 ## Plot regressions of rates from multiple clocks
 #Morpho-morpho rates
 p1<- clockrate_reg_plot(RateTable_Medians_Clades, clock_x = 1, clock_y = 2)
@@ -241,7 +240,7 @@ head(posterior, 10)
 
 The output includes histograms showing the data distribution before and after data transformation for comparisons. 
 
-```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
+```{r, fig.width=8, fig.height=3, fig.align = "center", out.width = "90%", echo=FALSE}
 library(ggplot2)
 B1 <- plot_back_rates (type = "BEAST2", posterior, clock = 1,
                       trans = "log10", size = 10, quantile = 1)
@@ -253,7 +252,6 @@ B3 <- plot_back_rates (type = "BEAST2", posterior, clock = 3,
                       trans = "log10", size = 10, quantile = 1)
 B3
 
-B1+B2+B3
 ```
 
 
@@ -314,11 +312,13 @@ The function `get_pwt_rates_BEAST2()` complements the functionality of `plot_tre
 
 Below, we use the rate table with clade membership "RateTable_Means_Clades.csv" that accompanies `EvoPhylo`.
 
-```{r,eval=FALSE}
+```{r}
 ## Import rate table with clade membership (new "clade" column added) 
 ## from your local directory with "mean" values
 RateTable_Means_Clades <- system.file("extdata", "RateTable_Means_Clades.csv", package = "EvoPhylo")
 RateTable_Means_Clades <- read.csv(RateTable_Means_Clades, header = TRUE)
+
+head(RateTable_Means_Clades, 5)
 ```
 
 4.2. Get and export table of pairwise t-tests

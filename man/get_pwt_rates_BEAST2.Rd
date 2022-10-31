@@ -38,12 +38,16 @@ A long data frame with one row per node per clock and the following columns:
 
 }
 \examples{
+\dontrun{
 # See vignette("rates-selection") for how to use this
 # function as part of an analysis pipeline
 
 # Load example rate table and posterior data sets
-data("rate_table_clades_means3")
-data("posterior3p")
+RateTable_Means_Clades <- system.file("extdata", "RateTable_Means_Clades.csv", package = "EvoPhylo")
+RateTable_Means_Clades <- read.csv(RateTable_Means_Clades, header = TRUE)
 
-get_pwt_rates_BEAST2(rate_table_clades_means3, posterior3p)
-}
+posterior <- system.file("extdata", "Penguins_log.log", package = "EvoPhylo")
+posterior <- read.table(posterior, header = TRUE)
+
+get_pwt_rates_BEAST2(RateTable_Means_Clades, posterior)
+}}

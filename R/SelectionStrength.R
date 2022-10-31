@@ -18,7 +18,7 @@ plot_back_rates <- function(type = c("MrBayes", "BEAST2"),
                            posterior,
                            clock = 1,
                            trans = c("none", "log", "log10"),
-                           size = 12, quantile = 0.95)        {
+                           size = 12, quantile = 0.95) {
 
   if(!type %in% c("MrBayes", "BEAST2")) stop("Bad type call")
 
@@ -36,6 +36,8 @@ plot_back_rates <- function(type = c("MrBayes", "BEAST2"),
       if (!hasName(posterior, "clockrate")) {
         stop("A 'clockrate' column must be present in 'posterior'.", call. = FALSE)
       }}
+
+   rates.post = ..density.. = clockrate = Rel.Back.Rate = NULL
 
   if(type == "BEAST2") {
       #get BEAST2 relative background clock rate (for the desired clock partition) and data transform
@@ -192,6 +194,7 @@ get_pwt_rates_BEAST2 <- function(rate_table, posterior) {
   if (!any(startsWith(names(posterior), "rate"))) {
     stop("At least one clock 'rate' column must be present in 'posterior'.", call. = FALSE)
   }
+  clade = nodes = clock = rates = mean.rates.post <- NULL
 
   posterior.clockrate<-get_clockrate_posterior(posterior)       #get rate table from posterior sample using 'get_clockrate_posterior' helper
 
@@ -240,10 +243,10 @@ get_pwt_rates_BEAST2 <- function(rate_table, posterior) {
 
 #Plot tree with colored thresholds
 
-plot_treerates_sgn = function(type = c("MrBayes", "BEAST2"),
+plot_treerates_sgn <- function(type = c("MrBayes", "BEAST2"),
                                  tree, posterior,
                                  trans = c("none", "log", "log10"),
-                                 summary = "mean", drop.dummyextant = TRUE, #MrBayes specific
+                                 summary = "mean", drop.dummyextant = TRUE,
                                  clock = 1, threshold = c("1 SD", "2 SD"),
                                  low = "blue", mid = "gray90", high = "red",
                                  branch_size = 2, tip_size = 2,

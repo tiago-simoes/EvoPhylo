@@ -9,10 +9,10 @@ Plots The distribution of background rates extracted from the posterior log file
 }
 \usage{
 plot_back_rates(type = c("MrBayes", "BEAST2"),
-                posterior,
-                clock = 1,
-                trans = c("none", "log", "log10"),
-                size = 12, quantile = 0.95)
+                           posterior,
+                           clock = 1,
+                           trans = c("none", "log", "log10"),
+                           size = 12, quantile = 0.95)
 }
 \arguments{
     \item{type}{
@@ -55,7 +55,7 @@ It produces a \code{ggplot} object that can be manipulated using \pkg{ggplot2} s
 
 data("posterior3p")
 
-P <- plot_back_rates (type = "MrBayes", posterior, clock = 1,
+P <- plot_back_rates (type = "MrBayes", posterior3p, clock = 1,
                       trans = "log10", size = 10, quantile = 0.95)
 P
 }

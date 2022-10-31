@@ -44,15 +44,15 @@ A \code{ggplot} object, which can be modified using \pkg{ggplot2} functions.
 # See vignette("rates-selection") for how to use this
 # function as part of an analysis pipeline
 
-data("rate_table_clades_means3")
+data("RateTable_Means_3p_Clades")
 
 # Overlapping plots
-clockrate_dens_plot(rate_table_clades_means3, stack = FALSE,
+clockrate_dens_plot(RateTable_Means_3p_Clades, stack = FALSE,
                     nrow = 1, scales = "fixed")
 
 # Stacked density for all three clocks, changing the color
 # palette to viridis using ggplot2 functions
-clockrate_dens_plot(rate_table_clades_means3,
+clockrate_dens_plot(RateTable_Means_3p_Clades,
                     clock = 1:3, nrow = 1, stack = TRUE,
                     scales = "fixed") +
   ggplot2::scale_color_viridis_d() +

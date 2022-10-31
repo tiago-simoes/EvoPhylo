@@ -43,8 +43,8 @@ A long data frame with one row per node per clock and the following columns:
 # function as part of an analysis pipeline
 
 # Load example rate table and posterior data sets
-data("rate_table_clades_means3")
+data("RateTable_Means_3p_Clades")
 data("posterior3p")
 
-get_pwt_rates_MrBayes(rate_table_clades_means3, posterior3p)
+get_pwt_rates_MrBayes(RateTable_Means_3p_Clades, posterior3p)
 }

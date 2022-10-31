@@ -1,10 +1,10 @@
 importFrom("ggplot2",
            "aes", "after_stat", "annotate", "element_blank", "element_text", "facet_grid",
-           "facet_wrap", "geom_blank", "geom_density", "geom_hline", "geom_label", "geom_line",
-           "geom_point", "geom_smooth", "geom_violin", "ggplot", "ggplot_build", "guides", "labs",
+           "facet_wrap", "geom_blank", "geom_density", "geom_histogram","geom_hline", "geom_label", "geom_line",
+           "geom_point", "geom_smooth", "geom_violin", "geom_vline","ggplot", "ggplot_build", "guides", "labs",
            "layer_data", "position_jitter", "position_nudge", "scale_color_steps2",
            "scale_x_continuous", "scale_y_continuous", "stat_density", "stat_summary", "theme",
-           "theme_bw", "vars", ".data")
+           "theme_bw", "vars", "xlim",".data")
 importFrom("stats",
            "aggregate", "ave", "bartlett.test", "cor",
            "dnorm", "fligner.test", "p.adjust", "pairwise.t.test",
@@ -14,6 +14,8 @@ importFrom("utils",
            "combn", "hasName", "read.table", "write.csv")
 importFrom("grid",
            "unit")
+importFrom("devtools",
+           "load_all")
 
 export("get_gower_dist", "get_sil_widths", "make_clusters", "cluster_to_nexus", "write_partitioned_alignments",
        "get_clockrate_table_BEAST2", "get_clockrate_table_MrBayes", "clockrate_summary", "clockrate_dens_plot", "clockrate_reg_plot",

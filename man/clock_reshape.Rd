@@ -30,14 +30,13 @@ A data frame containing a single "value" column (for all rate values) and one co
 # See vignette("rates-selection") for how to use this
 # function as part of an analysis pipeline
 
-## The example dataset rate_table_clades_means3 already
+## The example dataset rate_table_clades_means3
 ## has clades and 3 clock rate columns:
 data("rate_table_clades_means3")
 
-head(rate_table_clades_means3)
-
 ## Reshape a clock rate table with clade names to long format
+\dontrun{
 rates_by_clade <- clock_reshape(rate_table_clades_means3)
-}
+}}
 
 

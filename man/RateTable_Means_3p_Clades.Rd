@@ -1,5 +1,5 @@
-\name{rate_table_clades_means3}
-\alias{rate_table_clades_means3}
+\name{RateTable_Means_3p_Clades}
+\alias{RateTable_Means_3p_Clades}
 \docType{data}
 \title{
 Mean clock rates by node and clade (3 clock partitions)
@@ -7,7 +7,7 @@ Mean clock rates by node and clade (3 clock partitions)
 \description{
 A data set containing the mean clock rates for a tree with 3 clock partitions, such as the output of \code{\link{get_clockrate_table_MrBayes}} but with an additional "clade" column added, which is required for use in \code{\link{clockrate_summary}} and \code{\link{clockrate_dens_plot}}.
 }
-\usage{data("rate_table_clades_means3")}
+\usage{data("RateTable_Means_3p_Clades")}
 \format{
   A data frame with 79 observations on the following 5 variables.
   \describe{
@@ -19,7 +19,7 @@ A data set containing the mean clock rates for a tree with 3 clock partitions, s
   }
 }
 \details{
-\code{rate_table_clades_means3} was created by running \code{get_clockrate_table_MrBayes(tree3p)} and then adding a "clade" column. It can be produced by using the following procedure:
+\code{RateTable_Means_3p_Clades} was created by running \code{get_clockrate_table_MrBayes(tree3p)} and then adding a "clade" column. It can be produced by using the following procedure:
 
 1) Import tree file:
 
@@ -39,9 +39,9 @@ A data set containing the mean clock rates for a tree with 3 clock partitions, s
 
 4) Read the file back in:
 
-\preformatted{rate_table_clades_means3 <- read.csv("rate_table_clades_means.csv")}
+\preformatted{RateTable_Means_3p_Clades <- read.csv("rate_table_clades_means.csv")}
 
-\preformatted{head(rate_table_clades_means3)}
+\preformatted{head(RateTable_Means_3p_Clades)}
 
 }
 \seealso{

@@ -130,7 +130,7 @@ kableExtra::kbl(t1, caption = "Rate table summary statistics") |>
 
 Plot distributions of rates by clock partition and clade with `clockrate_dens_plot()`.
 
-```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "100%"}
+```{r, fig.width=10, fig.height=5, fig.align = "center", out.width = "100%"}
 ## Overlapping plots
 clockrate_dens_plot(RateTable_Means_3p_Clades, stack = FALSE,
                     nrow = 1, scales = "fixed")
@@ -138,7 +138,7 @@ clockrate_dens_plot(RateTable_Means_3p_Clades, stack = FALSE,
 
 Sometimes using stacked plots provides a better visualization as it avoids overlapping distributions.
 
-```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "100%"}
+```{r, fig.width=10, fig.height=5, fig.align = "center", out.width = "100%"}
 ## Stacked plots
 clockrate_dens_plot(RateTable_Means_3p_Clades, stack = TRUE,
                     nrow = 1, scales = "fixed")
@@ -146,7 +146,7 @@ clockrate_dens_plot(RateTable_Means_3p_Clades, stack = TRUE,
 
 It is also possible to append extra layers using `ggplot2` function, such as for changing the color scale. Below, we change the color scale to be the Viridis scale.
 
-```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "100%"}
+```{r, fig.width=10, fig.height=5, fig.align = "center", out.width = "100%"}
 ## Stacked plots with viridis color scale
 clockrate_dens_plot(RateTable_Means_3p_Clades, stack = TRUE,
                     nrow = 1, scales = "fixed") +
@@ -158,7 +158,7 @@ clockrate_dens_plot(RateTable_Means_3p_Clades, stack = TRUE,
 
 We can also plot linear model regressions between rates from two or more clocks with `clockrate_reg_plot()`.
 
-```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
+```{r, fig.width=8, fig.height=6, fig.align = "center", out.width = "70%"}
 ## Plot regressions of rates from two clocks
 p12 <- clockrate_reg_plot(RateTable_Means_3p_Clades, clock_x = 1, clock_y = 2)
 p13 <- clockrate_reg_plot(RateTable_Means_3p_Clades, clock_x = 1, clock_y = 3)
@@ -220,7 +220,7 @@ kableExtra::kbl(t1, caption = "Rate table summary statistics") |>
                             bootstrap_options = "striped", "condensed")
 ```
 
-```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "100%"}
+```{r, fig.width=6, fig.height=4, fig.align = "center", out.width = "100%"}
 ## Stacked plots with viridis color scale
 clockrate_dens_plot(RateTable_Means_1p_Clades, stack = TRUE,
                     nrow = 1, scales = "fixed") +
@@ -259,7 +259,7 @@ head(posterior3p, 10)
 
 The output includes histograms showing the data distribution before and after data transformation for comparisons. 
 
-```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
+```{r, fig.width=8, fig.height=3, fig.align = "center", out.width = "90%"}
 library(ggplot2)
 B1 <- plot_back_rates (type = "MrBayes", posterior3p, clock = 1,
                       trans = "log10", size = 10, quantile = 1)
@@ -270,8 +270,6 @@ B2
 B3 <- plot_back_rates (type = "MrBayes", posterior3p, clock = 3,
                       trans = "log10", size = 10, quantile = 1)
 B3
-
-#B1+B2+B3
 ```
 
 ### 3. Plot selection gradient on the summary tree

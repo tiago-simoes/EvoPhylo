@@ -36,7 +36,7 @@ A data frame containing a row for each clade and each clock with summary statist
 # See vignette("rates-selection") for how to use this
 # function as part of an analysis pipeline
 
-data("rate_table_clades_means3")
+data("RateTable_Means_3p_Clades")
 
-clockrate_summary(rate_table_clades_means3)
+clockrate_summary(RateTable_Means_3p_Clades)
 }
