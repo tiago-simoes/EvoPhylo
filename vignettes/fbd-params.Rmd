@@ -18,6 +18,16 @@ This vignette explains how to extract, plot, and statistically test for differen
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Load the **EvoPhylo** package
+
+```{r, eval = FALSE}
+library(EvoPhylo)
+```
+
+```{r, include=FALSE}
+devtools::load_all(".")
+```
+
 ## FBD Parameters Statistics and Plots (Mr. Bayes)
 
 Below we demonstrate how to extract evolutionary rate summary statistics from each node from a Bayesian clock (time-calibrate) summary tree produced by Mr. Bayes, store them in a data frame, produce summary tables, and plots.
@@ -37,6 +47,9 @@ Below, we use the posterior dataset `posterior3p` that accompanies `EvoPhylo`.
 
 ```{r, results='hide'}
 data(posterior3p)
+
+## Show first 5 lines of combined log file
+head(posterior3p, 5)
 ```
 
 The posterior data must first be transformed from wide to long to be used with the functions described below; `FBD_reshape()` accomplishes this.
@@ -44,9 +57,6 @@ The posterior data must first be transformed from wide to long to be used with t
 ```{r}
 ## Reshape imported combined log file from wide to long with FBD_reshape
 posterior3p_long <- FBD_reshape(posterior3p, variables = NULL, log.type = "MrBayes")
-
-## Show first 5 lines of combined log file
-head(posterior3p_long, 5)
 ```
 
 ### 2. Summarize FBD parameters by time bin
@@ -276,7 +286,7 @@ posterior <- system.file("extdata", "Penguins_log.log", package = "EvoPhylo")
 posterior <- read.table(posterior, header = TRUE)
 
 ## Show first 10 lines of combined log file
-head(posterior, 10)
+head(posterior, 5)
 ```
 
 The posterior data must first be transformed from wide to long to be used with the functions described below; `FBD_reshape()` accomplishes this.
@@ -284,9 +294,6 @@ The posterior data must first be transformed from wide to long to be used with t
 ```{r}
 ## Reshape imported combined log file from wide to long with FBD_reshape
 posterior_long <- FBD_reshape(posterior, variables = NULL, log.type = "BEAST2")
-
-## Show first 5 lines of combined log file
-head(posterior_long, 5)
 ```
 
 ### 2. Summarize FBD parameters by time bin

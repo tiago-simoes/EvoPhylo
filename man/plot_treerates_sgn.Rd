@@ -8,16 +8,16 @@ Plot Bayesian evolutionary tree with rate thresholds for selection mode
 Plots the summary Bayesian evolutionary tree with branches, according to user-defined thresholds (in units of standard deviations) used to infer the strength and mode of selection.
 }
 \usage{
-plot_treerates_sgn_MrBayes(type = c("MrBayes", "BEAST2"),
-                                 tree, posterior,
-                                 clock = 1,
-                                 trans = c("none", "log", "log10"),
-                                 threshold = c("1 SD", "2 SD"),
-                                 summary = "mean", drop.dummyextant = TRUE,
-                                 low = "blue", mid = "gray90", high = "red",
-                                 branch_size = 2, tip_size = 2,
-                                 xlim = NULL, nbreaks = 10, geo_size = list(2, 3),
-                                 geo_skip = c("Quaternary", "Holocene", "Late Pleistocene"))
+plot_treerates_sgn(type = c("MrBayes", "BEAST2"),
+                   tree, posterior,
+                   clock = 1,
+                   trans = c("none", "log", "log10"),
+                   threshold = c("1 SD", "2 SD"),
+                   summary = "mean", drop.dummyextant = TRUE,
+                   low = "blue", mid = "gray90", high = "red",
+                   branch_size = 2, tip_size = 2,
+                   xlim = NULL, nbreaks = 10, geo_size = list(2, 3),
+                   geo_skip = c("Quaternary", "Holocene", "Late Pleistocene"))
 }
 \arguments{
     \item{type}{

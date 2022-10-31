@@ -3,10 +3,15 @@
 `EvoPhylo` News and Updates
 ======
 
+## Development: EvoPhylo 0.3.2
+(OCtober 31st, 2022)
+
+* New function `plot_back_rates` and updates on vignettes.
+
 ## Development: EvoPhylo 0.3.1
 (OCtober 20th, 2022)
 
-#Bug fixes and adjustment of selection functions for BEAST2: old `get_pwt_rates` function exists now in two versions`get_pwt_rates_MrBayes` and `get_pwt_rates_BEAST2`, and updates on `plot_treerates_sgn` to handle BEAST2.
+* Bug fixes and adjustment of selection functions for BEAST2: old `get_pwt_rates` function exists now in two versions`get_pwt_rates_MrBayes` and `get_pwt_rates_BEAST2`, and updates on `plot_treerates_sgn` to handle BEAST2.
 
 ## Development: EvoPhylo 0.3
 (August 1st, 2022)

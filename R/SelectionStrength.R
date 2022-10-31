@@ -14,11 +14,11 @@ clock_reshape <- function(rate_table) {
 }
 
 # Check background rates distribution and if they need transformation
-plot_back_rates = function(type = c("MrBayes", "BEAST2"),
+plot_back_rates <- function(type = c("MrBayes", "BEAST2"),
                            posterior,
                            clock = 1,
                            trans = c("none", "log", "log10"),
-                           size = 12, quantile = 0.95) {
+                           size = 12, quantile = 0.95)        {
 
   if(!type %in% c("MrBayes", "BEAST2")) stop("Bad type call")
 

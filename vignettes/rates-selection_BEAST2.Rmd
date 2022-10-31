@@ -20,8 +20,12 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, collapse = TRUE)
 
 Load the **EvoPhylo** package
 
-```{r}
+```{r, eval = FALSE}
 library(EvoPhylo)
+```
+
+```{r, include=FALSE}
+devtools::load_all(".")
 ```
 
 # Character Partitioning (Case 1)
@@ -238,12 +242,16 @@ head(posterior, 10)
 The output includes histograms showing the data distribution before and after data transformation for comparisons. 
 
 ```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
+library(ggplot2)
 B1 <- plot_back_rates (type = "BEAST2", posterior, clock = 1,
                       trans = "log10", size = 10, quantile = 1)
+B1
 B2 <- plot_back_rates (type = "BEAST2", posterior, clock = 2,
                       trans = "log10", size = 10, quantile = 1)
+B2
 B3 <- plot_back_rates (type = "BEAST2", posterior, clock = 3,
                       trans = "log10", size = 10, quantile = 1)
+B3
 
 B1+B2+B3
 ```
@@ -257,7 +265,7 @@ Users must indicate the type of output file (between [Mr. Bayes](https://nbiswed
 
 ```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
 ## Plot tree using various thresholds for clock partition 1
-A1<-plot_treerates_sgn2(
+A1<-plot_treerates_sgn(
   type = "BEAST2", trans = "log10",                         #Indicates software name output and type of transformation
   tree_clock1, posterior,                                   #Calls tree for clock partition 1 and posterior log file
   clock = 1,                                                #Use background rates for clock partition 1

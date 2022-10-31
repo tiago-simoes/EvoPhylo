@@ -20,11 +20,13 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, collapse = TRUE)
 
 Load the **EvoPhylo** package
 
-```{r}
+```{r, eval = FALSE}
 library(EvoPhylo)
 ```
 
-# Character Partitioning (Case 1)
+```{r, include=FALSE}
+devtools::load_all(".")
+```
 
 
 ## Evolutionary Rates Statistics and Plots
@@ -258,14 +260,18 @@ head(posterior3p, 10)
 The output includes histograms showing the data distribution before and after data transformation for comparisons. 
 
 ```{r, fig.width=8, fig.height=8, fig.align = "center", out.width = "70%"}
+library(ggplot2)
 B1 <- plot_back_rates (type = "MrBayes", posterior3p, clock = 1,
                       trans = "log10", size = 10, quantile = 1)
+B1
 B2 <- plot_back_rates (type = "MrBayes", posterior3p, clock = 2,
                       trans = "log10", size = 10, quantile = 1)
+B2
 B3 <- plot_back_rates (type = "MrBayes", posterior3p, clock = 3,
                       trans = "log10", size = 10, quantile = 1)
+B3
 
-B1+B2+B3
+#B1+B2+B3
 ```
 
 ### 3. Plot selection gradient on the summary tree

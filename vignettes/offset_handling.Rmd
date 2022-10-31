@@ -23,7 +23,16 @@ The SA package for [BEAST2](http://www.beast2.org/) includes an alternate tree w
 
 ```{r, setup, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load the **EvoPhylo** package
+
+```{r, eval = FALSE}
 library(EvoPhylo)
+```
+
+```{r, include=FALSE}
+devtools::load_all(".")
 ```
 
 ### 1. Import the posterior tree distribution.
