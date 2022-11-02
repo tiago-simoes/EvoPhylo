@@ -14,7 +14,7 @@ link-citations: true
 This vignette explains how to conduct automated morphological character partitioning as a pre-processing step for clock (time-calibrated) Bayesian phylogenetic analysis of morphological data, as introduced by @simões2021.
 
 ```{r, setup, echo=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, collapse = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, collapse = TRUE, dpi=300)
 ```
 
 ## Character Partitioning (Case 1)

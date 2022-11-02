@@ -81,6 +81,7 @@ articles:
   contents:
   - data_treatment
   - char-part
-  - rates-selection
+  - rates-selection_MrBayes
+  - rates-selection_BEAST2
   - fbd-params
   - offset_handling

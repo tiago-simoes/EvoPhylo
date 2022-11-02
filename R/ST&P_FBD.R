@@ -69,8 +69,6 @@ combine_log <- function(path = ".", burnin = .25, downsample = 1e4) {
 }
 
 #Reshape AllRuns from wide to long with Time_bins as time and parameters as varying
-#' @param variables Names of FBD rate variables in the log. If NULL (default), will attempt to auto-detect the names and log type.
-#' @param log.type Name of the software which produced the log (currently supported: MrBayes or BEAST2).
 FBD_reshape <- function(posterior, variables = NULL, log.type = c("MrBayes", "BEAST2")) {
   if (!is.data.frame(posterior)) {
     stop("'posterior' must be a data frame.", call. = FALSE)
