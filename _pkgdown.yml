@@ -33,7 +33,7 @@ reference:
   - plot_back_rates
   - get_pwt_rates_MrBayes
   - plot_treerates_sgn
-  - subtitle: Evolutionary rates & selection mode (BEAST2)
+- subtitle: Evolutionary rates & selection mode (BEAST2)
   desc: >
     See `vignette("rates-selection_BEAST2")` for a complete workflow that uses these functions
     to extract evolutionary rate parameters estimated from relaxed clock Bayesian
