@@ -33,6 +33,8 @@ devtools::load_all(".")
 
 In this section, we will extract evolutionary rate parameters from each node from a Bayesian clock (time-calibrated) summary tree. The functions below will store them in a data frame, produce summary statistics tables, and create different plots showing how rates are distributed across morphological partitions and clades. 
 
+&nbsp;  
+
 
 ### 1. Get rates from the clock tree and create a rate table 
 
@@ -60,6 +62,8 @@ Please note that analyses must have reached the stationarity phase and independe
 ## the tree for each relaxed clock partition (3 partitions in this tree file)
 RateTable_Means_3p <- get_clockrate_table_MrBayes(tree3p, summary = "mean")
 ```
+
+&nbsp;  
 
 
 ### 2. Export the rate table and plot tree with node values
@@ -89,10 +93,12 @@ tree_nodes
 ggplot2::ggsave("Tree_nodes.pdf", width = 10, height = 10)
 ```
 
+&nbsp;  
+
 
 ### 3. Import rate table with custom clade memberships 
 
-## A new "clade" column has been added to the rates table
+A new "clade" column has been added to the rates table
 
 ```{r,eval=FALSE}
 ## Import rate table with clade membership (new "clade" column added) 
@@ -107,6 +113,9 @@ data(RateTable_Means_3p_Clades)
 
 head(RateTable_Means_3p_Clades)
 ```
+
+&nbsp;  
+
 
 ### 4. Get summary stats for each clade/clock partition
 
@@ -124,6 +133,8 @@ kableExtra::kbl(t1, caption = "Rate table summary statistics") |>
   kableExtra::kable_styling(font_size = 15, full_width = FALSE,
                             bootstrap_options = "striped", "condensed")
 ```
+
+&nbsp;  
 
 
 ### 5. Plot rates by clock partition and clade
@@ -154,6 +165,9 @@ clockrate_dens_plot(RateTable_Means_3p_Clades, stack = TRUE,
   ggplot2::scale_fill_viridis_d()
 ```
 
+&nbsp;  
+
+
 ### 6. Rate linear models
 
 We can also plot linear model regressions between rates from two or more clocks with `clockrate_reg_plot()`.
@@ -171,6 +185,9 @@ p12 + p13 + p23 + plot_layout(ncol = 2)
 ## Save your plot to your working directory as a PDF
 ggplot2::ggsave("Plot_regs.pdf", width = 8, height = 8)
 ```
+
+&nbsp;  
+&nbsp;  
 
 
 ### ADDENDUM: Example using rates from single clock analysis (no partitioning)
@@ -236,6 +253,9 @@ clockrate_dens_plot(RateTable_Means_1p_Clades, stack = TRUE,
 
 In this section, we will use evolutionary rate based inference of selection mode, as first introduced by @baker2016 for continuous traits, and later adapted to clock-based rates by @simões2021.
 
+&nbsp;  
+
+
 ### 1. Import combined log file from all runs. 
 
 This is produced by using `combine_log()`. The first argument passed to `combine_log()` should be a path to the folder containing the log files to be imported and combined.
@@ -255,6 +275,9 @@ data(posterior3p)
 head(posterior3p, 10)
 ```
 
+&nbsp;  
+
+
 ###2. Check background rates distribution and if they need transformation
 
 The output includes histograms showing the data distribution before and after data transformation for comparisons. 
@@ -271,6 +294,9 @@ B3 <- plot_back_rates (type = "MrBayes", posterior3p, clock = 3,
                       trans = "log10", size = 10, quantile = 1)
 B3
 ```
+
+&nbsp;  
+
 
 ### 3. Plot selection gradient on the summary tree
 
@@ -321,6 +347,9 @@ A1 + A2 + A3 + plot_layout(nrow = 1)
 ggplot2::ggsave("Tree_Sel_3p.pdf", width = 20, height = 8)
 ```
 
+&nbsp;  
+
+
 ### 4. Pairwise t-tests of rate values among clades
 
 The function `get_pwt_rates_MrBayes()` complements the functionality of `plot_treerates_sgn` by producing a table of pairwise t-tests for differences between the mean background rate in the posterior and the absolute rate for each summary tree branches Should be used only for normally distributed data in which a CI=0.95 is considered a good threshold. In many cases, however, using multiple standard deviations as outputted using `plot_treerates_sgn` provides a more robust test of whether branch rates are significantly different from background rates.
@@ -358,5 +387,8 @@ kableExtra::kbl(t3, caption = "Combined log file") |>
 ## Export the table
 write.csv(RateSign_Tests, file = "RateSign_Tests.csv")
 ```
+
+&nbsp;  
+
 
 ## References
