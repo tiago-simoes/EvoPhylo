@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EvoPhylo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +26,8 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/data_treatment.html">Theoretical background</a>
     <a class="dropdown-item" href="../articles/char-part.html">Character Partitioning</a>
-    <a class="dropdown-item" href="../articles/rates-selection.html">Evolutionary Rates &amp; Selection Mode</a>
+    <a class="dropdown-item" href="../articles/rates-selection_MrBayes.html">Evolutionary Rates &amp; Selection Mode (Mr.Bayes)</a>
+    <a class="dropdown-item" href="../articles/rates-selection_BEAST2.html">Evolutionary Rates &amp; Selection Mode (BEAST2)</a>
     <a class="dropdown-item" href="../articles/fbd-params.html">Analyzing FBD Parameters</a>
     <a class="dropdown-item" href="../articles/offset_handling.html">Analyzing Trees With Offsets</a>
   </div>
@@ -61,34 +62,43 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_treerates_sgn</span><span class="op">(</span><span class="va">tree</span>, <span class="va">posterior</span>, clock <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>       summary <span class="op">=</span> <span class="st">"mean"</span>, threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1 SD"</span>, <span class="st">"2 SD"</span><span class="op">)</span>,</span>
-<span>       drop.dummyextant <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>       low <span class="op">=</span> <span class="st">"blue"</span>, mid <span class="op">=</span> <span class="st">"gray90"</span>, high <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span>       branch_size <span class="op">=</span> <span class="fl">2</span>, tip_size <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>       xlim <span class="op">=</span> <span class="cn">NULL</span>, nbreaks <span class="op">=</span> <span class="fl">10</span>, geo_size<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
-<span>       geo_skip <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Quaternary"</span>, <span class="st">"Holocene"</span>, <span class="st">"Late Pleistocene"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre><code>plot_treerates_sgn(type = c("MrBayes", "BEAST2"),
+                            tree, posterior,
+                            trans = c("none", "log", "log10"),
+                            summary = "mean", drop.dummyextant = TRUE,
+                            clock = 1, threshold = c("1 SD", "2 SD"),
+                            low = "blue", mid = "gray90", high = "red",
+                            branch_size = 2, tip_size = 2,
+                            xlim = NULL, nbreaks = 10, geo_size = list(2, 3),
+                            geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")))</code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>tree</dt>
-<dd><p>A <code>tidytree</code> object; the output of a call to <code><a href="https://docs.ropensci.org/treeio/reference/beast-parser.html" class="external-link">treeio::read.mrbayes</a></code>.</p></dd>
+    <dl><dt>type</dt>
+<dd><p>Whether to use data output from "Mr.Bayes" or "BEAST2".</p></dd>
+
+  <dt>tree</dt>
+<dd><p>A <code>tidytree</code> object; the output of a call to <code><a href="https://docs.ropensci.org/treeio/reference/beast-parser.html" class="external-link">treeio::read.beast</a></code>. Summary trees from Mr. Bayes will include branch specific rates for all clock partitions, and the partition to be plotted will be specified using the "clock" argument. On the other hand, BEAST2 will output one separate summary tree file for each clock partition. For the latter, the tree file for the partition of interest should be provided for plotting.</p></dd>
 
   <dt>posterior</dt>
-<dd><p>A data frame of posterior parameter estimates including a "clockrate" column indicating the base of the clock rate estimate for each generation that will be used for pairwise t-tests. Such data frame can be imported using <code><a href="combine_log.html">combine_log</a></code> (no need to reshape from wide to long). See the <code><a href="posterior1p.html">posterior1p</a></code> or <code><a href="posterior3p.html">posterior3p</a></code> datasets for an examples of how the input file should look.</p></dd>
+<dd><p>A data frame of posterior parameter estimates (log file). From Mr.Bayes, it includes a "clockrate" column indicating the mean (background) clock rate estimate for each generation that will be used for pairwise t-tests. Such data frame can be imported using <code><a href="combine_log.html">combine_log</a></code> (no need to reshape from wide to long). See the <code><a href="posterior1p.html">posterior1p</a></code> or <code><a href="posterior3p.html">posterior3p</a></code> datasets for an examples of how the input file should look.
+     From BEAST2, it will include at least one "rate&lt;filename&gt;.mean" column indicating the mean (background) clock rate estimate for each generation. If there are "P" unlinked clock partitions in BEAST2, there will be P x "rate&lt;filename&gt;.mean" columns (one for each partition) in the posterior log file.</p></dd>
 
-  <dt>clock</dt>
-<dd><p>The clock number to plot, (i.e., the number in "rate&lt;clockmodel&gt;Brlens{#}_mean"). Ignored if only one clock is available.</p></dd>
+  <dt>trans</dt>
+<dd><p>Type of data transformation to perform on background rates extracted from the posterior log file from Mr. Bayes or BEAST2. Options include "none" (if rates are normally distributed), natural log transformation "log", and log of base 10 transformation "log10". The necessity of using data transformation can be tested using the function <code><a href="plot_back_rates.html">plot_back_rates</a></code>.</p></dd>
 
   <dt>summary</dt>
-<dd><p>The rate summary to plot, (i.e., the value in "rate&lt;clockmodel&gt;Brlens1_{summary}"). Only "mean" and "median" are allowed. Default is "mean".</p></dd>
-
-  <dt>threshold</dt>
-<dd><p>A vector of threshold values. Default is to display thresholds of ±1 relative standard deviation (SD) of the relative posterior clock rates. Should be specified as a number of standard deviations (e.g., <code>"1 SD"</code>) or the confidence level for a confidence interal around the mean relative posterior clockrate (e.g., <code>"95%"</code>). Multiple values are allowed to produce a plot with multiple thresholds. Set to <code>NULL</code> to omit thresholds.</p></dd>
+<dd><p>The rate summary stats chosen to calculate selection mode. Only rates "mean" and "median" are allowed. Default is "mean".</p></dd>
 
   <dt>drop.dummyextant</dt>
 <dd><p><code>logical</code>; whether to drop the "Dummyextant" tip (if present) from the tree before plotting the tree. Default is <code>TRUE</code>.</p></dd>
+
+  <dt>clock</dt>
+<dd><p>The clock partition number to calculate selection mode. Ignored if only one clock is available.</p></dd>
+
+    <dt>threshold</dt>
+<dd><p>A vector of threshold values. Default is to display thresholds of ±1 relative standard deviation (SD) of the relative posterior clock rates. Should be specified as a number of standard deviations (e.g., <code>"1 SD"</code>) or the confidence level for a confidence interal around the mean relative posterior clockrate (e.g., <code>"95%"</code>). Multiple values are allowed to produce a plot with multiple thresholds. Set to <code>NULL</code> to omit thresholds.</p></dd>
 
   <dt>low, mid, high</dt>
 <dd><p>Colors passed to <code>scale_color_steps2</code> to control the colors of the branches based on which thresholds are exceeded. When no thresholds are supplied, use <code>mid</code> to control the color of the tree.</p></dd>
@@ -114,7 +124,8 @@
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Plots the phylogentic tree contained in <code>tree</code> using <code><a href="https://rdrr.io/pkg/ggtree/man/ggtree.html" class="external-link">ggtree::ggtree</a></code>. Branches undergoing accelerating evolutionary rates (e.g., &gt;<code>"1 SD"</code>, <code>"3 SD"</code>, or <code>"5 SD"</code> relative to the background rate) for each morphological partition suggest directional (or positive) selection for that morphological partition in that branch of the tree. Branches undergoing decelerating evolutionary rates (e.g., &lt;<code>"1 SD"</code>, <code>"3 SD"</code>, or <code>"5 SD"</code> relative to the background rate) for each morphological partition suggest stabilizing selection for that morphological partition in that branch of the tree. For details methods and rationale, see Simões &amp; Pierce (2021).</p>
+    <p>Plots the phylogentic tree contained in <code>tree</code> using <code><a href="https://rdrr.io/pkg/ggtree/man/ggtree.html" class="external-link">ggtree::ggtree</a></code>. Branches undergoing accelerating evolutionary rates (e.g., &gt;<code>"1 SD"</code>, <code>"3 SD"</code>, or <code>"5 SD"</code> relative to the background rate) for each morphological clock partition suggest directional (or positive) selection for that morphological partition in that branch of the tree. Branches undergoing decelerating evolutionary rates (e.g., &lt;<code>"1 SD"</code>, <code>"3 SD"</code>, or <code>"5 SD"</code> relative to the background rate) for each morphological clock partition suggest stabilizing selection for that morphological partition in that branch of the tree. For details on rationale, see Simões &amp; Pierce (2021).</p>
+<p>Please double check that the distribution of background rates (mean rates for the tree) sampled from the posterior follow the assumptions of a normal distribution (e.g., check for normality of distribution in Tracer). Otherwise, displayed results may not have a valid interpretation.</p>
     </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -128,8 +139,8 @@
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="../articles/rates-selection.html">vignette("rates-selection")</a></code> for the use of this function as part of an analysis pipeline.</p>
-<p><code><a href="https://rdrr.io/pkg/ggtree/man/ggtree.html" class="external-link">ggtree::ggtree</a></code>, <code><a href="https://rdrr.io/pkg/deeptime/man/coord_geo.html" class="external-link">deeptime::coord_geo</a></code></p></div>
+    <div class="dont-index"><p><code>vignette("rates-selection")</code> for the use of this function as part of an analysis pipeline.
+<code><a href="https://rdrr.io/pkg/ggtree/man/ggtree.html" class="external-link">ggtree::ggtree</a></code>, <code><a href="https://rdrr.io/pkg/deeptime/man/coord_geo.html" class="external-link">deeptime::coord_geo</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -137,25 +148,39 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># See vignette("rates-selection") for how to use this</span></span></span>
 <span class="r-in"><span><span class="co"># function as part of an analysis pipeline</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## MrBayes example</span></span></span>
 <span class="r-in"><span><span class="co"># Load example tree and posterior</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"tree3p"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"posterior3p"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">plot_treerates_sgn</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">tree3p</span>, <span class="va">posterior3p</span>,</span></span>
-<span class="r-in"><span>  <span class="co"># show rates for clock partition 1</span></span></span>
-<span class="r-in"><span>  clock <span class="op">=</span> <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>  <span class="co"># set summary stats to get from summary tree nodes</span></span></span>
-<span class="r-in"><span>  summary <span class="op">=</span> <span class="st">"mean"</span>,</span></span>
-<span class="r-in"><span>  <span class="co"># set size for tree elements</span></span></span>
-<span class="r-in"><span>  branch_size <span class="op">=</span> <span class="fl">1.5</span>, tip_size <span class="op">=</span> <span class="fl">3</span>,</span></span>
-<span class="r-in"><span>  <span class="co"># set limits, breaks, and size for geological scale</span></span></span>
-<span class="r-in"><span>  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">450</span>, <span class="op">-</span><span class="fl">260</span><span class="op">)</span>, nbreaks <span class="op">=</span> <span class="fl">8</span>, geo_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="co"># set rate threshold for selection strength</span></span></span>
-<span class="r-in"><span>  threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1 SD"</span>, <span class="st">"2 SD"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "-2 SD" "-1 SD" "+1 SD" "+2 SD"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4965128 0.7482564 1.2517436 1.5034872</span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="st">"MrBayes"</span>,</span></span>
+<span class="r-in"><span>  <span class="va">tree3p</span>, <span class="va">posterior3p</span>,          <span class="co">#MrBayes tree file with data for all partitions</span></span></span>
+<span class="r-in"><span>  trans <span class="op">=</span> <span class="st">"none"</span>,</span></span>
+<span class="r-in"><span>  summary <span class="op">=</span> <span class="st">"mean"</span>,             <span class="co">#MrBayes specific argument</span></span></span>
+<span class="r-in"><span>  drop.dummyextant <span class="op">=</span> <span class="cn">TRUE</span>,      <span class="co">#MrBayes specific argument</span></span></span>
+<span class="r-in"><span>  clock <span class="op">=</span> <span class="fl">1</span>,                           <span class="co">#Show rates for clock partition 1</span></span></span>
+<span class="r-in"><span>  threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1 SD"</span>, <span class="st">"3 SD"</span><span class="op">)</span>,       <span class="co">#sets background rate threshold for selection mode</span></span></span>
+<span class="r-in"><span>  branch_size <span class="op">=</span> <span class="fl">1.5</span>, tip_size <span class="op">=</span> <span class="fl">3</span>,                          <span class="co">#sets size for tree elements</span></span></span>
+<span class="r-in"><span>  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">450</span>, <span class="op">-</span><span class="fl">260</span><span class="op">)</span>, nbreaks <span class="op">=</span> <span class="fl">8</span>, geo_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="co">#sets limits and breaks for geoscale</span></span></span>
 <span class="r-plt img"><img src="plot_treerates_sgn-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co">## BEAST2 example</span></span></span>
+<span class="r-in"><span><span class="va">tree_clock1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Penguins_MCC_morpho_part1"</span>, package <span class="op">=</span> <span class="st">"EvoPhylo"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tree_clock1</span> <span class="op">&lt;-</span> <span class="fu">treeio</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/treeio/reference/beast-parser.html" class="external-link">read.beast</a></span><span class="op">(</span><span class="va">tree_clock1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">posterior</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Penguins_log.log"</span>, package <span class="op">=</span> <span class="st">"EvoPhylo"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">posterior</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="va">posterior</span>, header <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_treerates_sgn</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="st">"BEAST2"</span>,</span></span>
+<span class="r-in"><span>  <span class="va">tree_clock1</span>, <span class="va">posterior</span>,                 <span class="co">#BEAST2 tree file with data for partition 1</span></span></span>
+<span class="r-in"><span>  trans <span class="op">=</span> <span class="st">"log10"</span>,</span></span>
+<span class="r-in"><span>  clock <span class="op">=</span> <span class="fl">1</span>,                              <span class="co">#Show rates for clock partition 1</span></span></span>
+<span class="r-in"><span>  threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1 SD"</span>, <span class="st">"3 SD"</span><span class="op">)</span>,          <span class="co">#sets background rate threshold for selection mode</span></span></span>
+<span class="r-in"><span>  branch_size <span class="op">=</span> <span class="fl">1.5</span>, tip_size <span class="op">=</span> <span class="fl">3</span>,                        <span class="co">#sets size for tree elements</span></span></span>
+<span class="r-in"><span>  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">70</span>, <span class="fl">30</span><span class="op">)</span>, nbreaks <span class="op">=</span> <span class="fl">8</span>, geo_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>  <span class="co">#sets limits and breaks for geoscale</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -19,7 +19,10 @@
     <loc>https://tiago-simoes.github.io/EvoPhylo/articles/offset_handling.html</loc>
   </url>
   <url>
-    <loc>https://tiago-simoes.github.io/EvoPhylo/articles/rates-selection.html</loc>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/articles/rates-selection_BEAST2.html</loc>
+  </url>
+  <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/articles/rates-selection_MrBayes.html</loc>
   </url>
   <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/authors.html</loc>
@@ -47,6 +50,12 @@
   </url>
   <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/FBD_tests2.html</loc>
+  </url>
+  <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/RateTable_Means_1p_Clades.html</loc>
+  </url>
+  <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/RateTable_Means_3p_Clades.html</loc>
   </url>
   <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/characters.html</loc>
@@ -85,7 +94,10 @@
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/get_gower_dist.html</loc>
   </url>
   <url>
-    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/get_pwt_rates.html</loc>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/get_pwt_rates_BEAST2.html</loc>
+  </url>
+  <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/get_pwt_rates_MrBayes.html</loc>
   </url>
   <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/get_sil_widths.html</loc>
@@ -103,6 +115,9 @@
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/offset.to.dummy.metadata.html</loc>
   </url>
   <url>
+    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/plot_back_rates.html</loc>
+  </url>
+  <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/plot_treerates_sgn.html</loc>
   </url>
   <url>
@@ -113,12 +128,6 @@
   </url>
   <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/posterior3p.html</loc>
-  </url>
-  <url>
-    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/rate_table_clades_means1.html</loc>
-  </url>
-  <url>
-    <loc>https://tiago-simoes.github.io/EvoPhylo/reference/rate_table_clades_means3.html</loc>
   </url>
   <url>
     <loc>https://tiago-simoes.github.io/EvoPhylo/reference/tree1p.html</loc>

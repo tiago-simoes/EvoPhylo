@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EvoPhylo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,8 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/data_treatment.html">Theoretical background</a>
     <a class="dropdown-item" href="../articles/char-part.html">Character Partitioning</a>
-    <a class="dropdown-item" href="../articles/rates-selection.html">Evolutionary Rates &amp; Selection Mode</a>
+    <a class="dropdown-item" href="../articles/rates-selection_MrBayes.html">Evolutionary Rates &amp; Selection Mode (Mr.Bayes)</a>
+    <a class="dropdown-item" href="../articles/rates-selection_BEAST2.html">Evolutionary Rates &amp; Selection Mode (BEAST2)</a>
     <a class="dropdown-item" href="../articles/fbd-params.html">Analyzing FBD Parameters</a>
     <a class="dropdown-item" href="../articles/offset_handling.html">Analyzing Trees With Offsets</a>
   </div>
@@ -76,7 +77,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Analyzing Trees With Offsets</h1>
             
-            <h4 data-toc-skip class="date">2022-10-04</h4>
+            <h4 data-toc-skip class="date">2022-11-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/tiago-simoes/EvoPhylo/blob/HEAD/vignettes/offset_handling.Rmd" class="external-link"><code>vignettes/offset_handling.Rmd</code></a></small>
       <div class="d-none name"><code>offset_handling.Rmd</code></div>
@@ -90,11 +91,14 @@
 <h2 id="analyzing-trees-with-offset-ages-beast2">Analyzing Trees With Offset ages (BEAST2)<a class="anchor" aria-label="anchor" href="#analyzing-trees-with-offset-ages-beast2"></a>
 </h2>
 <p>The SA package for <a href="http://www.beast2.org/" class="external-link">BEAST2</a> includes an alternate tree with offset format, which can be set up as shown in the <a href="https://taming-the-beast.org/tutorials/FBD-tutorial/" class="external-link">FBD tutorial</a>. This uses a a “treeWoffset” operator that will sample the offset of every tree from the posterior as an additional parameter during clock analysis. However, posterior trees produced by <a href="http://www.beast2.org/" class="external-link">BEAST2</a> with offset ages cannot be directly used by TreeAnnotator to calculate the maximum clade credibility tree (MCC), as the latter still assumes that the youngest tips in the dataset represent extant tips. To correct for this, a “dummy” extant taxon must be added to the posterior trees to be interpreted by TreeAnnotator, and the “dummy” extant must be pruned from the resulting MCC tree to produce the final MCC tree. These can be done by performing by following steps and functions from <code>EvoPhylo</code>:</p>
+<p>Load the <strong>EvoPhylo</strong> package</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tiago-simoes/EvoPhylo" class="external-link">EvoPhylo</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="import-the-posterior-tree-distribution-">1. Import the posterior tree distribution.<a class="anchor" aria-label="anchor" href="#import-the-posterior-tree-distribution-"></a>
 </h3>
 <p>First we import the posterior tree distribution and log file produced by <a href="http://www.beast2.org/" class="external-link">BEAST2</a>. The log file is needed because it contains the offset for each sample. In order to store the correct age in the tree, we are going to add a “dummy” tip to each phylogeny. This dummy tip will have age 0 for each sample, and so the length of the age between this tip and the root of the tree will encode the age of the tree including the offset.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trees_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ex_offset.trees"</span>, package <span class="op">=</span> <span class="st">"EvoPhylo"</span><span class="op">)</span></span>
 <span><span class="va">log_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ex_offset.log"</span>, package <span class="op">=</span> <span class="st">"EvoPhylo"</span><span class="op">)</span></span>
 <span></span>
@@ -102,7 +106,7 @@
 <span><span class="va">converted_trees</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/offset.to.dummy.metadata.html">offset.to.dummy.metadata</a></span><span class="op">(</span><span class="va">trees_file</span>, <span class="va">log_file</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 364.0323</span></span></code></pre>
 <p>Here we output the transformed trees to a variable, but in practice it is often more useful to write them directly to a new trees file.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Transform the trees to add a dummy tip and save to file</span></span>
 <span><span class="va">converted_trees</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/offset.to.dummy.metadata.html">offset.to.dummy.metadata</a></span><span class="op">(</span><span class="va">trees_file</span>, <span class="va">log_file</span>, </span>
 <span>                                            output.file <span class="op">=</span> <span class="st">"transformed_offset.trees"</span><span class="op">)</span></span></code></pre></div>
@@ -116,7 +120,7 @@
 <h3 id="restore-the-final-summary-tree">3. Restore the final summary tree<a class="anchor" aria-label="anchor" href="#restore-the-final-summary-tree"></a>
 </h3>
 <p>Our summary tree will include the dummy tip that we added earlier, so the last step of the process is to remove it, and get back the proper extinct tree with an offset.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Find the example MCC tree from the package</span></span>
 <span><span class="va">tree_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ex_offset.MCC.tre"</span>, package <span class="op">=</span> <span class="st">"EvoPhylo"</span><span class="op">)</span></span>
 <span><span class="co">## Then remove the dummy tip</span></span>
@@ -124,11 +128,11 @@
 <span><span class="co">## The output contains the final tree and the offset</span></span>
 <span><span class="va">final_tree</span><span class="op">$</span><span class="va">offset</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 366.4744</span></span></code></pre>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">final_tree</span><span class="op">$</span><span class="va">tree</span></span></code></pre></div>
 <pre><code><span><span class="co">## 'treedata' S4 object that stored information</span></span>
 <span><span class="co">## of</span></span>
-<span><span class="co">##  '/home/runner/work/_temp/Library/EvoPhylo/extdata/ex_offset.MCC.tre'.</span></span>
+<span><span class="co">##  '/home/runner/work/EvoPhylo/EvoPhylo/inst/extdata/ex_offset.MCC.tre'.</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## ...@ phylo:</span></span>
 <span><span class="co">## </span></span>
@@ -164,7 +168,7 @@
 <span><span class="co">## <span style="color: #949494;">#   abbreviated variable names ¹​height_0.95_HPD, ²​height_median, ³​height_range,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   ⁴​length_0.95_HPD, ⁵​length_median</span></span></span></code></pre>
 <p>As before, we can also save the tree directly to a file.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Remove the dummy tip and save to file</span></span>
 <span><span class="va">final_tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drop.dummy.beast.html">drop.dummy.beast</a></span><span class="op">(</span><span class="va">tree_file</span>, output.file <span class="op">=</span> <span class="st">"ex_final_mcc.tre"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -173,7 +177,7 @@
 <h2 id="analyzing-trees-with-offset-ages-mr-bayes">Analyzing Trees With Offset ages (Mr.Bayes)<a class="anchor" aria-label="anchor" href="#analyzing-trees-with-offset-ages-mr-bayes"></a>
 </h2>
 <p><a href="https://nbisweden.github.io/MrBayes/" class="external-link">Mr.Bayes</a> does not have an equivalent procedure to treeWoffset from <a href="http://www.beast2.org/" class="external-link">BEAST2</a> for handling tip-dating analyses of entirely extinct lineages. In this case, it is necessary to manually add a “dummy” extant taxon to the dataset from the beginning of the analyses (as done in <span class="citation">Simões and Pierce (<a href="#ref-sim%C3%B5es2021" role="doc-biblioref">2021</a>)</span>). This “dummy” tip must be scored only with missing data (“?”) and constrained as the sister taxon to one other taxon in the data, so it does not fluctuate around the tree as a wildcard. As with the MCC trees from <a href="http://www.beast2.org/" class="external-link">BEAST2</a>, the final summary trees from Mr.Bayes [50% majority rule consensus tree (MRC) and the maximum compatible tree (MCT)] will have the extant “dummy’ taxon in then. It can be pruned using <code>drop.dummy.mb</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Find the example MCC tree from the package</span></span>
 <span><span class="va">tree_file_mb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"tree_mb_dummy.tre"</span>, package <span class="op">=</span> <span class="st">"EvoPhylo"</span><span class="op">)</span></span>
 <span></span>

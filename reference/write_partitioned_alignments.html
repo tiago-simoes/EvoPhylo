@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EvoPhylo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +26,8 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/data_treatment.html">Theoretical background</a>
     <a class="dropdown-item" href="../articles/char-part.html">Character Partitioning</a>
-    <a class="dropdown-item" href="../articles/rates-selection.html">Evolutionary Rates &amp; Selection Mode</a>
+    <a class="dropdown-item" href="../articles/rates-selection_MrBayes.html">Evolutionary Rates &amp; Selection Mode (Mr.Bayes)</a>
+    <a class="dropdown-item" href="../articles/rates-selection_BEAST2.html">Evolutionary Rates &amp; Selection Mode (BEAST2)</a>
     <a class="dropdown-item" href="../articles/fbd-params.html">Analyzing FBD Parameters</a>
     <a class="dropdown-item" href="../articles/offset_handling.html">Analyzing Trees With Offsets</a>
   </div>
@@ -97,7 +98,7 @@
 <span class="r-in"><span><span class="va">cluster_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="make_clusters.html">make_clusters</a></span><span class="op">(</span><span class="va">Dmatrix</span>, k <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Write to Nexus files</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="fu">write_partitioned_alignments</span><span class="op">(</span><span class="va">x</span>, <span class="va">cluster_df</span>, <span class="st">"example.nex"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="fu">write_partitioned_alignments</span><span class="op">(</span><span class="va">characters</span>, <span class="va">cluster_df</span>, <span class="st">"example.nex"</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

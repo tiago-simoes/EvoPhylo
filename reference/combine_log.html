@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EvoPhylo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +26,8 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/data_treatment.html">Theoretical background</a>
     <a class="dropdown-item" href="../articles/char-part.html">Character Partitioning</a>
-    <a class="dropdown-item" href="../articles/rates-selection.html">Evolutionary Rates &amp; Selection Mode</a>
+    <a class="dropdown-item" href="../articles/rates-selection_MrBayes.html">Evolutionary Rates &amp; Selection Mode (Mr.Bayes)</a>
+    <a class="dropdown-item" href="../articles/rates-selection_BEAST2.html">Evolutionary Rates &amp; Selection Mode (BEAST2)</a>
     <a class="dropdown-item" href="../articles/fbd-params.html">Analyzing FBD Parameters</a>
     <a class="dropdown-item" href="../articles/offset_handling.html">Analyzing Trees With Offsets</a>
   </div>
@@ -79,7 +80,7 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code>combine_log()</code> imports log files produced by Mr.Bayes, ignoring the first row of the file (which contains an ID number). The files are appended together, optionally after removing burn-in generations from the beginning and/or by further filtering throughout the rest of each file. When <code>burnin</code> is greater than 0, the number or propotion of generations corresponding to the supplied value will be dropped from the beginning of each file as it is read in. For example, setting <code>burnin = .25</code> (the default) will drop the first 25% of generations from each file. When <code>downsample</code> is greater than 0, the file will be downsampled until the number or proportion of generations corresponding to the supplied value is reached. For example, if <code>downsample = 10000</code> generations (the default) for log files from 4 independent runs (i.e., 4 (.p) files), each log file will be downsampled to 2500 generations, and the final combined data frame will contain 10000 samples, selected in approximately equally spaced intervals from the original data.</p>
-<p>The output can be supplied to <code><a href="get_pwt_rates.html">get_pwt_rates</a></code> and to <code><a href="FBD_reshape.html">FBD_reshape</a></code>. The latter will convert the log data frame from my wide to long format, which is necessary to be used as input for downstream analyses using <code><a href="FBD_summary.html">FBD_summary</a></code>, <code><a href="FBD_dens_plot.html">FBD_dens_plot</a></code>, <code><a href="FBD_normality_plot.html">FBD_normality_plot</a></code>, <code><a href="FBD_tests1.html">FBD_tests1</a></code>, or <code><a href="FBD_tests2.html">FBD_tests2</a></code>.</p>
+<p>The output can be supplied to <code><a href="get_pwt_rates_MrBayes.html">get_pwt_rates_MrBayes</a></code> and to <code><a href="FBD_reshape.html">FBD_reshape</a></code>. The latter will convert the log data frame from my wide to long format, which is necessary to be used as input for downstream analyses using <code><a href="FBD_summary.html">FBD_summary</a></code>, <code><a href="FBD_dens_plot.html">FBD_dens_plot</a></code>, <code><a href="FBD_normality_plot.html">FBD_normality_plot</a></code>, <code><a href="FBD_tests1.html">FBD_tests1</a></code>, or <code><a href="FBD_tests2.html">FBD_tests2</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EvoPhylo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +26,8 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/data_treatment.html">Theoretical background</a>
     <a class="dropdown-item" href="../articles/char-part.html">Character Partitioning</a>
-    <a class="dropdown-item" href="../articles/rates-selection.html">Evolutionary Rates &amp; Selection Mode</a>
+    <a class="dropdown-item" href="../articles/rates-selection_MrBayes.html">Evolutionary Rates &amp; Selection Mode (Mr.Bayes)</a>
+    <a class="dropdown-item" href="../articles/rates-selection_BEAST2.html">Evolutionary Rates &amp; Selection Mode (BEAST2)</a>
     <a class="dropdown-item" href="../articles/fbd-params.html">Analyzing FBD Parameters</a>
     <a class="dropdown-item" href="../articles/offset_handling.html">Analyzing Trees With Offsets</a>
   </div>
@@ -62,7 +63,7 @@
     </div><div class="section level2">
       
       <h3 id="character-partitioning">Character partitioning<a class="anchor" aria-label="anchor" href="#character-partitioning"></a></h3>
-      <p class="section-desc"></p><p>See <code><a href="../articles/char-part.html">vignette("char-part")</a></code> for a complete workflow that uses these functions to conduct automated morphological character partitioning as a pre-processing step for clock (time-calibrated) Bayesian phylogenetic analysis of morphological data.</p>
+      <p class="section-desc"></p><p>See <code><a href="../articles/char-part.html">vignette("char-part")</a></code> for a complete workflow that uses these functions to conduct automated morphological character partitioning as a pre-processing step for clock (time-calibrated) Bayesian phylogenetic analysis of morphological data using the programs Mr. Bayes or BEAST2.</p>
 
       
     </div><div id="" class="section level2">
@@ -97,8 +98,8 @@
         <dd>Write character partitions as separate Nexus files (for use in BEAUti)</dd>
       </dl></div><div class="section level2">
       
-      <h3 id="evolutionary-rates-and-selection-mode">Evolutionary rates and selection mode<a class="anchor" aria-label="anchor" href="#evolutionary-rates-and-selection-mode"></a></h3>
-      <p class="section-desc"></p><p>See <code><a href="../articles/rates-selection.html">vignette("rates-selection")</a></code> for a complete workflow that uses these functions to extract evolutionary rate parameters estimated from relaxed clock Bayesian inference analyses produced by the program Mr. Bayes and use evolutionary rate based inference of selection mode (or strength) adapted to clock-based rates.</p>
+      <h3 id="evolutionary-rates-selection-mode-mrbayes-">Evolutionary rates &amp; selection mode (MrBayes)<a class="anchor" aria-label="anchor" href="#evolutionary-rates-selection-mode-mrbayes-"></a></h3>
+      <p class="section-desc"></p><p>See <code><a href="../articles/rates-selection_MrBayes.html">vignette("rates-selection_MrBayes")</a></code> for a complete workflow that uses these functions to extract evolutionary rate parameters estimated from relaxed clock Bayesian inference analyses produced by the program Mr. Bayes and use evolutionary rate based inference of selection mode (or strength) adapted to clock-based rates.</p>
 
       
     </div><div id="" class="section level2">
@@ -108,9 +109,9 @@
 
       <dl><dt>
           
-          <code><a href="clock_reshape.html">clock_reshape()</a></code> 
+          <code><a href="get_clockrate_table_MrBayes.html">get_clockrate_table_MrBayes()</a></code> 
         </dt>
-        <dd>Convert clock rate tables from wide to long format</dd>
+        <dd>Extract evolutionary rates from a Bayesian clock tree produced by Mr. Bayes</dd>
       </dl><dl><dt>
           
           <code><a href="clockrate_dens_plot.html">clockrate_dens_plot()</a></code> 
@@ -133,22 +134,73 @@
         <dd>Combine and filter (.p) log files from Mr.Bayes</dd>
       </dl><dl><dt>
           
-          <code><a href="get_clockrate_table_MrBayes.html">get_clockrate_table_MrBayes()</a></code> 
+          <code><a href="clock_reshape.html">clock_reshape()</a></code> 
         </dt>
-        <dd>Extract evolutionary rates from a Bayesian clock tree produced by Mr. Bayes</dd>
+        <dd>Convert clock rate tables from wide to long format</dd>
       </dl><dl><dt>
+          
+          <code><a href="plot_back_rates.html">plot_back_rates()</a></code> 
+        </dt>
+        <dd>Plots distribution of background rates extracted from posterior log files.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_pwt_rates_MrBayes.html">get_pwt_rates_MrBayes()</a></code> 
+        </dt>
+        <dd>Conduct pairwise t-tests between node rates and clock base rate from a Mr.Bayes output.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot_treerates_sgn.html">plot_treerates_sgn</a></code> 
+        </dt>
+        <dd>Plot Bayesian evolutionary tree with rate thresholds for selection mode</dd>
+      </dl></div><div class="section level2">
+      
+      <h3 id="evolutionary-rates-selection-mode-beast-">Evolutionary rates &amp; selection mode (BEAST2)<a class="anchor" aria-label="anchor" href="#evolutionary-rates-selection-mode-beast-"></a></h3>
+      <p class="section-desc"></p><p>See <code><a href="../articles/rates-selection_BEAST2.html">vignette("rates-selection_BEAST2")</a></code> for a complete workflow that uses these functions to extract evolutionary rate parameters estimated from relaxed clock Bayesian inference analyses produced by the program BEAST2 and use evolutionary rate based inference of selection mode (or strength) adapted to clock-based rates.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="get_clockrate_table_BEAST2.html">get_clockrate_table_BEAST2()</a></code> 
         </dt>
         <dd>Extract evolutionary rates from Bayesian clock trees produced by BEAST2</dd>
       </dl><dl><dt>
           
-          <code><a href="get_pwt_rates.html">get_pwt_rates()</a></code> 
+          <code><a href="clockrate_dens_plot.html">clockrate_dens_plot()</a></code> 
         </dt>
-        <dd>Conduct pairwise t-tests between node rates and clock base rate</dd>
+        <dd>Plot clock rate distributions</dd>
       </dl><dl><dt>
           
-          <code><a href="plot_treerates_sgn.html">plot_treerates_sgn()</a></code> 
+          <code><a href="clockrate_reg_plot.html">clockrate_reg_plot()</a></code> 
+        </dt>
+        <dd>Plot regression lines between sets of rates</dd>
+      </dl><dl><dt>
+          
+          <code><a href="clockrate_summary.html">clockrate_summary()</a></code> 
+        </dt>
+        <dd>Compute rate summary statistics across clades and clocks</dd>
+      </dl><dl><dt>
+          
+          <code><a href="clock_reshape.html">clock_reshape()</a></code> 
+        </dt>
+        <dd>Convert clock rate tables from wide to long format</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot_back_rates.html">plot_back_rates()</a></code> 
+        </dt>
+        <dd>Plots distribution of background rates extracted from posterior log files.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_pwt_rates_BEAST2.html">get_pwt_rates_BEAST2()</a></code> 
+        </dt>
+        <dd>Conduct pairwise t-tests between node rates and clock base rates from a BEAST2 output.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot_treerates_sgn.html">plot_treerates_sgn</a></code> 
         </dt>
         <dd>Plot Bayesian evolutionary tree with rate thresholds for selection mode</dd>
       </dl></div><div class="section level2">
@@ -247,6 +299,16 @@ accounting for possible metadata on the tips.</dd>
 
       <dl><dt>
           
+          <code><a href="RateTable_Means_1p_Clades.html">RateTable_Means_1p_Clades</a></code> 
+        </dt>
+        <dd>Mean clock rates by node and clade (single clock)</dd>
+      </dl><dl><dt>
+          
+          <code><a href="RateTable_Means_3p_Clades.html">RateTable_Means_3p_Clades</a></code> 
+        </dt>
+        <dd>Mean clock rates by node and clade (3 clock partitions)</dd>
+      </dl><dl><dt>
+          
           <code><a href="characters.html">characters</a></code> 
         </dt>
         <dd>A morphological phylogenetic data matrix</dd>
@@ -265,16 +327,6 @@ accounting for possible metadata on the tips.</dd>
           <code><a href="posterior3p.html">posterior3p</a></code> 
         </dt>
         <dd>Posterior parameter samples (3 clock partions)</dd>
-      </dl><dl><dt>
-          
-          <code><a href="rate_table_clades_means1.html">rate_table_clades_means1</a></code> 
-        </dt>
-        <dd>Mean clock rates by node and clade (single clock)</dd>
-      </dl><dl><dt>
-          
-          <code><a href="rate_table_clades_means3.html">rate_table_clades_means3</a></code> 
-        </dt>
-        <dd>Mean clock rates by node and clade (3 clock partitions)</dd>
       </dl><dl><dt>
           
           <code><a href="tree1p.html">tree1p</a></code> 

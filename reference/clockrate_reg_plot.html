@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EvoPhylo</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +26,8 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/data_treatment.html">Theoretical background</a>
     <a class="dropdown-item" href="../articles/char-part.html">Character Partitioning</a>
-    <a class="dropdown-item" href="../articles/rates-selection.html">Evolutionary Rates &amp; Selection Mode</a>
+    <a class="dropdown-item" href="../articles/rates-selection_MrBayes.html">Evolutionary Rates &amp; Selection Mode (Mr.Bayes)</a>
+    <a class="dropdown-item" href="../articles/rates-selection_BEAST2.html">Evolutionary Rates &amp; Selection Mode (BEAST2)</a>
     <a class="dropdown-item" href="../articles/fbd-params.html">Analyzing FBD Parameters</a>
     <a class="dropdown-item" href="../articles/offset_handling.html">Analyzing Trees With Offsets</a>
   </div>
@@ -97,7 +98,7 @@
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="../articles/rates-selection.html">vignette("rates-selection")</a></code> for the use of this function as part of an analysis pipeline.</p>
+    <div class="dont-index"><p><code>vignette("rates-selection")</code> for the use of this function as part of an analysis pipeline.</p>
 <p><code>geom_point</code>, <code>geom_smooth</code></p></div>
     </div>
 
@@ -106,19 +107,18 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># See vignette("rates-selection") for how to use this</span></span></span>
 <span class="r-in"><span><span class="co"># function as part of an analysis pipeline</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"rate_table_clades_means3"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set ‘rate_table_clades_means3’ not found</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"RateTable_Means_3p_Clades"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#Plot correlations between clocks 1 and 3</span></span></span>
-<span class="r-in"><span><span class="fu">clockrate_reg_plot</span><span class="op">(</span><span class="va">rate_table_clades_means3</span>,</span></span>
+<span class="r-in"><span><span class="fu">clockrate_reg_plot</span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span>,</span></span>
 <span class="r-in"><span>                   clock_x <span class="op">=</span> <span class="fl">1</span>, clock_y <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in is.data.frame(rate_table):</span> object 'rate_table_clades_means3' not found</span>
+<span class="r-plt img"><img src="clockrate_reg_plot-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#Use arguments supplied to geom_smooth():</span></span></span>
-<span class="r-in"><span><span class="fu">clockrate_reg_plot</span><span class="op">(</span><span class="va">rate_table_clades_means3</span>,</span></span>
+<span class="r-in"><span><span class="fu">clockrate_reg_plot</span><span class="op">(</span><span class="va">RateTable_Means_3p_Clades</span>,</span></span>
 <span class="r-in"><span>                   clock_x <span class="op">=</span> <span class="fl">1</span>, clock_y <span class="op">=</span> <span class="fl">3</span>,</span></span>
 <span class="r-in"><span>                   color <span class="op">=</span> <span class="st">"red"</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in is.data.frame(rate_table):</span> object 'rate_table_clades_means3' not found</span>
+<span class="r-plt img"><img src="clockrate_reg_plot-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
