@@ -19,7 +19,7 @@ Barido-Sottani & Pierce (2022)](https://doi.org/10.32942/osf.io/3mkf9).
 
 ## Installing package **EvoPhylo**
 
-Install the latest release version (v. 0.3) directly from CRAN:
+Install the latest release version (v. 0.3.2) directly from CRAN:
 
 ``` r
 install.packages("EvoPhylo")
@@ -35,7 +35,8 @@ devtools::install_github("tiago-simoes/EvoPhylo")
 ## Tutorials
 
 See `vignette("char-part")`,`vignette("data_treatment")`,
-`vignette("rates-selection")`, `vignette("fbd-params")`, and
+`vignette("rates-selection_MrBayes")`,
+`vignette("rates-selection_BEAST2")`, `vignette("fbd-params")`, and
 `vignette("offset_handling")`, for step-by-step guides on using
 `EvoPhylo` to perform these analyses, also available on the [EvoPhylo
 website](https://tiago-simoes.github.io/EvoPhylo/).
@@ -44,15 +45,15 @@ website](https://tiago-simoes.github.io/EvoPhylo/).
 
 ## Authors (including current developers)
 
--   [**Tiago R. Simões**](https://tiago-simoes.com/): *Conceptualization
-    and code development* - [Github
-    Profile](https://github.com/tiago-simoes)
--   [**Noah Greifer**](https://github.com/ngreifer): *Code development*
--   [**Joëlle Barido-Sottani**](https://github.com/bjoelle): *Code
-    development*
--   [**Stephanie
-    E.Pierce**](https://projects.iq.harvard.edu/spierce/home): *Project
-    supervision*
+- [**Tiago R. Simões**](https://tiago-simoes.com/): *Conceptualization
+  and code development* - [Github
+  Profile](https://github.com/tiago-simoes)
+- [**Noah Greifer**](https://github.com/ngreifer): *Code development*
+- [**Joëlle Barido-Sottani**](https://github.com/bjoelle): *Code
+  development*
+- [**Stephanie
+  E.Pierce**](https://projects.iq.harvard.edu/spierce/home): *Project
+  supervision*
 
 ## License
 
