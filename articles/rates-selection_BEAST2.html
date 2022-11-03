@@ -78,7 +78,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Evolutionary Rates &amp; Selection Mode (BEAST2)</h1>
             
-            <h4 data-toc-skip class="date">2022-11-02</h4>
+            <h4 data-toc-skip class="date">2022-11-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/tiago-simoes/EvoPhylo/blob/HEAD/vignettes/rates-selection_BEAST2.Rmd" class="external-link"><code>vignettes/rates-selection_BEAST2.Rmd</code></a></small>
       <div class="d-none name"><code>rates-selection_BEAST2.Rmd</code></div>
@@ -692,15 +692,7 @@ LateStemPenguins
 <p> </p>
 <p>###2. Check background rates distribution and if they need transformation</p>
 <p>The output includes histograms showing the data distribution before and after data transformation for comparisons.</p>
-<pre><code><span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span>
-<span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span></code></pre>
-<p><img src="rates-selection_BEAST2_files/figure-html/unnamed-chunk-18-1.png" width="90%" style="display: block; margin: auto;"></p>
-<pre><code><span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span>
-<span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span></code></pre>
-<p><img src="rates-selection_BEAST2_files/figure-html/unnamed-chunk-18-2.png" width="90%" style="display: block; margin: auto;"></p>
-<pre><code><span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span>
-<span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span></code></pre>
-<p><img src="rates-selection_BEAST2_files/figure-html/unnamed-chunk-18-3.png" width="90%" style="display: block; margin: auto;"></p>
+<p><img src="rates-selection_BEAST2_files/figure-html/unnamed-chunk-18-1.png" width="90%" style="display: block; margin: auto;"><img src="rates-selection_BEAST2_files/figure-html/unnamed-chunk-18-2.png" width="90%" style="display: block; margin: auto;"><img src="rates-selection_BEAST2_files/figure-html/unnamed-chunk-18-3.png" width="90%" style="display: block; margin: auto;"></p>
 <p> </p>
 </div>
 <div class="section level3">
@@ -708,7 +700,7 @@ LateStemPenguins
 </h3>
 <p>Using different thresholds, Identify the selection mode across branches in the tree for each clock partition with <code><a href="../reference/plot_treerates_sgn.html">plot_treerates_sgn()</a></code>.</p>
 <p>Users must indicate the type of output file (between <a href="https://nbisweden.github.io/MrBayes/" class="external-link">Mr. Bayes</a> and <a href="https://www.beast2.org/" class="external-link">BEAST2</a>) and whether they would like to log transform the background rate to meet assumptions of normally distributed data, based on the results obtained from <code>plot_back_rates</code>. Users should also indicate in “clock” the number of the clock partition they would like to plot rates from and the desired significance threshold to interpret branch rates (we recommend number of standard deviations around the mean of background rates).Finally, a series of arguments enable users to customize the geological timescale to add to the tree.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot tree using various thresholds for clock partition 1</span></span>
 <span><span class="va">A1</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/plot_treerates_sgn.html">plot_treerates_sgn</a></span><span class="op">(</span></span>
 <span>  type <span class="op">=</span> <span class="st">"BEAST2"</span>, trans <span class="op">=</span> <span class="st">"log10"</span>,                         <span class="co">#Indicates software name output and type of transformation</span></span>
@@ -720,7 +712,7 @@ LateStemPenguins
 <span><span class="va">A1</span></span></code></pre></div>
 <p><img src="rates-selection_BEAST2_files/figure-html/unnamed-chunk-19-1.png" width="70%" style="display: block; margin: auto;"></p>
 <p>Plot tree using various thresholds for the other clock partitions and combine them.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot tree using various thresholds for other clock partition and combine them</span></span>
 <span><span class="va">A2</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/plot_treerates_sgn.html">plot_treerates_sgn</a></span><span class="op">(</span></span>
 <span>  type <span class="op">=</span> <span class="st">"BEAST2"</span>, trans <span class="op">=</span> <span class="st">"log10"</span>,                         <span class="co">#Indicates software name output and type of transformation</span></span>
@@ -753,7 +745,7 @@ LateStemPenguins
 <p>The function <code><a href="../reference/get_pwt_rates_BEAST2.html">get_pwt_rates_BEAST2()</a></code> complements the functionality of <code>plot_treerates_sgn</code> by producing a table of pairwise t-tests for differences between the mean background rate in the posterior and the absolute rate for each summary tree branches Should be used only for normally distributed data in which a CI=0.95 is considered a good threshold. In many cases, however, using multiple standard deviations as outputted using <code>plot_treerates_sgn</code> provides a more robust test of whether branch rates are significantly different from background rates.</p>
 <p>4.1. Import rate table with clade membership (new “clade” column added) from your local directory with “mean” values</p>
 <p>Below, we use the rate table with clade membership “RateTable_Means_Clades.csv” that accompanies <code>EvoPhylo</code>.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Import rate table with clade membership (new "clade" column added) </span></span>
 <span><span class="co">## from your local directory with "mean" values</span></span>
 <span><span class="va">RateTable_Means_Clades</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"RateTable_Means_Clades.csv"</span>, package <span class="op">=</span> <span class="st">"EvoPhylo"</span><span class="op">)</span></span>
@@ -767,7 +759,7 @@ LateStemPenguins
 <span><span class="co">## 4     CrownPenguins     3 0.01913400 0.01017825 0.05145375 0.04892464</span></span>
 <span><span class="co">## 5     CrownPenguins     4 0.01319288 0.01016964 0.04996688 0.04325669</span></span></code></pre></div>
 <p>4.2. Get and export table of pairwise t-tests</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Get table of pairwise t-tests for difference between the posterior </span></span>
 <span><span class="co">## mean and the rate for each tree node</span></span>
 <span><span class="va">RateSign_Tests</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pwt_rates_BEAST2.html">get_pwt_rates_BEAST2</a></span><span class="op">(</span><span class="va">RateTable_Means_Clades</span>, <span class="va">posterior</span><span class="op">)</span></span></code></pre></div>
@@ -810,16 +802,16 @@ EarlyStemPenguins
 1
 </td>
 <td style="text-align:right;">
-0.0299739
+0.0260902
 </td>
 <td style="text-align:right;">
 0.0156937
 </td>
 <td style="text-align:right;">
-0.5235770
+0.6015154
 </td>
 <td style="text-align:right;">
-0
+0e+00
 </td>
 </tr>
 <tr>
@@ -833,16 +825,16 @@ LateStemPenguins
 1
 </td>
 <td style="text-align:right;">
-0.0299739
+0.0260902
 </td>
 <td style="text-align:right;">
 0.0215020
 </td>
 <td style="text-align:right;">
-0.7173554
+0.8241390
 </td>
 <td style="text-align:right;">
-0
+0e+00
 </td>
 </tr>
 <tr>
@@ -856,16 +848,16 @@ LateStemPenguins
 1
 </td>
 <td style="text-align:right;">
-0.0299739
+0.0260902
 </td>
 <td style="text-align:right;">
 0.0153367
 </td>
 <td style="text-align:right;">
-0.5116674
+0.5878329
 </td>
 <td style="text-align:right;">
-0
+0e+00
 </td>
 </tr>
 <tr>
@@ -879,16 +871,16 @@ LateStemPenguins
 1
 </td>
 <td style="text-align:right;">
-0.0299739
+0.0260902
 </td>
 <td style="text-align:right;">
 0.0450708
 </td>
 <td style="text-align:right;">
-1.5036646
+1.7274962
 </td>
 <td style="text-align:right;">
-0
+0e+00
 </td>
 </tr>
 <tr>
@@ -902,16 +894,16 @@ EarlyStemPenguins
 1
 </td>
 <td style="text-align:right;">
-0.0299739
+0.0260902
 </td>
 <td style="text-align:right;">
 0.0175102
 </td>
 <td style="text-align:right;">
-0.5841806
+0.6711403
 </td>
 <td style="text-align:right;">
-0
+0e+00
 </td>
 </tr>
 <tr>
@@ -925,16 +917,16 @@ EarlyStemPenguins
 1
 </td>
 <td style="text-align:right;">
-0.0299739
+0.0260902
 </td>
 <td style="text-align:right;">
 0.0161433
 </td>
 <td style="text-align:right;">
-0.5385773
+0.6187486
 </td>
 <td style="text-align:right;">
-0
+0e+00
 </td>
 </tr>
 <tr>
@@ -948,16 +940,16 @@ EarlyStemPenguins
 1
 </td>
 <td style="text-align:right;">
-0.0299739
+0.0260902
 </td>
 <td style="text-align:right;">
 0.0189790
 </td>
 <td style="text-align:right;">
-0.6331840
+0.7274382
 </td>
 <td style="text-align:right;">
-0
+0e+00
 </td>
 </tr>
 <tr>
@@ -971,16 +963,16 @@ EarlyStemPenguins
 1
 </td>
 <td style="text-align:right;">
-0.0299739
+0.0260902
 </td>
 <td style="text-align:right;">
 0.0178498
 </td>
 <td style="text-align:right;">
-0.5955089
+0.6841549
 </td>
 <td style="text-align:right;">
-0
+0e+00
 </td>
 </tr>
 <tr>
@@ -994,16 +986,16 @@ EarlyStemPenguins
 1
 </td>
 <td style="text-align:right;">
-0.0299739
+0.0260902
 </td>
 <td style="text-align:right;">
 0.0130211
 </td>
 <td style="text-align:right;">
-0.4344154
+0.4990813
 </td>
 <td style="text-align:right;">
-0
+0e+00
 </td>
 </tr>
 <tr>
@@ -1017,21 +1009,21 @@ EarlyStemPenguins
 1
 </td>
 <td style="text-align:right;">
-0.0299739
+0.0260902
 </td>
 <td style="text-align:right;">
 0.0223161
 </td>
 <td style="text-align:right;">
-0.7445162
+0.8553429
 </td>
 <td style="text-align:right;">
-0
+5e-07
 </td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Export the table</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">RateSign_Tests</span>, file <span class="op">=</span> <span class="st">"RateSign_Tests.csv"</span><span class="op">)</span></span></code></pre></div>
 <p> </p>

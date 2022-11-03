@@ -78,7 +78,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Evolutionary Rates &amp; Selection Mode (Mr.Bayes)</h1>
             
-            <h4 data-toc-skip class="date">2022-11-02</h4>
+            <h4 data-toc-skip class="date">2022-11-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/tiago-simoes/EvoPhylo/blob/HEAD/vignettes/rates-selection_MrBayes.Rmd" class="external-link"><code>vignettes/rates-selection_MrBayes.Rmd</code></a></small>
       <div class="d-none name"><code>rates-selection_MrBayes.Rmd</code></div>
@@ -1107,23 +1107,17 @@ Other
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="va">B1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_back_rates.html">plot_back_rates</a></span> <span class="op">(</span>type <span class="op">=</span> <span class="st">"MrBayes"</span>, <span class="va">posterior3p</span>, clock <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                      trans <span class="op">=</span> <span class="st">"log10"</span>, size <span class="op">=</span> <span class="fl">10</span>, quantile <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">B1</span></span>
-<span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span>
-<span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span></code></pre></div>
+<span><span class="va">B1</span></span></code></pre></div>
 <p><img src="rates-selection_MrBayes_files/figure-html/unnamed-chunk-28-1.png" width="90%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_back_rates.html">plot_back_rates</a></span> <span class="op">(</span>type <span class="op">=</span> <span class="st">"MrBayes"</span>, <span class="va">posterior3p</span>, clock <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>                      trans <span class="op">=</span> <span class="st">"log10"</span>, size <span class="op">=</span> <span class="fl">10</span>, quantile <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">B2</span></span>
-<span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span>
-<span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span></code></pre></div>
+<span><span class="va">B2</span></span></code></pre></div>
 <p><img src="rates-selection_MrBayes_files/figure-html/unnamed-chunk-28-2.png" width="90%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_back_rates.html">plot_back_rates</a></span> <span class="op">(</span>type <span class="op">=</span> <span class="st">"MrBayes"</span>, <span class="va">posterior3p</span>, clock <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>                      trans <span class="op">=</span> <span class="st">"log10"</span>, size <span class="op">=</span> <span class="fl">10</span>, quantile <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">B3</span></span>
-<span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span>
-<span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span></code></pre></div>
+<span><span class="va">B3</span></span></code></pre></div>
 <p><img src="rates-selection_MrBayes_files/figure-html/unnamed-chunk-28-3.png" width="90%" style="display: block; margin: auto;"></p>
 <p> </p>
 </div>

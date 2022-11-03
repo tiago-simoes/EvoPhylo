@@ -78,7 +78,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Analyzing FBD Parameters</h1>
             
-            <h4 data-toc-skip class="date">2022-11-02</h4>
+            <h4 data-toc-skip class="date">2022-11-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/tiago-simoes/EvoPhylo/blob/HEAD/vignettes/fbd-params.Rmd" class="external-link"><code>vignettes/fbd-params.Rmd</code></a></small>
       <div class="d-none name"><code>fbd-params.Rmd</code></div>
@@ -3333,7 +3333,7 @@ diversificationRateFBD
 1
 </td>
 <td style="text-align:right;">
-10001
+556
 </td>
 <td style="text-align:right;">
 0.04
@@ -3354,7 +3354,7 @@ diversificationRateFBD
 0.06
 </td>
 <td style="text-align:right;">
-0.50
+0.17
 </td>
 </tr>
 <tr>
@@ -3365,7 +3365,7 @@ turnoverFBD
 1
 </td>
 <td style="text-align:right;">
-10001
+556
 </td>
 <td style="text-align:right;">
 0.86
@@ -3374,7 +3374,7 @@ turnoverFBD
 0.10
 </td>
 <td style="text-align:right;">
-0.37
+0.45
 </td>
 <td style="text-align:right;">
 0.81
@@ -3397,7 +3397,7 @@ samplingProportionFBD
 1
 </td>
 <td style="text-align:right;">
-10001
+556
 </td>
 <td style="text-align:right;">
 0.27
@@ -3406,10 +3406,10 @@ samplingProportionFBD
 0.12
 </td>
 <td style="text-align:right;">
-0.00
+0.06
 </td>
 <td style="text-align:right;">
-0.18
+0.19
 </td>
 <td style="text-align:right;">
 0.25
@@ -3418,7 +3418,7 @@ samplingProportionFBD
 0.34
 </td>
 <td style="text-align:right;">
-0.78
+0.74
 </td>
 </tr>
 </tbody>
@@ -3439,19 +3439,11 @@ samplingProportionFBD
 <p><img src="fbd-params_files/figure-html/unnamed-chunk-43-1.png" width="70%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot distribution of the desired FBD parameter by time bin with </span></span>
-<span><span class="co">## stacked kernel density plot</span></span>
-<span><span class="fu"><a href="../reference/FBD_dens_plot.html">FBD_dens_plot</a></span><span class="op">(</span><span class="va">posterior_long</span>, parameter <span class="op">=</span> <span class="st">"diversificationRateFBD"</span>,</span>
-<span>              type <span class="op">=</span> <span class="st">"density"</span>, stack <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="fbd-params_files/figure-html/unnamed-chunk-44-1.png" width="70%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Plot distribution of the desired FBD parameter by time bin with </span></span>
 <span><span class="co">## a violin plot</span></span>
 <span><span class="fu"><a href="../reference/FBD_dens_plot.html">FBD_dens_plot</a></span><span class="op">(</span><span class="va">posterior_long</span>, parameter <span class="op">=</span> <span class="st">"diversificationRateFBD"</span>,</span>
 <span>              type <span class="op">=</span> <span class="st">"violin"</span>, stack <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
-<span><span class="co">## collapsing to unique 'x' values</span></span></code></pre>
-<p><img src="fbd-params_files/figure-html/unnamed-chunk-45-1.png" width="50%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<p><img src="fbd-params_files/figure-html/unnamed-chunk-44-1.png" width="50%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot distribution of all FBD parameter by time bin with a violin plot</span></span>
 <span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FBD_dens_plot.html">FBD_dens_plot</a></span><span class="op">(</span><span class="va">posterior_long</span>, parameter <span class="op">=</span> <span class="st">"diversificationRateFBD"</span>,</span>
 <span>                    type <span class="op">=</span> <span class="st">"violin"</span>, stack <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
@@ -3462,8 +3454,8 @@ samplingProportionFBD
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="fbd-params_files/figure-html/unnamed-chunk-46-1.png" width="100%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<p><img src="fbd-params_files/figure-html/unnamed-chunk-45-1.png" width="100%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Save your plot to your working directory as a PDF</span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"Plot_regs.pdf"</span>, width <span class="op">=</span> <span class="fl">12</span>, height <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 </div>
