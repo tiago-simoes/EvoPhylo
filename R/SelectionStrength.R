@@ -47,7 +47,7 @@ plot_back_rates <- function(type = c("MrBayes", "BEAST2"),
 
       #check original data distribution
       P1<-ggplot2::ggplot(posterior.final, aes(x=rates.post)) +
-        geom_histogram(aes(y=..density..), colour="black", fill="white")+
+        geom_histogram(aes(y=..density..), bins = 50, colour="black", fill="white")+
         geom_density(alpha=.2, fill="cyan")+
         geom_vline(aes(xintercept=mean(rates.post)),color="red", linetype="dashed", size=1)+
         labs(x = "Absolute background rates", y = "Density") +
@@ -76,7 +76,7 @@ plot_back_rates <- function(type = c("MrBayes", "BEAST2"),
       #get Mr. Bayes relative background clock rate (shared among all partitions)
       #check original data distribution
       P1<-ggplot2::ggplot(posterior, aes(x=clockrate)) +
-        geom_histogram(aes(y=..density..), colour="black", fill="white")+
+        geom_histogram(aes(y=..density..), bins = 50, colour="black", fill="white")+
         geom_density(alpha=.2, fill="cyan")+
         geom_vline(aes(xintercept=mean(clockrate)),color="red", linetype="dashed", size=1)+
         labs(x = "Absolute background rates", y = "Density") +
@@ -105,7 +105,7 @@ plot_back_rates <- function(type = c("MrBayes", "BEAST2"),
     posterior.rel.clockrate<- as.data.frame(posterior.rel.clockrate)
     names(posterior.rel.clockrate) <- "Rel.Back.Rate"
     P2<- ggplot2::ggplot(posterior.rel.clockrate, aes(x=Rel.Back.Rate)) +
-        geom_histogram(aes(y=..density..), colour="black", fill="white")+
+        geom_histogram(aes(y=..density..), bins = 50, colour="black", fill="white")+
         geom_density(alpha=.2, fill="cyan")+
         geom_vline(aes(xintercept=mean(Rel.Back.Rate)),color="red", linetype="dashed", size=1)+
         #xlim(c(0,quantile(posterior.rel.clockrate$Rel.Back.Rate, quantile)))+
@@ -120,7 +120,7 @@ plot_back_rates <- function(type = c("MrBayes", "BEAST2"),
     posterior.rel.clockrate<- as.data.frame(posterior.rel.clockrate)
     names(posterior.rel.clockrate) <- "Rel.Back.Rate"
     P2<- ggplot2::ggplot(posterior.rel.clockrate, aes(x=Rel.Back.Rate)) +
-        geom_histogram(aes(y=..density..), colour="black", fill="white")+
+        geom_histogram(aes(y=..density..), bins = 50, colour="black", fill="white")+
         geom_density(alpha=.2, fill="cyan")+
         geom_vline(aes(xintercept=mean(Rel.Back.Rate)),color="red", linetype="dashed", size=1)+
         labs(x = "Relative background rates (Transformed)", y = "Density") +

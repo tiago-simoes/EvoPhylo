@@ -15,7 +15,7 @@ plot_back_rates(type = c("MrBayes", "BEAST2"),
                            size = 12, quantile = 0.95)
 }
 \arguments{
-    \item{type}{
+  \item{type}{
 Whether to use data output from "Mr.Bayes" or "BEAST2".
 }
   \item{posterior}{

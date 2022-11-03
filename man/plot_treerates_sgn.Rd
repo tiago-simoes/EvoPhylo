@@ -9,14 +9,14 @@ Plots the summary Bayesian evolutionary tree with branches, according to user-de
 }
 \usage{
 plot_treerates_sgn(type = c("MrBayes", "BEAST2"),
-                            tree, posterior,
-                            trans = c("none", "log", "log10"),
-                            summary = "mean", drop.dummyextant = TRUE,
-                            clock = 1, threshold = c("1 SD", "2 SD"),
-                            low = "blue", mid = "gray90", high = "red",
-                            branch_size = 2, tip_size = 2,
-                            xlim = NULL, nbreaks = 10, geo_size = list(2, 3),
-                            geo_skip = c("Quaternary", "Holocene", "Late Pleistocene")))
+                  tree, posterior,
+                  trans = c("none", "log", "log10"),
+                  summary = "mean", drop.dummyextant = TRUE,
+                  clock = 1, threshold = c("1 SD", "2 SD"),
+                  low = "blue", mid = "gray90", high = "red",
+                  branch_size = 2, tip_size = 2,
+                  xlim = NULL, nbreaks = 10, geo_size = list(2, 3),
+                  geo_skip = c("Quaternary", "Holocene", "Late Pleistocene"))
 }
 \arguments{
   \item{type}{
@@ -31,17 +31,17 @@ A data frame of posterior parameter estimates (log file). From Mr.Bayes, it incl
 }
   \item{trans}{
 Type of data transformation to perform on background rates extracted from the posterior log file from Mr. Bayes or BEAST2. Options include "none" (if rates are normally distributed), natural log transformation "log", and log of base 10 transformation "log10". The necessity of using data transformation can be tested using the function \code{\link{plot_back_rates}}.
-  }
+}
   \item{summary}{
-The rate summary stats chosen to calculate selection mode. Only rates "mean" and "median" are allowed. Default is "mean".
+Only when using Mr. Bayes trees. The rate summary stats chosen to calculate selection mode. Only rates "mean" and "median" are allowed. Default is "mean".
 }
   \item{drop.dummyextant}{
-\code{logical}; whether to drop the "Dummyextant" tip (if present) from the tree before plotting the tree. Default is \code{TRUE}.
+\code{logical}; Only when using Mr. Bayes trees. Whether to drop the "Dummyextant" tip (if present) from the tree before plotting the tree. Default is \code{TRUE}.
 }
   \item{clock}{
 The clock partition number to calculate selection mode. Ignored if only one clock is available.
 }
-    \item{threshold}{
+  \item{threshold}{
 A vector of threshold values. Default is to display thresholds of ±1 relative standard deviation (SD) of the relative posterior clock rates. Should be specified as a number of standard deviations (e.g., \code{"1 SD"}) or the confidence level for a confidence interal around the mean relative posterior clockrate (e.g., \code{"95\%"}). Multiple values are allowed to produce a plot with multiple thresholds. Set to \code{NULL} to omit thresholds.
 }
   \item{low, mid, high}{

@@ -327,19 +327,13 @@ FBD_dens_plot(posterior_long, parameter = "diversificationRateFBD",
               type = "density", stack = FALSE)
 ```
 
-```{r, fig.width=8, fig.height=5, fig.align = "center", out.width = "70%"}
-## Plot distribution of the desired FBD parameter by time bin with 
-## stacked kernel density plot
-FBD_dens_plot(posterior_long, parameter = "diversificationRateFBD",
-              type = "density", stack = TRUE)
-```
-
 ```{r, fig.width=4, fig.height=4, fig.align = "center", out.width = "50%"}
 ## Plot distribution of the desired FBD parameter by time bin with 
 ## a violin plot
 FBD_dens_plot(posterior_long, parameter = "diversificationRateFBD",
               type = "violin", stack = FALSE, color = "red")
 ```
+
 ```{r, fig.width=12, fig.height=4, fig.align = "center", out.width = "100%", warning=FALSE}
 ## Plot distribution of all FBD parameter by time bin with a violin plot
 p1 <- FBD_dens_plot(posterior_long, parameter = "diversificationRateFBD",
