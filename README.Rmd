@@ -21,7 +21,7 @@ The ideas and rationale behind the original functionality and objectives of the 
 
 ## Installing package **EvoPhylo**
 
-Install the latest release version (v. 0.3) directly from CRAN:
+Install the latest release version (v. 0.3.2) directly from CRAN:
 
 ```{r, eval = FALSE}
 install.packages("EvoPhylo")
@@ -36,7 +36,7 @@ devtools::install_github("tiago-simoes/EvoPhylo")
 
 ## Tutorials
 
-See `vignette("char-part")`,`vignette("data_treatment")`, `vignette("rates-selection")`, `vignette("fbd-params")`, and `vignette("offset_handling")`, for step-by-step guides on using `EvoPhylo` to perform these analyses, also available on the [EvoPhylo website](https://tiago-simoes.github.io/EvoPhylo/).
+See `vignette("char-part")`,`vignette("data_treatment")`, `vignette("rates-selection_MrBayes")`, `vignette("rates-selection_BEAST2")`, `vignette("fbd-params")`, and `vignette("offset_handling")`, for step-by-step guides on using `EvoPhylo` to perform these analyses, also available on the [EvoPhylo website](https://tiago-simoes.github.io/EvoPhylo/).
 
 
 ## Authors
