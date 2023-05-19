@@ -15,7 +15,8 @@ The ideas and rationale behind the original functionality and objectives
 of the analyses available in this package were first presented by
 [Simões & Pierce (2021)](https://doi.org/10.1038/s41559-021-01532-x).
 It’s current functionality is described in detail by [Simões, Grifer,
-Barido-Sottani & Pierce (2022)](https://doi.org/10.32942/osf.io/3mkf9).
+Barido-Sottani & Pierce
+(2023)](https://doi.org/10.1111/2041-210X.14128).
 
 ## Installing package **EvoPhylo**
 
