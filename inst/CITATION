@@ -1,4 +1,4 @@
-citHeader("To cite package 'EvoPhylo' in a publication, please use:")
+citHeader("To cite the package 'EvoPhylo' in a publication, please use:")
 
 citEntry(entry = "Article",
 	title = "EvoPhylo: an R package for pre- and postprocessing of morphological data from relaxed clock Bayesian phylogenetics",
