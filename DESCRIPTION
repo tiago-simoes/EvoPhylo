@@ -45,4 +45,4 @@ URL: https://github.com/tiago-simoes/EvoPhylo,
     https://tiago-simoes.github.io/EvoPhylo/
 BugReports: https://github.com/tiago-simoes/EvoPhylo/issues
 VignetteBuilder: knitr
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3

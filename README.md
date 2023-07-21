@@ -20,13 +20,13 @@ Barido-Sottani & Pierce
 
 ## Installing package **EvoPhylo**
 
-Install the latest release version (v. 0.3.2) directly from CRAN:
+Install the latest release version directly from CRAN:
 
 ``` r
 install.packages("EvoPhylo")
 ```
 
-or development version from Github:
+or developers version from Github:
 
 ``` r
 # install.packages("devtools")

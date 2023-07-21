@@ -21,13 +21,13 @@ The ideas and rationale behind the original functionality and objectives of the 
 
 ## Installing package **EvoPhylo**
 
-Install the latest release version (v. 0.3.2) directly from CRAN:
+Install the latest release version directly from CRAN:
 
 ```{r, eval = FALSE}
 install.packages("EvoPhylo")
 ```
 
-or development version from Github:
+or developers version from Github:
 
 ```{r, eval = FALSE}
 # install.packages("devtools")
