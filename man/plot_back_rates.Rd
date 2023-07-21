@@ -5,7 +5,7 @@
 Plots distribution of background rates extracted from posterior log files.
 }
 \description{
-Plots The distribution of background rates extracted from the posterior log files from Mr. Bayes or BEAST2, as well as the distribution of background rates if log transformed to test for normality of data distribution.
+Plots The distribution and mean of background rates extracted from the posterior log files from Mr. Bayes or BEAST2, as well as the distribution of background rates if log transformed to test for normality of data distribution.
 }
 \usage{
 plot_back_rates(type = c("MrBayes", "BEAST2"),
@@ -36,7 +36,7 @@ Upper limit for X axis (passed on to 'xlim') to remove outliers from histogram. 
 }
 }
 \details{
-Plots The distribution of background rates extracted from the posterior log files from Mr. Bayes or BEAST2, as well as the distribution of background rates if log transformed.  Background rates should be normally distributed for meeting the assumptions of t-tests and other tests passed on by downstream functions, including \code{\link{get_pwt_rates_MrBayes}}, \code{\link{get_pwt_rates_BEAST2}}, and \code{\link{plot_treerates_sgn}}.
+Plots The distribution and mean (red dotted line) of background rates extracted from the posterior log files from Mr. Bayes or BEAST2, as well as the distribution of background rates if log transformed.  Background rates should be normally distributed for meeting the assumptions of t-tests and other tests passed on by downstream functions, including \code{\link{get_pwt_rates_MrBayes}}, \code{\link{get_pwt_rates_BEAST2}}, and \code{\link{plot_treerates_sgn}}.
 }
 
 \value{

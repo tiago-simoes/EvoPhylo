@@ -2,9 +2,14 @@
 ---
 `EvoPhylo` News and Updates
 ======
+## Development: EvoPhylo 0.3.3
+(July 21st, 2023)
+
+* Function `plot_back_rates` corrected for MrBayes.
+* New warnings and import of MrBayes single {all} clock partition for `plot_treerates_sgn`.
 
 ## Development: EvoPhylo 0.3.2
-(OCtober 31st, 2022)
+(October 31st, 2022)
 
 * New function `plot_back_rates` and updates on vignettes.
 
