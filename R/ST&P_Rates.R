@@ -3,18 +3,18 @@
 #Rate Table - BEAST2 version
 #' Extract evolutionary rates from Bayesian clock trees produced by BEAST2
 #'
-#' BEAST2 stores the rates for each clock in a separate file. All trees need to be loaded using \code{treeio::read.beast}.
+#' BEAST2 stores the rates for each clock in a separate file. All trees need to be loaded using `treeio::read.beast()`.
 #'
-#' @param ... \code{treedata} objects containing the summary trees with associated data on the rates for each separate clock.
-#' @param summary summary metric used for the rates. Currently supported: \code{"mean"} or \code{"median"}, default \code{"median"}.
-#' @param drop_dummy if not \code{NULL}, will drop the dummy extant tip with the given label from the BEAST2 summary trees prior to extracting the clock rates (when present). Default is \code{NULL}.
+#' @param ... `treedata` objects containing the summary trees with associated data on the rates for each separate clock.
+#' @param summary summary metric used for the rates. Currently supported: `"mean"` or `"median"`, default `"median"`.
+#' @param drop_dummy if not `NULL`, will drop the dummy extant tip with the given label from the BEAST2 summary trees prior to extracting the clock rates (when present). Default is `NULL`.
 #'
-#' @return A data frame with a column containing the node identifier (\code{node}) and one column containing the clock rates for each tree provided, in the same order as the trees.
+#' @return A data frame with a column containing the node identifier (`node`) and one column containing the clock rates for each tree provided, in the same order as the trees.
 #'
 #' @seealso [get_clockrate_table_MrBayes()] for the equivalent function for MrBayes output files.
 #' @seealso [clockrate_summary()] for summarizing and examining properties of the resulting rate table. Note that clade membership for each node must be customized (manually added) before these functions can be used, since this is tree and dataset dependent.
 #'
-#' @export
+
 #'
 #' @examples
 #' #Import all clock summary trees produced by BEAST2 from your local directory
@@ -31,22 +31,28 @@
 #' rate_table <- get_clockrate_table_BEAST2(tree_clock1, tree_clock2, summary = "mean")
 #'
 #' @md
+#' @export
 get_clockrate_table_BEAST2 <- function(..., summary = "median", drop_dummy = NULL) {
   trees <- list(...)
-  if(length(trees) == 0) stop("No trees provided")
+
+  if (length(trees) == 0L) {
+    stop("No trees provided")
+  }
 
   summary <- match.arg(summary, c("mean", "median"))
-  name <- if(summary == "mean") "rate" else "rate_median"
+  name <- if (summary == "mean") "rate" else "rate_median"
 
   if (!is.null(drop_dummy)) {
-    trees <- lapply(trees, function(tr) treeio::drop.tip(tr, drop_dummy))
+    trees <- lapply(trees, treeio::drop.tip, drop_dummy)
   }
 
   rate_table <- data.frame(nodes = as.integer(trees[[1]]@data$node))
-  for(tr in trees) {
+
+  for (tr in trees) {
     data <- tr@data[match(rate_table$nodes, as.integer(tr@data$node)), ] #get rates in same order as 1st column
     rate_table <- cbind(rate_table, data[[name]])
   }
+
   colnames(rate_table)[2:ncol(rate_table)] <- paste0("rates", 1:(ncol(rate_table) - 1))
   row.names(rate_table) <- NULL
 
@@ -75,11 +81,13 @@ get_clockrate_table_MrBayes <- function(tree, summary = "median", drop_dummy = N
   rates <- rownames(p)[p$summary == summary]
 
   rate_table <- setNames(data.frame(nodes, tree@data[rates]),
-                        c("nodes", paste0("rates", p[rates, "clock"])))
+                         c("nodes", paste0("rates", p[rates, "clock"])))
 
-  for (i in seq_len(ncol(rate_table))[-1]) rate_table[[i]] <- as.numeric(rate_table[[i]])
+  for (i in seq_len(ncol(rate_table))[-1]) {
+    rate_table[[i]] <- as.numeric(rate_table[[i]])
+  }
 
-  return(rate_table)
+  rate_table
 }
 
 #Summary stats for clades
@@ -88,9 +96,11 @@ clockrate_summary <- function(rate_table, file = NULL, digits = 3) {
   if (!is.data.frame(rate_table)) {
     stop("'rate_table' must be a data frame.", call. = FALSE)
   }
+
   if (!any(startsWith(names(rate_table), "rates"))) {
     stop("'rate_table' must contain \"rates\" columns containing clockrate summaries.", call. = FALSE)
   }
+
   if (!hasName(rate_table, "clade")) {
     stop("A 'clade' column must be present in the data.", call. = FALSE)
   }
@@ -116,15 +126,16 @@ clockrate_summary <- function(rate_table, file = NULL, digits = 3) {
 
   rownames(out) <- NULL
 
-  if (all(clocks == "")) out$clock <- NULL
-
-  if (length(file) > 0) {
-    write.csv(out, file = file)
-    invisible(out)
+  if (all(clocks == "")) {
+    out$clock <- NULL
   }
-  else {
+
+  if (length(file) == 0L) {
     return(out)
   }
+
+  write.csv(out, file = file)
+  invisible(out)
 }
 
 #Density plot of rates by clade
@@ -133,9 +144,11 @@ clockrate_dens_plot <- function(rate_table, clock = NULL, stack = FALSE, nrow = 
   if (!is.data.frame(rate_table)) {
     stop("'rate_table' must be a data frame.", call. = FALSE)
   }
+
   if (!any(startsWith(names(rate_table), "rates"))) {
     stop("'rate_table' must contain \"rates\" columns containing clockrate summaries.", call. = FALSE)
   }
+
   if (!hasName(rate_table, "clade")) {
     stop("A 'clade' column must be present in the data.", call. = FALSE)
   }
@@ -175,7 +188,7 @@ clockrate_dens_plot <- function(rate_table, clock = NULL, stack = FALSE, nrow = 
     theme(legend.position = "top")
 
   # if (nlevels(rt$clock) > 1) {
-    rateplot <- rateplot  + facet_wrap(~.data$clock, nrow = nrow, scales = scales)
+  rateplot <- rateplot  + facet_wrap(~.data$clock, nrow = nrow, scales = scales)
   # }
   rateplot
 }
@@ -186,6 +199,7 @@ clockrate_reg_plot <- function(rate_table, clock_x, clock_y, method = "lm", show
   if (!is.data.frame(rate_table)) {
     stop("'rate_table' must be a data frame.", call. = FALSE)
   }
+
   if (!any(startsWith(names(rate_table), "rates"))) {
     stop("'rate_table' must contain \"rates\" columns containing clockrate summaries.", call. = FALSE)
   }
@@ -224,40 +238,41 @@ clockrate_reg_plot <- function(rate_table, clock_x, clock_y, method = "lm", show
   names(rate_table)[names(rate_table) == paste0("rates", clock_x)] <- "clock_x"
   names(rate_table)[names(rate_table) == paste0("rates", clock_y)] <- "clock_y"
 
-  regplot <- ggplot(rate_table, aes(x = clock_x, y = clock_y)) +
+  regplot <- ggplot(rate_table, aes(x = .data$clock_x, y = .data$clock_y)) +
     geom_point() +
     geom_smooth(method = method, formula = y ~ x, ...) +
     scale_x_continuous() +
     scale_y_continuous() +
-    labs(x = paste("Clock", clock_x), y = paste("Clock", clock_y)) +
+    labs(x = paste("Clock", clock_x),
+         y = paste("Clock", clock_y)) +
     theme_bw()
 
-  if (show_lm) {
-    r <- cor(rate_table$clock_x, rate_table$clock_y)
-
-    #Extract underlying ggplot data to place correlation in correct place in plot
-    ggbd <- ggplot_build(regplot)$data
-
-    ggbd1 <- ggbd[[1]] #geom_point data
-    ggbd2 <- ggbd[[2]] #geom_smooth data
-
-    min_x <- min(min(ggbd1$x), min(ggbd2$x))
-    max_x <- max(max(ggbd1$x), max(ggbd2$x))
-
-    min_y <- min(min(ggbd1$y), min(ggbd2$y),
-                 if (hasName(ggbd2, "ymin")) min(ggbd2$ymin)) #FALSE when se = FALSE
-    max_y <- max(max(ggbd1$y), max(ggbd2$y),
-                 if (hasName(ggbd2, "ymax")) max(ggbd2$ymax)) #FALSE when se = FALSE
-
-    regplot <- regplot +
-      annotate("text", label = c(paste0("italic(R)^2 == ", round(r^2, 2)),
-                                  paste0("italic(r) == ", round(r, 2))), parse = TRUE,
-               x = .3*min_x + .7*max_x,
-               y = c(.85*min_y + .15*max_y,
-                     .8*min_y + .2*max_y))
+  if (!show_lm) {
+    return(regplot)
   }
 
-  regplot
+  r <- cor(rate_table$clock_x, rate_table$clock_y)
+
+  #Extract underlying ggplot data to place correlation in correct place in plot
+  ggbd <- ggplot_build(regplot)$data
+
+  ggbd1 <- ggbd[[1]] #geom_point data
+  ggbd2 <- ggbd[[2]] #geom_smooth data
+
+  min_x <- min(min(ggbd1$x), min(ggbd2$x))
+  max_x <- max(max(ggbd1$x), max(ggbd2$x))
+
+  min_y <- min(min(ggbd1$y), min(ggbd2$y),
+               if (hasName(ggbd2, "ymin")) min(ggbd2$ymin)) #FALSE when se = FALSE
+  max_y <- max(max(ggbd1$y), max(ggbd2$y),
+               if (hasName(ggbd2, "ymax")) max(ggbd2$ymax)) #FALSE when se = FALSE
+
+  regplot +
+    annotate("text", label = c(paste0("italic(R)^2 == ", round(r^2, 2)),
+                               paste0("italic(r) == ", round(r, 2))), parse = TRUE,
+             x = .3*min_x + .7*max_x,
+             y = c(.85*min_y + .15*max_y,
+                   .8*min_y + .2*max_y))
 }
 
 

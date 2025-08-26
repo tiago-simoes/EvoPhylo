@@ -46,3 +46,4 @@ URL: https://github.com/tiago-simoes/EvoPhylo,
 BugReports: https://github.com/tiago-simoes/EvoPhylo/issues
 VignetteBuilder: knitr
 RoxygenNote: 7.2.3
+Roxygen: list(markdown = TRUE)
