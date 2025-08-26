@@ -1,15 +1,15 @@
-citHeader("To cite the package 'EvoPhylo' in a publication, please use:")
-
-citEntry(
-entry = "Article",
-	title = "EvoPhylo: an R package for pre- and postprocessing of morphological data from relaxed clock Bayesian phylogenetics",
-	author = "Tiago R. Simões, Noah Greifer, Joëlle Barido-Sottani, and Stephanie E. Pierce",
-	journal = "Methods in Ecology and Evolution",
-  year = "2023",
-	volume = "n/a",
-	pages = "1-13",
-	note = "DOI:  https://doi.org/10.1111/2041-210X.14128",
-	textVersion = "Simões, T. R., Greifer, N., Barido-Sottani, J., & Pierce, S. E. 2023. EvoPhylo: an R package for pre- and postprocessing of morphological data from relaxed clock Bayesian phylogenetics. Methods in Ecology and Evolution. https://doi.org/10.1111/2041-210X.14128"
-	)
-
-citFooter("As EvoPhylo will be constantly updated, you may want to also cite its version number")
+bibentry(bibtype = "Article",
+  title        = "EvoPhylo: An R package for pre- and postprocessing of morphological data from relaxed clock Bayesian phylogenetics",
+  author       = c(person("Tiago", "Simoes"),
+                   person("Noah", "Greifer"),
+                   person("Joelle", "Barido-Sottani"),
+                   person("Stephanie", "Pierce")),
+  journal      = "Methods in Ecology and Evolution",
+  year         = "2023",
+  volume       = "14",
+  number       = "8",
+  pages        = "1981-1993",
+  doi          = "10.1111/2041-210X.14128",
+  header       = "To cite the package 'EvoPhylo' in a publication, please use:"
+  footer       = "As EvoPhylo will be constantly updated, you may want to also cite its version number"
+)
