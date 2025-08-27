@@ -14,7 +14,7 @@ write_partitioned_alignments(x, cluster_df, file)
 \item{file}{path to save the alignments. If \code{file = "example.nex"}, alignments will be saved to files \code{"example_part1.nex"}, \code{"example_part2.nex"}, etc.}
 }
 \value{
-no return value
+No return value. This function is called for its side effect of writing alignment files to disk.
 }
 \description{
 Write character partitions as separate Nexus files (for use in BEAUti)
@@ -31,4 +31,8 @@ cluster_df <- make_clusters(Dmatrix, k = 3)
 
 # Write to Nexus files
 \dontrun{write_partitioned_alignments(characters, cluster_df, "example.nex")}
+
+}
+\seealso{
+\code{\link{write_partitioned_alignments2}} expanded function for exporting both  morphological and molecular partitions.
 }

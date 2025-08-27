@@ -8,6 +8,7 @@ vignette: |
   %\VignetteIndexEntry{Analyzing Trees With Offsets} 
   %\VignetteEngine{knitr::rmarkdown} 
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{devtools}
 bibliography: references.bib
 link-citations: true
 ---

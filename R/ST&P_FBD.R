@@ -1,4 +1,4 @@
-#Import and combine log (.p) files from Mr. Bayes, optionally downsampling; produces posterior1p-style object
+#Import and combine log (.p) files from Mr. Bayes, BEAST2, or MCMCTREE, optionally downsampling
 combine_log <- function(path = ".", burnin = .25, downsample = 1e4) {
   #Get FBD parameter estimates from collection of log files (.p)
   if (!is.character(path)) files <- NULL
@@ -6,12 +6,12 @@ combine_log <- function(path = ".", burnin = .25, downsample = 1e4) {
     files <- path
   }
   else if (length(path) == 1 && utils::file_test(path, op = "-d")) {
-    files <- paste0(path, "/", list.files(path, pattern = '\\.p$'))
+    files <- list.files(path, pattern = '\\.(txt|log|p)$', full.names = TRUE)
   }
   else files <- NULL
 
   if (length(files) == 0) {
-    stop("The value supplied to 'path' must be a character vector containing the names of parameter log (.p) files or of a folder containg such files.", call. = FALSE)
+    stop("The value supplied to 'path' must be a character vector containing the names of parameter log (.txt) files or of a folder containg such files.", call. = FALSE)
   }
 
   if (length(burnin) != 1 || !is.numeric(burnin) || burnin < 0) {
@@ -24,19 +24,26 @@ combine_log <- function(path = ".", burnin = .25, downsample = 1e4) {
          call. = FALSE)
   }
 
-  L <- lapply(files, function(x) {
-    rtest <- read.table(x, skip = 1, header = TRUE, nrows = 3)
-    if (!all(c("Gen", "LnL", "LnPr") %in% names(rtest))) return(NULL)
+  # Function to read a log file and skip initial lines until the header
+  read_log_file <- function(file) {
+    lines <- readLines(file)
+    header_line <- grep("^(Iteration|Sample|Gen|Generation)\\t", lines)
+    if (length(header_line) == 0) {
+      stop(paste("No header found in file:", file), call. = FALSE)
+    }
+    data <- read.table(file, skip = (header_line - 1), header = TRUE)
+    return(data)
+  }
 
-    r <- read.table(x, skip = 1, header = TRUE)
+  L <- lapply(files, function(x) {
+    r <- read_log_file(x)
     if (burnin > 0) {
       if (burnin < 1) {
         b <- seq_len(round(burnin * NROW(r)))
-      }
-      else {
+      } else {
         b <- seq_len(round(min(burnin, NROW(r))))
       }
-      r <- r[-b,,drop = FALSE]
+      r <- r[-b, , drop = FALSE]
     }
     r
   })
@@ -67,6 +74,7 @@ combine_log <- function(path = ".", burnin = .25, downsample = 1e4) {
 
   return(samples)
 }
+
 
 #Reshape AllRuns from wide to long with Time_bins as time and parameters as varying
 FBD_reshape <- function(posterior, variables = NULL, log.type = c("MrBayes", "BEAST2")) {

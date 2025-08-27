@@ -1,4 +1,21 @@
 #Helpers
+
+# Function to get all descendant nodes (both internal and tips) of a specified node
+get_descendants <- function(tree, node) {
+  edges <- tree$edge
+  descendants <- c(node)
+
+  to_check <- node
+  while (length(to_check) > 0) {
+    new_nodes <- edges[edges[,1] %in% to_check, 2]
+    descendants <- c(descendants, new_nodes)
+    to_check <- new_nodes
+  }
+
+  return(descendants)
+}
+
+
 firstup <- function(x) {
   #Capitalize first letter
   substr(x, 1, 1) <- toupper(substr(x, 1, 1))

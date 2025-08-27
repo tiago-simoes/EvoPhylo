@@ -30,7 +30,7 @@ A data frame of posterior parameter estimates (log file). From Mr.Bayes, it incl
      From BEAST2, it will include at least one "rate<filename>.mean" column indicating the mean (background) clock rate estimate for each generation. If there are "P" unlinked clock partitions in BEAST2, there will be P x "rate<filename>.mean" columns (one for each partition) in the posterior log file.
 }
   \item{trans}{
-Type of data transformation to perform on background rates extracted from the posterior log file from Mr. Bayes or BEAST2. Options include "none" (if rates are normally distributed), natural log transformation "log", and log of base 10 transformation "log10". The necessity of using data transformation can be tested using the function \code{\link{plot_back_rates}}.
+Type of data transformation to perform on background rates extracted from the posterior log file from Mr. Bayes or BEAST2. Options include "none" (if rates are normally distributed), natural log transformation "log", and log of base 10 transformation "log10"". The necessity of using data transformation can be tested using the function \code{\link{plot_back_rates}}.
 }
   \item{summary}{
 Only when using Mr. Bayes trees. The rate summary stats chosen to calculate selection mode. Only rates "mean" and "median" are allowed. Default is "mean".

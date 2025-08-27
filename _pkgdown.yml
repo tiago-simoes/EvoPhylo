@@ -5,83 +5,97 @@ template:
 
 reference:
 - title: Functions
+
 - subtitle: Character partitioning
   desc: >
     See `vignette("char-part")` for a complete workflow that uses these functions to
     conduct automated morphological character partitioning as a pre-processing step
     for clock (time-calibrated) Bayesian phylogenetic analysis of morphological data
     using the programs Mr. Bayes or BEAST2.
-- contents:
-  - get_gower_dist
-  - get_sil_widths
-  - make_clusters
-  - cluster_to_nexus
-  - write_partitioned_alignments
+  contents:
+    - get_gower_dist
+    - get_sil_widths
+    - make_clusters
+    - cluster_to_nexus
+    - write_partitioned_alignments
+    - write_partitioned_alignments2
+
+- subtitle: Clade membership assignment
+  desc: >
+    Functions to assign tips to clades based on ancestral nodes. Useful for summarizing
+    evolutionary rates by clade in downstream analyses.
+  contents:
+    - clade_membership
+
 - subtitle: Evolutionary rates & selection mode (MrBayes)
   desc: >
     See `vignette("rates-selection_MrBayes")` for a complete workflow that uses these functions
     to extract evolutionary rate parameters estimated from relaxed clock Bayesian
-    inference analyses produced by the program Mr. Bayes and use evolutionary rate
+    inference analyses produced by the program MrBayes and use evolutionary rate
     based inference of selection mode (or strength) adapted to clock-based rates.
-- contents:
-  - get_clockrate_table_MrBayes
-  - clockrate_dens_plot
-  - clockrate_reg_plot
-  - clockrate_summary
-  - combine_log
-  - clock_reshape
-  - plot_back_rates
-  - get_pwt_rates_MrBayes
-  - plot_treerates_sgn
+  contents:
+    - get_clockrate_table_MrBayes
+    - clockrate_dens_plot
+    - clockrate_reg_plot
+    - clockrate_summary
+    - combine_log
+    - clock_reshape
+    - plot_back_rates
+    - get_pwt_rates_MrBayes
+    - plot_treerates_sgn
+
 - subtitle: Evolutionary rates & selection mode (BEAST2)
   desc: >
     See `vignette("rates-selection_BEAST2")` for a complete workflow that uses these functions
     to extract evolutionary rate parameters estimated from relaxed clock Bayesian
     inference analyses produced by the program BEAST2 and use evolutionary rate
     based inference of selection mode (or strength) adapted to clock-based rates.
-- contents:
-  - get_clockrate_table_BEAST2
-  - clockrate_dens_plot
-  - clockrate_reg_plot
-  - clockrate_summary
-  - clock_reshape
-  - plot_back_rates
-  - get_pwt_rates_BEAST2
-  - plot_treerates_sgn
+  contents:
+    - get_clockrate_table_BEAST2
+    - clockrate_dens_plot
+    - clockrate_reg_plot
+    - clockrate_summary
+    - clock_reshape
+    - plot_back_rates
+    - get_pwt_rates_BEAST2
+    - plot_treerates_sgn
+
 - subtitle: Analyzing FBD parameters
   desc: >
     See `vignette("fbd-params")` for a complete workflow that uses these functions
     to extract FBD parameters estimated from relaxed
     clock Bayesian inference analyses produced by Mr. Bayes and BEAST2.
-- contents:
-  - combine_log
-  - FBD_dens_plot
-  - FBD_normality_plot
-  - FBD_reshape
-  - FBD_summary
-  - FBD_tests1
-  - FBD_tests2
+  contents:
+    - combine_log
+    - FBD_dens_plot
+    - FBD_normality_plot
+    - FBD_reshape
+    - FBD_summary
+    - FBD_tests1
+    - FBD_tests2
+
 - subtitle: Analyzing Trees With Offsets
   desc: >
     See `vignette("offset_handling")` for a complete workflow that uses these functions
     to summarize trees with offsets (with fossil species only) as produced by the SA package in BEAST2.
-- contents:
-  - drop.dummy.beast
-  - drop.dummy.mb
-  - offset.to.dummy
-  - offset.to.dummy.metadata
-  - write.beast.treedata
+  contents:
+    - drop.dummy.beast
+    - drop.dummy.mb
+    - offset.to.dummy
+    - offset.to.dummy.metadata
+    - write.beast.treedata
+
 - title: Datasets
-- contents:
-  - has_keyword("datasets")
+  contents:
+    - has_keyword("datasets")
 
 articles:
-- title: ~
-  navbar: ~
+- title: Workflows
+  navbar: Workflows
   contents:
-  - data_treatment
-  - char-part
-  - rates-selection_MrBayes
-  - rates-selection_BEAST2
-  - fbd-params
-  - offset_handling
+    - data_treatment
+    - char-part
+    - rates-selection_MrBayes
+    - rates-selection_BEAST2
+    - fbd-params
+    - offset_handling

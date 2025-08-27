@@ -1,5 +1,8 @@
 #All functions documented with examples
 
+# R/globals.R or top of any script file
+utils::globalVariables(c("value", "%>%"))
+
 #Load data and compute Gower distance matrix
 get_gower_dist <- function(x, numeric = FALSE) {
   if (is.matrix(x) || is.data.frame(x) ||
@@ -16,6 +19,8 @@ get_gower_dist <- function(x, numeric = FALSE) {
   return(gowerdist(data))
 }
 
+
+#--------------------------------------------------------------------------------------
 #Compute silhouette widths for different numbers of clusters; optionally plot
 get_sil_widths <- function(dist_mat, max.k = 10) {
 
@@ -29,6 +34,7 @@ get_sil_widths <- function(dist_mat, max.k = 10) {
   return(sil_width_df)
 }
 
+#--------------------------------------------------------------------------------------
 #Plot silhouette widths
 plot.sil_width_df <- function(x, ...) {
   ggplot(data = x) +
@@ -37,6 +43,8 @@ plot.sil_width_df <- function(x, ...) {
     theme_bw()
 }
 
+
+#--------------------------------------------------------------------------------------
 #Perform clustering,
 make_clusters <- function(dist_mat, k, tsne = FALSE, tsne_dim = 2,
                           tsne_theta = 0, ...) {
@@ -69,6 +77,8 @@ make_clusters <- function(dist_mat, k, tsne = FALSE, tsne_dim = 2,
   return(df.Clusters)
 }
 
+
+#--------------------------------------------------------------------------------------
 plot.cluster_df <- function(x, seed = NA, nrow = 1, ...) {
 
   if (sum(startsWith(names(x), "tSNE_Dim")) > 1) {
@@ -104,6 +114,7 @@ plot.cluster_df <- function(x, seed = NA, nrow = 1, ...) {
   p
 }
 
+#--------------------------------------------------------------------------------------
 #Write cluster output to a Nexus file
 cluster_to_nexus <- function(cluster_df, file = NULL) {
 
@@ -125,6 +136,8 @@ cluster_to_nexus <- function(cluster_df, file = NULL) {
   }
 }
 
+#-------------------------------------------------------------------------------------------------
+
 
 #' Write character partitions as separate Nexus files (for use in BEAUti)
 #'
@@ -132,7 +145,8 @@ cluster_to_nexus <- function(cluster_df, file = NULL) {
 #' @param cluster_df cluster partitions as outputted by \code{make.clusters}
 #' @param file path to save the alignments. If \code{file = "example.nex"}, alignments will be saved to files \code{"example_part1.nex"}, \code{"example_part2.nex"}, etc.
 #'
-#' @return no return value
+#' @seealso \code{\link{write_partitioned_alignments2}} expanded function for exporting both  morphological and molecular partitions.
+#' @return No return value. This function is called for its side effect of writing alignment files to disk.
 #' @export
 #'
 #' @examples
@@ -147,6 +161,7 @@ cluster_to_nexus <- function(cluster_df, file = NULL) {
 #'
 #' # Write to Nexus files
 #' \dontrun{write_partitioned_alignments(characters, cluster_df, "example.nex")}
+#'
 write_partitioned_alignments <- function(x, cluster_df, file) {
     if (is.matrix(x) || is.data.frame(x) ||
       (is.list(x) && all(lengths(x) == length(x[[1]])))) {
@@ -169,3 +184,104 @@ write_partitioned_alignments <- function(x, cluster_df, file) {
 
   }
 }
+
+
+#-------------------------------------------------------------------------------------------------
+#' Write alignment partitions as separate alignment files for various data types
+#'
+#' @param x concatenated alignment file in Nexus or Phyllip format read directly from local directory
+#' @param cluster_df cluster partitions as outputted by \code{make.clusters}
+#' @param partition_file name of text file with user provided partitions, with names and start&end positions
+#' @param in_format Format of the input alignment file. One of "phylip", "interleaved", "sequential", "clustal", "fasta", or "nexus", or any unambiguous abbreviation. Passed to \code{phangorn::read.phyDat}.
+#' @param in_type Type of input sequences. One of "DNA", "AA", "CODON" or "USER". Passed to \code{phangorn::read.phyDat}.
+#' @param out_file Path to save the alignments. If \code{out_file = "example.nex"}, files will be saved as \code{"example_part1.nex"}, \code{"example_part2.nex"}, etc.
+#' @param out_type Output format type. One of "dna" (default), "protein", "standard", or "continuous".
+#'
+#' @seealso \code{\link{write_partitioned_alignments}} for the older version supporting morphological data only.
+#' @return No return value. This function is called for its side effect of writing alignment files to disk.
+#' @export
+#' @importFrom magrittr %>%
+#'
+#' @examples
+#' # Load example phylogenetic data matrix
+#' data("characters")
+#'
+#' # Create distance matrix
+#' Dmatrix <- get_gower_dist(characters)
+#'
+#' # Find optimal partitioning scheme using PAM under k=3 partitions
+#' cluster_df <- make_clusters(Dmatrix, k = 3)
+#'
+#' # Write morphological partitions into multiple Nexus files
+#' \dontrun{write_partitioned_alignments2(x = "characters.nex",
+#'                              cluster_df = cluster_df,
+#'                              out_file = "test", out_type = "standard")}
+#'
+#' # Write to molecular partitions into multiple Phyllip files
+#' \dontrun{write_partitioned_alignments2(x = "alignments.phy",
+#'                              partition_file = "sorted_partitions_50genes.txt",
+#'                              in_format = "phylip", in_type = "dna",
+#'                              out_file = "test", out_type = "dna")}
+#'
+#' @md
+### Function
+
+write_partitioned_alignments2 <- function(x, cluster_df, partition_file,
+                                          in_format = NULL, in_type = NULL,
+                                          out_file, out_type = "standard") {
+
+#Get data matrix as data frame
+  if (is.matrix(x) || is.data.frame(x) ||
+      (is.list(x) && all(lengths(x) == length(x[[1]])))) {
+    data <- as.data.frame(as.matrix(x))
+  }
+  else if (length(x) == 1 && is.character(x) && endsWith(x, ".nex")) {
+    data <- as.data.frame(ape::read.nexus.data(x))
+  }
+  else if (length(x) == 1 && is.character(x) && (endsWith(x, ".phy") || endsWith(x, ".fa"))) {
+    data <- as.data.frame(phangorn::read.phyDat(x, format = in_format, type = in_type))
+  }
+  else stop("'x' must be a data frame, matrix, or file path to a Nexus(.nex), Phylip (.phy), or Fasta (.fa) file", call. = FALSE)
+
+#Get partition names and start&end positions
+#From a user provided partition file
+
+ if(length(partition_file) == 1 && is.character(partition_file)) {
+
+    partitions <- read.table(partition_file, sep = ' ')
+    loc_names <- as.character(unlist(tibble::enframe(partitions[,(which(partitions[1,] == '=') - 1)], name = NULL), use.names = F))
+    partitions <- tibble::enframe(partitions[,ncol(partitions)], name = NULL)
+    partitions <- partitions %>% tidyr::separate(value, into = c('Start', 'End'), sep = '-') %>%
+                      dplyr::mutate_if(is.character, as.numeric)
+
+#Write data for each partition as a separate file
+  nk <- length(loc_names)
+  out_file <- tools::file_path_sans_ext(out_file)
+
+   for(j in 1:nk) {
+    charset <- c()
+    charset <- c(charset, partitions$Start[j]:partitions$End[j])
+    aln <- lapply(as.data.frame(data), function(char) char[charset])
+
+    fn <- paste0(out_file, "_part", j, "_locus", loc_names[j],".nex")
+    ape::write.nexus.data(aln, file = fn, format = out_type, interleaved = FALSE)
+    }}
+
+#From a cluster file generated with 'make_clusters'
+ else if (is.data.frame(cluster_df))  {
+
+  nk <- length(levels(cluster_df$cluster))
+  out_file <- tools::file_path_sans_ext(out_file)
+
+  for(j in 1:nk) {
+    charset <- cluster_df$character_number[cluster_df$cluster==j]
+    aln <- lapply(as.data.frame(data), function(char) char[charset])
+
+    fn <- paste0(out_file, "_part", j, ".nex")
+    ape::write.nexus.data(aln, file = fn, format = out_type, interleaved = FALSE)
+  }}
+
+  else stop("either 'cluster_df' must be a data frame or 'partition_file' must be a partition file", call. = FALSE)
+
+}
+

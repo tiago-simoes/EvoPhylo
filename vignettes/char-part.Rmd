@@ -8,9 +8,11 @@ vignette: |
   %\VignetteIndexEntry{Character Partitioning} 
   %\VignetteEngine{knitr::rmarkdown} 
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{devtools}
 bibliography: references.bib
 link-citations: true
 ---
+
 This vignette explains how to conduct automated morphological character partitioning as a pre-processing step for clock (time-calibrated) Bayesian phylogenetic analysis of morphological data, as introduced by @simões2021.
 
 ```{r, setup, echo=FALSE}
@@ -28,7 +30,6 @@ library(EvoPhylo)
 ```{r, include=FALSE}
 devtools::load_all(".")
 ```
-
 
 ### 1. Generate distance matrix
 
@@ -78,6 +79,7 @@ clusters <- make_clusters(dist_matrix, k = 3)
 
 plot(clusters)
 ```
+
 ```{r, eval = FALSE}
 ## Write clusters to Nexus file for Mr. Bayes
 cluster_to_nexus(clusters, file = "Clusters_MB.txt")
@@ -101,6 +103,7 @@ clusters <- make_clusters(dist_matrix, k = 3, tsne = TRUE, tsne_dim = 3)
 
 plot(clusters, nrow = 2, max.overlaps = 5)
 ```
+
 ```{r, eval = FALSE}
 ## Write clusters to Nexus file for Mr. Bayes
 cluster_to_nexus(clusters, file = "Clusters_MB.txt")
@@ -110,13 +113,13 @@ cluster_to_nexus(clusters, file = "Clusters_MB.txt")
 write_partitioned_alignments("DataMatrix.nex", clusters, file = "Clusters_BEAUTi.nex")
 ```
 
-&nbsp;  
-&nbsp;  
-&nbsp;  
+ \
+ \
+ 
 
 ## Character Partitioning (Case 2)
 
-Here is an additional example of how to conduct automated morphological character partitioning. In this example, we utilize a combined evidence dataset (morphological and molecular data) of fossil and extant penguins from @ksepka2012, following similar modifications to this dataset as used in @gavryushkina2017 (removing all invariant characters from the dataset and all non-penguin taxa), resulting in 55 taxa and 201 characters for the morphological partition. A key feature of this dataset is the high amount of missing data in the fossil species. Therefore, it is recommended in such cases to reduce the number of observations with missing data (e.g. more than 30% of missing data, @ciampaglio2001). In this case, all fossils have more than 30% of missing data, and so only data from extant taxa were used to calculate character partitions. 
+Here is an additional example of how to conduct automated morphological character partitioning. In this example, we utilize a combined evidence dataset (morphological and molecular data) of fossil and extant penguins from @ksepka2012, following similar modifications to this dataset as used in @gavryushkina2017 (removing all invariant characters from the dataset and all non-penguin taxa), resulting in 55 taxa and 201 characters for the morphological partition. A key feature of this dataset is the high amount of missing data in the fossil species. Therefore, it is recommended in such cases to reduce the number of observations with missing data (e.g. more than 30% of missing data, @ciampaglio2001). In this case, all fossils have more than 30% of missing data, and so only data from extant taxa were used to calculate character partitions.
 
 ### 1. Generate distance matrix
 
@@ -127,7 +130,7 @@ Generate a Gower distance matrix with `get_gower_dist()` by supplying the file p
 dist_matrix <- get_gower_dist("Penguins_Morpho(VarCh)_Extant.nex", numeric = FALSE)
 ```
 
-Or, for this example simply load the data matrix 'Penguins_Morpho(VarCh)_Extant.nex' that accompanies `EvoPhylo`.
+Or, for this example simply load the data matrix 'Penguins_Morpho(VarCh)\_Extant.nex' that accompanies `EvoPhylo`.
 
 ```{r}
 DataMatrix <- system.file("extdata", "Penguins_Morpho(VarCh)_Extant.nex", package = "EvoPhylo")
@@ -161,6 +164,7 @@ clusters <- make_clusters(dist_matrix, k = 3, tsne = TRUE, tsne_dim = 3)
 
 plot(clusters, nrow = 2, max.overlaps = 5)
 ```
+
 ```{r, eval = FALSE}
 ## Write partitioned alignments to separate Nexus files for BEAUTi
 # Make reference to your original character data matrix in your local directory
@@ -168,5 +172,3 @@ write_partitioned_alignments("Penguins_Morpho(VarCha).nex", clusters, file = "Pe
 ```
 
 ## References
-
-

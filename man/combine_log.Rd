@@ -2,10 +2,10 @@
 \alias{combine_log}
 
 \title{
-Combine and filter (.p) log files from Mr.Bayes
+Combine and filter (.p) log files from Mr.Bayes, BEAST2 and MCMCTREE
 }
 \description{
-Imports parameter (.p) log files from Mr. Bayes and combines them into a single data frame. Samples can be dropped from the start of each log file (i.e., discarded as burn-in) and/or downsampled to reduce the size of the output object.
+Imports parameter log files from Mr. Bayes (.p files), BEAST2, and MCMCTREE, and combines them into a single data frame. Samples can be dropped from the start of each log file (i.e., discarded as burn-in) and/or downsampled to reduce the size of the output object.
 }
 \usage{
 combine_log(path = ".", burnin = 0.25, downsample = 10000)

@@ -82,6 +82,128 @@ get_clockrate_table_MrBayes <- function(tree, summary = "median", drop_dummy = N
   return(rate_table)
 }
 
+
+#----------------------------------------------------------------------------------
+
+#' Designate clade membership for each tip for downstream analyses summarizing rates for each clade
+#'
+#' @param tree Tree object (file path to a Nexus file) used to extract node numbers and tip labels.
+#' @param ancestral_nodes A named list specifying the MRCA node number for each clade.
+#'   The names are the clade labels. To specify non-monophyletic groups, use a character string
+#'   in the format \code{"inclusive_node - exclusive_node"}.
+#' @param other_nodes_label A label to assign to tips not included in any clade defined by \code{ancestral_nodes}.
+#'
+#' @return A data frame with columns: \code{node} (node number), \code{ancestral_node} (source MRCA node),
+#'   and \code{clade} (clade label). Each row represents the clade assignment of a node in the tree.
+#'
+#' @examples
+#' \dontrun{
+#' ancestral_nodes <- list(
+#'   Non_lepidosauria = 242,
+#'   Other_Lepidosauria = 237,
+#'   Gekkota = 222,
+#'   Scincoidea = 210,
+#'   Teiioidea = 192,
+#'   Lacertidae = 209,
+#'   Amphisbaenia = 205,
+#'   Anguiformes = 150,
+#'   Acrodonta = 145,
+#'   Pleurodonta = 133,
+#'   Caenophidia = 170,
+#'   Early_Serpentes = "164 - 170"  # non-monophyletic group
+#' )
+#'
+#' Nodes_Clade_Table <- clade_membership(
+#'   tree = "tree.nex",
+#'   ancestral_nodes = ancestral_nodes,
+#'   other_nodes_label = "deep_Squamata_nodes"
+#' )
+#' }
+#'
+#' @md
+
+
+### Function
+clade_membership <- function(tree, ancestral_nodes, other_nodes_label = "other_nodes") {
+  # Read the phylogenetic tree from the file
+  tree <- ape::read.nexus(tree)
+
+  # Initialize a list to store results
+  descendant_list <- list()
+
+  # A helper list to store computed descendants for easy reference
+  computed_descendants <- list()
+
+  # Track all descendants to identify other nodes later
+  all_descendants <- c()
+
+  # Loop through each ancestral node and calculate descendants
+  for (name in names(ancestral_nodes)) {
+    definition <- ancestral_nodes[[name]]
+
+    # Check if the definition is a node number or a formula
+    if (is.numeric(definition)) {
+      # If it's numeric, get the descendants as a monophyletic group
+      descendants <- get_descendants(tree, definition)
+
+    } else if (grepl("-", definition)) {
+      # If it's a formula, parse it and perform the set difference
+      # Split the formula by "-" to get the inclusive and exclusive nodes as strings
+      terms <- strsplit(definition, " - ")[[1]]
+      inclusive_node <- as.numeric(terms[1])
+      exclusive_node <- as.numeric(terms[2])
+
+      # Get descendants for both nodes
+      inclusive_descendants <- get_descendants(tree, inclusive_node)
+      exclusive_descendants <- get_descendants(tree, exclusive_node)
+
+      # Compute non-monophyletic descendants
+      descendants <- setdiff(inclusive_descendants, exclusive_descendants)
+
+    } else {
+      stop("Unrecognized format in ancestral_nodes")
+    }
+
+    # Store the descendants in the computed list
+    computed_descendants[[name]] <- descendants
+
+    # Store the results in the descendant_list
+    descendant_list[[name]] <- data.frame(
+      node = descendants,
+      ancestral_node = if (is.numeric(definition)) definition else inclusive_node,  # Use inclusive node as reference
+      clade = name
+    )
+
+    # Track all descendants for this group
+    all_descendants <- c(all_descendants, descendants)
+  }
+
+  # Get all nodes in the tree (tips and internal nodes)
+  all_tree_nodes <- c(1:Ntip(tree), (Ntip(tree) + 1):(Ntip(tree) + Nnode(tree)))
+
+  # Identify nodes that are not in any descendant list (i.e., "other_nodes")
+  other_nodes <- setdiff(all_tree_nodes, unique(all_descendants))
+
+  # Create a data frame for 'other_nodes'
+  other_nodes_df <- data.frame(
+    node = other_nodes,
+    ancestral_node = NA,  # No ancestral node since these are not part of specified groups
+    clade = other_nodes_label  # Use custom label for other nodes
+  )
+
+  # Add the 'other_nodes' data frame to the list
+  descendant_list[[other_nodes_label]] <- other_nodes_df
+
+  # Combine all data frames into one
+  combined_df <- do.call(rbind, descendant_list)
+
+  # Return the combined data frame
+  return(combined_df)
+}
+
+
+#----------------------------------------------------------------------------------
+
 #Summary stats for clades
 clockrate_summary <- function(rate_table, file = NULL, digits = 3) {
 

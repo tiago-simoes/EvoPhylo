@@ -11,7 +11,7 @@ Plots The distribution and mean of background rates extracted from the posterior
 plot_back_rates(type = c("MrBayes", "BEAST2"),
                            posterior,
                            clock = 1,
-                           trans = c("none", "log", "log10"),
+                           trans = c("none", "log", "log10", "z"),
                            size = 12, quantile = 0.95)
 }
 \arguments{
@@ -26,7 +26,7 @@ A data frame of posterior parameter estimates (log file). From Mr.Bayes, it incl
 The clock partition number to calculate selection mode. Ignored if only one clock is available.
 }
   \item{trans}{
-Type of data transformation to perform on background rates extracted from the posterior log file from Mr. Bayes or BEAST2. Options include "none" (if rates are normally distributed), natural log transformation "log", and log of base 10 transformation "log10". The necessity of using data transformation can be tested using the function \code{\link{plot_back_rates}}.
+Type of data transformation to perform on background rates extracted from the posterior log file from Mr. Bayes or BEAST2. Options include "none" (if rates are normally distributed), natural log transformation "log", and log of base 10 transformation "log10", and "z" FOR A z-transformation. The necessity of using data transformation can be tested using the function \code{\link{plot_back_rates}}.
   }
   \item{size}{
 Font size for title of plot

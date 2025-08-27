@@ -8,6 +8,7 @@ vignette: |
   %\VignetteIndexEntry{Theoretical background} 
   %\VignetteEngine{knitr::rmarkdown} 
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{devtools}
 bibliography: references.bib
 link-citations: true
 ---

@@ -8,6 +8,7 @@ vignette: |
   %\VignetteIndexEntry{Evolutionary Rates & Selection Mode (Mr.Bayes)} 
   %\VignetteEngine{knitr::rmarkdown} 
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{devtools}
 bibliography: references.bib
 link-citations: true
 ---
@@ -28,15 +29,13 @@ library(EvoPhylo)
 devtools::load_all(".")
 ```
 
-
 ## Evolutionary Rates Statistics and Plots
 
-In this section, we will extract evolutionary rate parameters from each node from a Bayesian clock (time-calibrated) summary tree. The functions below will store them in a data frame, produce summary statistics tables, and create different plots showing how rates are distributed across morphological partitions and clades. 
+In this section, we will extract evolutionary rate parameters from each node from a Bayesian clock (time-calibrated) summary tree. The functions below will store them in a data frame, produce summary statistics tables, and create different plots showing how rates are distributed across morphological partitions and clades.
 
-&nbsp;  
+ 
 
-
-### 1. Get rates from the clock tree and create a rate table 
+### 1. Get rates from the clock tree and create a rate table
 
 First, import a Bayesian clock tree using `treeio`'s function `read.mrbayes()` (= `read.beast()`).
 
@@ -63,8 +62,7 @@ Please note that analyses must have reached the stationarity phase and independe
 RateTable_Means_3p <- get_clockrate_table_MrBayes(tree3p, summary = "mean")
 ```
 
-&nbsp;  
-
+ 
 
 ### 2. Export the rate table and plot tree with node values
 
@@ -74,7 +72,6 @@ Once a rate table has been obtained from [Mr. Bayes](https://nbisweden.github.io
 ## Export the rate tables (using Mr. Bayes example with 3 partitions)
 write.csv(RateTable_Means_3p, file = "RateTable_Means_3p.csv")
 ```
-
 
 ## Plot tree node labels to customize clade names
 
@@ -88,15 +85,15 @@ tree_nodes <- ggtree(tree3p, branch.length = "none", size = 0.05) +
   geom_label(aes(label = node), size = 2, color="purple")
 tree_nodes
 ```
+
 ```{r, eval = FALSE}
 ## Save your plot to your working directory as a PDF
 ggplot2::ggsave("Tree_nodes.pdf", width = 10, height = 10)
 ```
 
-&nbsp;  
+ 
 
-
-### 3. Import rate table with custom clade memberships 
+### 3. Import rate table with custom clade memberships
 
 A new "clade" column has been added to the rates table
 
@@ -114,8 +111,7 @@ data(RateTable_Means_3p_Clades)
 head(RateTable_Means_3p_Clades)
 ```
 
-&nbsp;  
-
+ 
 
 ### 4. Get summary stats for each clade/clock partition
 
@@ -134,8 +130,7 @@ kableExtra::kbl(t1, caption = "Rate table summary statistics") |>
                             bootstrap_options = "striped", "condensed")
 ```
 
-&nbsp;  
-
+ 
 
 ### 5. Plot rates by clock partition and clade
 
@@ -165,8 +160,7 @@ clockrate_dens_plot(RateTable_Means_3p_Clades, stack = TRUE,
   ggplot2::scale_fill_viridis_d()
 ```
 
-&nbsp;  
-
+ 
 
 ### 6. Rate linear models
 
@@ -181,14 +175,14 @@ p23 <- clockrate_reg_plot(RateTable_Means_3p_Clades, clock_x = 2, clock_y = 3)
 library(patchwork) #for combining plots
 p12 + p13 + p23 + plot_layout(ncol = 2)
 ```
+
 ```{r, eval = FALSE}
 ## Save your plot to your working directory as a PDF
 ggplot2::ggsave("Plot_regs.pdf", width = 8, height = 8)
 ```
 
-&nbsp;  
-&nbsp;  
-
+ \
+ 
 
 ### ADDENDUM: Example using rates from single clock analysis (no partitioning)
 
@@ -221,15 +215,18 @@ write.csv(RateTable_Means_1p, file = "RateTable_Means1.csv")
 ## Import rate table after adding clade membership (new "clade" column added)
 RateTable_Means_1p_Clades <- read.csv("RateTable_Means1_Clades.csv", header = TRUE)
 ```
+
 ```{r}
 #Below, we use the rate table with clade membership `RateTable_Means_1p_Clades` that accompanies `EvoPhylo`.
 data(RateTable_Means_1p_Clades)
 ```
+
 ```{r,eval = FALSE}
 ## Get summary statistics table for each clade by clock 
 clockrate_summary(RateTable_Means_1p_Clades,
                   file = "Sum_RateTable_Medians1.csv")
 ```
+
 ```{r, echo = FALSE}
 t1 <- clockrate_summary(RateTable_Means_1p_Clades, digits = 2) 
 kableExtra::kbl(t1, caption = "Rate table summary statistics") |> 
@@ -245,18 +242,17 @@ clockrate_dens_plot(RateTable_Means_1p_Clades, stack = TRUE,
   ggplot2::scale_fill_viridis_d()
 ```
 
-&nbsp;  
-&nbsp;  
-&nbsp;  
+ \
+ \
+ 
 
 ## Selection Mode
 
 In this section, we will use evolutionary rate based inference of selection mode, as first introduced by @baker2016 for continuous traits, and later adapted to clock-based rates by @simões2021.
 
-&nbsp;  
+ 
 
-
-### 1. Import combined log file from all runs. 
+### 1. Import combined log file from all runs.
 
 This is produced by using `combine_log()`. The first argument passed to `combine_log()` should be a path to the folder containing the log files to be imported and combined.
 
@@ -275,12 +271,11 @@ data(posterior3p)
 head(posterior3p, 10)
 ```
 
-&nbsp;  
-
+ 
 
 ###2. Check background rates distribution and if they need transformation
 
-The output includes histograms showing the data distribution and mean (red dotted line) before and after data transformation for comparisons. 
+The output includes histograms showing the data distribution and mean (red dotted line) before and after data transformation for comparisons.
 
 ```{r, fig.width=8, fig.height=3, fig.align = "center", out.width = "90%"}
 library(ggplot2)
@@ -289,12 +284,11 @@ B <- plot_back_rates (type = "MrBayes", posterior3p, clock = 1,
 B
 ```
 
-&nbsp;  
-
+ 
 
 ### 3. Plot selection gradient on the summary tree
 
-Using different thresholds, identify the selection mode across branches in the tree for each clock partition with `plot_treerates_sgn()`. 
+Using different thresholds, identify the selection mode across branches in the tree for each clock partition with `plot_treerates_sgn()`.
 
 Users must indicate the type of output file (between [Mr. Bayes](https://nbisweden.github.io/MrBayes/) and [BEAST2](https://www.beast2.org/)) and whether they would like to log transform the background rate to meet assumptions of normally distributed data, based on the results obtained from `plot_back_rates`. Users should also indicate in "clock" the number of the clock partition they would like to plot rates from and the desired significance threshold to interpret branch rates (we recommend number of standard deviations around the mean of background rates).Finally, a series of arguments enable users to customize the geological timescale to add to the tree.
 
@@ -336,13 +330,13 @@ A3 <- plot_treerates_sgn(
 library(patchwork)
 A1 + A2 + A3 + plot_layout(nrow = 1)
 ```
+
 ```{eval = FALSE}
 ## Save your plot to your working directory as a PDF
 ggplot2::ggsave("Tree_Sel_3p.pdf", width = 20, height = 8)
 ```
 
-&nbsp;  
-
+ 
 
 ### 4. Pairwise t-tests of rate values among clades
 
@@ -362,6 +356,7 @@ data(RateTable_Means_3p_Clades)
 ```
 
 4.2. Get and export table of pairwise t-tests
+
 ```{r, eval = FALSE}
 ## Get table of pairwise t-tests for difference between the posterior 
 ## mean and the rate for each tree node
@@ -370,6 +365,7 @@ RateSign_Tests <- get_pwt_rates_MrBayes(RateTable_Means_3p_Clades, posterior3p)
 ## Show first 10 lines of table
 head(RateSign_Tests, 10)
 ```
+
 ```{r, echo = FALSE}
 RateSign_Tests <- get_pwt_rates_MrBayes(RateTable_Means_3p_Clades, posterior3p)
 t3 <- head(RateSign_Tests, 10)
@@ -377,12 +373,12 @@ kableExtra::kbl(t3, caption = "Combined log file") |>
   kableExtra::kable_styling(font_size = 15, full_width = FALSE,
                             bootstrap_options = "striped", "condensed")
 ```
+
 ```{r, eval=FALSE}
 ## Export the table
 write.csv(RateSign_Tests, file = "RateSign_Tests.csv")
 ```
 
-&nbsp;  
-
+ 
 
 ## References
