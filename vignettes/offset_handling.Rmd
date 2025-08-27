@@ -27,12 +27,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Load the **EvoPhylo** package
 
-```{r, eval = FALSE}
+```{r}
 library(EvoPhylo)
-```
-
-```{r, include=FALSE}
-devtools::load_all(".")
 ```
 
 ### 1. Import the posterior tree distribution.

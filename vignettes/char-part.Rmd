@@ -21,14 +21,9 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, collapse = TRUE, dpi=300)
 
 Load the **EvoPhylo** package
 
-```{r, eval = FALSE}
+```{r}
 library(EvoPhylo)
 ```
-
-```{r, include=FALSE}
-devtools::load_all(".")
-```
-
 
 ### 1. Generate distance matrix
 
@@ -164,7 +159,8 @@ plot(clusters, nrow = 2, max.overlaps = 5)
 ```{r, eval = FALSE}
 ## Write partitioned alignments to separate Nexus files for BEAUTi
 # Make reference to your original character data matrix in your local directory
-write_partitioned_alignments("Penguins_Morpho(VarCha).nex", clusters, file = "Penguins_Morpho_3p.nex")
+write_partitioned_alignments("Penguins_Morpho(VarCha).nex",
+                             clusters, file = "Penguins_Morpho_3p.nex")
 ```
 
 ## References

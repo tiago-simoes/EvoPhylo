@@ -20,14 +20,9 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, collapse = TRUE)
 
 Load the **EvoPhylo** package
 
-```{r, eval = FALSE}
+```{r}
 library(EvoPhylo)
 ```
-
-```{r, include=FALSE}
-devtools::load_all(".")
-```
-
 
 ## Evolutionary Rates Statistics and Plots
 
@@ -264,13 +259,13 @@ The output includes histograms showing the data distribution before and after da
 
 ```{r, fig.width=8, fig.height=3, fig.align = "center", out.width = "90%", echo=FALSE}
 library(ggplot2)
-B1 <- plot_back_rates (type = "BEAST2", posterior, clock = 1,
+B1 <- plot_back_rates(type = "BEAST2", posterior, clock = 1,
                       trans = "log10", size = 10, quantile = 1)
 B1
-B2 <- plot_back_rates (type = "BEAST2", posterior, clock = 2,
+B2 <- plot_back_rates(type = "BEAST2", posterior, clock = 2,
                       trans = "log10", size = 10, quantile = 1)
 B2
-B3 <- plot_back_rates (type = "BEAST2", posterior, clock = 3,
+B3 <- plot_back_rates(type = "BEAST2", posterior, clock = 3,
                       trans = "log10", size = 10, quantile = 1)
 B3
 

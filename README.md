@@ -14,7 +14,7 @@ it also handles data pre- and post-processing for the software package
 The ideas and rationale behind the original functionality and objectives
 of the analyses available in this package were first presented by
 [Simões & Pierce (2021)](https://doi.org/10.1038/s41559-021-01532-x).
-It’s current functionality is described in detail by [Simões, Grifer,
+Its current functionality is described in detail by [Simões, Greifer,
 Barido-Sottani & Pierce
 (2023)](https://doi.org/10.1111/2041-210X.14128).
 
@@ -26,11 +26,11 @@ Install the latest release version directly from CRAN:
 install.packages("EvoPhylo")
 ```
 
-or developers version from Github:
+or developer’s version from Github:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("tiago-simoes/EvoPhylo")
+# install.packages("remotes")
+remotes::install_github("tiago-simoes/EvoPhylo")
 ```
 
 ## Tutorials
@@ -42,14 +42,12 @@ See `vignette("char-part")`,`vignette("data_treatment")`,
 `EvoPhylo` to perform these analyses, also available on the [EvoPhylo
 website](https://tiago-simoes.github.io/EvoPhylo/).
 
-## Authors
-
 ## Authors (including current developers)
 
 - [**Tiago R. Simões**](https://tiago-simoes.com/): *Conceptualization
   and code development* - [Github
   Profile](https://github.com/tiago-simoes)
-- [**Noah Greifer**](https://github.com/ngreifer): *Code development*
+- [**Noah Greifer**](https://ngreifer.github.io): *Code development*
 - [**Joëlle Barido-Sottani**](https://github.com/bjoelle): *Code
   development*
 - [**Stephanie

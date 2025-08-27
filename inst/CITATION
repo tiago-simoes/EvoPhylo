@@ -10,6 +10,6 @@ bibentry(bibtype = "Article",
   number       = "8",
   pages        = "1981-1993",
   doi          = "10.1111/2041-210X.14128",
-  header       = "To cite the package 'EvoPhylo' in a publication, please use:"
-  footer       = "As EvoPhylo will be constantly updated, you may want to also cite its version number"
+  header       = "To cite the package 'EvoPhylo' in a publication, please use:",
+  footer       = "As EvoPhylo will be constantly updated, you may want to also cite its version number."
 )
