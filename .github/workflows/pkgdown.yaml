@@ -1,5 +1,6 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
-# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+# .github/workflows/pkgdown.yml
+name: pkgdown
+
 on:
   push:
     branches: [main, master]
@@ -7,29 +8,46 @@ on:
     types: [published]
   workflow_dispatch:
 
-name: pkgdown
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
-  pkgdown:
+  build-deploy:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    concurrency:
+      group: pkgdown-${{ github.ref }}
+      cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: r-lib/actions/setup-pandoc@v1
+      - name: Setup Pandoc
+        uses: r-lib/actions/setup-pandoc@v2
 
-      - uses: r-lib/actions/setup-r@v1
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v1
+      - name: Install dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: pkgdown
+          extra-packages: |
+            any::pkgdown
+            local::.
           needs: website
 
-      - name: Deploy package
+      - name: Build site to docs/
+        shell: Rscript {0}
         run: |
-          git config --local user.name "$GITHUB_ACTOR"
-          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
+          pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
