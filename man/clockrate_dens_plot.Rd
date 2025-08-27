@@ -22,10 +22,10 @@ Which clock rates will be plotted. If unspecified, all clocks are plotted.
 Whether to display stacked density plots (\code{TRUE}) or overlapping density plots (\code{FALSE}).
 }
   \item{nrow}{
-When plotting rates for more than one clock, how many rows should be filled by the plots. This is passed to \code{\link{facet_wrap}}.
+When plotting rates for more than one clock, how many rows should be filled by the plots. This is passed to \code{\link[ggplot2]{facet_wrap}}.
 }
   \item{scales}{
-When plotting rates for more than one clock, whether the axis scales should be "fixed" (default) across clocks or allowed to vary ("free", "free_x", or "free_y"). This is passed to \code{\link{facet_wrap}}.
+When plotting rates for more than one clock, whether the axis scales should be "fixed" (default) across clocks or allowed to vary ("free", "free_x", or "free_y"). This is passed to \code{\link[ggplot2]{facet_wrap}}.
 }
 }
 \details{
@@ -38,7 +38,7 @@ A \code{ggplot} object, which can be modified using \pkg{ggplot2} functions.
 \seealso{
 \code{vignette("rates-selection")} for the use of this function as part of an analysis pipeline.
 
-\code{\link{get_clockrate_table_MrBayes}}, \code{\link{geom_density}}
+\code{\link{get_clockrate_table_MrBayes}}, \code{\link[ggplot2]{geom_density}}
 }
 \examples{
 # See vignette("rates-selection") for how to use this

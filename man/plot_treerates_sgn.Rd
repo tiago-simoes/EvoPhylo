@@ -45,7 +45,7 @@ The clock partition number to calculate selection mode. Ignored if only one cloc
 A vector of threshold values. Default is to display thresholds of ±1 relative standard deviation (SD) of the relative posterior clock rates. Should be specified as a number of standard deviations (e.g., \code{"1 SD"}) or the confidence level for a confidence interal around the mean relative posterior clockrate (e.g., \code{"95\%"}). Multiple values are allowed to produce a plot with multiple thresholds. Set to \code{NULL} to omit thresholds.
 }
   \item{low, mid, high}{
-Colors passed to \code{\link{scale_color_steps2}} to control the colors of the branches based on which thresholds are exceeded. When no thresholds are supplied, use \code{mid} to control the color of the tree.
+Colors passed to \code{\link[ggplot2]{scale_color_steps2}} to control the colors of the branches based on which thresholds are exceeded. When no thresholds are supplied, use \code{mid} to control the color of the tree.
 }
   \item{branch_size}{
 The thickness of the lines that form the tree.
